@@ -1,0 +1,6 @@
+# Fleet data file: one line per aircraft, released by the maintenance organisation.
+# Invented aircraft. Not for flight operations. Identifiers are invented, not registrations.
+# id,type,empty_mass_kg,empty_arm_mm,weighing_date
+HC4-01,hc4,765,2220,2026-03-02
+HC4-02,hc4,778,2236,2026-09-14
+HC2-01,hc2,640,2150,2025-11-20
