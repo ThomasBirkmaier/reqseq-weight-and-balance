@@ -20,6 +20,9 @@ test("walk-through need 6010df enter what is on board", async ({ page }) => {
   await page.fill("#entry-baggage", "60");
   await expect(page.locator("#entry-baggage-msg")).toHaveText("Enter 0 to 50 kg");
   await shot(page, "N-6010df", "2-too-much");
+  await open(page, "/hc2/");
+  await page.selectOption("#aircraft", "HC2-01");
+  await shot(page, "N-6010df", "3-hc2-entries");
 });
 
 test("walk-through need e9c5c6 mass permitted at once", async ({ page }) => {
@@ -109,6 +112,15 @@ test("walk-through need e01992 phone without network", async ({ page, context })
   await context.setOffline(false);
 });
 
+test("walk-through need e01992 dark mode", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await load(page, "HC4-01", [160, 0, 20]);
+  await expect(indication(page)).toHaveText("Within limits (without fuel)");
+  await shot(page, "N-e01992", "dark-result");
+  await page.locator("#chart").scrollIntoViewIfNeeded();
+  await shot(page, "N-e01992", "dark-chart");
+});
+
 test("walk-through need e67c17 data of the individual aircraft", async ({ page }) => {
   for (const id of ["HC4-01", "HC4-02"]) {
     await open(page);
@@ -119,6 +131,12 @@ test("walk-through need e67c17 data of the individual aircraft", async ({ page }
   await open(page, "/hc2/");
   await page.selectOption("#aircraft", "HC2-01");
   await shot(page, "N-e67c17", "HC2-01");
+  for (const [path, id] of [["/", "HC4-01"], ["/hc2/", "HC2-01"]] as const) {
+    await open(page, path);
+    await page.selectOption("#aircraft", id);
+    await page.locator("#corners").scrollIntoViewIfNeeded();
+    await shot(page, "N-e67c17", `type-limits-${id.slice(0, 3)}`);
+  }
 });
 
 test("walk-through need 2c5472 cross-check the calculation", async ({ page }) => {
@@ -143,7 +161,7 @@ test("walk-through need 1e786e never a wrong within limits", async ({ page }) =>
   ];
   for (const [name, l] of cases) {
     await load(page, "HC4-01", l);
-    await expect(indication(page)).toHaveText("Check not complete: correct the marked entries");
+    await expect(indication(page)).toHaveText("Check not complete: fill in or correct the marked entries");
     await expect(page.getByText("Within limits")).toHaveCount(0);
     await shot(page, "N-1e786e", name);
   }

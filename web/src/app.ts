@@ -25,6 +25,22 @@ export function startApp(core: Core, typeKey: string): void {
     inputs[i].addEventListener("input", update);
   });
 
+  const corners = $("corners").querySelector("tbody")!;
+  fleet.type.envelope.forEach(([mass, cg], i) => {
+    const tr = document.createElement("tr");
+    for (const [j, v] of [String(i + 1), kg(mass), m(cg)].entries()) {
+      const td = document.createElement(j === 0 ? "th" : "td");
+      if (j === 0) td.setAttribute("scope", "row");
+      td.textContent = v;
+      tr.append(td);
+    }
+    corners.append(tr);
+  });
+  const offline = () => { $("offline").hidden = navigator.onLine; };
+  addEventListener("online", offline);
+  addEventListener("offline", offline);
+  offline();
+
   select.addEventListener("change", () => {
     for (const inp of inputs) inp.value = "";
     update();
@@ -42,6 +58,8 @@ export function startApp(core: Core, typeKey: string): void {
     $("result-aircraft").textContent = `For ${a.id}`;
     const e = core.evaluate(typeKey, a.id, inputs.map((i) => i.value));
     render(e);
+    const active = document.activeElement;
+    if (active instanceof HTMLInputElement && inputs.includes(active)) active.scrollIntoView({ block: "nearest" });
   }
 
   function render(e: Evaluation): void {
