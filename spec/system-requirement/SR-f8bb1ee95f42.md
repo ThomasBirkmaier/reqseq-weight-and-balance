@@ -16,7 +16,7 @@ safety-related: "no"
 derives-from:
   - { id: 26a81038-3f7b-4df9-bfcb-e94f646010df, version: n1:b10ab801eb9fafcb, title: Enter what is on board }
 based-on:
-  - { id: d9378504-282e-4688-918c-d6c354e582bf, version: n1:b8fd64bb1fe5b5cf, title: "Units, input resolution and rounding" }
+  - { id: d9378504-282e-4688-918c-d6c354e582bf, version: n1:b671cab842587e57, title: "Units, input resolution and rounding" }
 ---
 
 If an aircraft is selected, the system shall provide one mass entry in kg for each loading station of its aircraft type, labelled with the name of the loading station and its maximum mass.
