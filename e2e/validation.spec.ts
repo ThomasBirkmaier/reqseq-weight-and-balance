@@ -1,6 +1,7 @@
 // Validation walk-throughs (15288 6.4.11): one scenario per need, in the context of use
 // (phone viewport), with a screenshot per step. Test names carry no element reference on
 // purpose: validation records are written by IV&V from these screenshots.
+import { readFileSync } from "node:fs";
 import { expect, test, type Page } from "@playwright/test";
 import { indication, load, open } from "./helpers";
 
@@ -32,6 +33,15 @@ test("walk-through need e9c5c6 mass permitted at once", async ({ page }) => {
     await expect(indication(page)).toBeInViewport();
     await shot(page, "N-e9c5c6", `hc4-${name}`);
   }
+  for (const [name, l, text] of [
+    ["at", [180, 160, 32], "Within limits (without fuel)"],
+    ["above", [180, 160, 33], "Outside limits: total mass above maximum take-off mass"],
+  ] as const) {
+    await load(page, "HC4-02", [...l]);
+    await expect(indication(page)).toHaveText(text);
+    await expect(indication(page)).toBeInViewport();
+    await shot(page, "N-e9c5c6", `hc4-02-${name}`);
+  }
   await load(page, "HC2-01", [220, 40], "/hc2/");
   await expect(indication(page)).toHaveText("Outside limits: total mass above maximum take-off mass");
   await shot(page, "N-e9c5c6", "hc2-above");
@@ -48,6 +58,19 @@ test("walk-through need 790a55 centre of gravity permitted at once", async ({ pa
     await expect(indication(page)).toBeInViewport();
     await shot(page, "N-790a55", `hc4-${name}`);
   }
+  for (const [name, l, text] of [
+    ["inside", [160, 0, 20], "Within limits (without fuel)"],
+    ["outside", [70, 200, 50], "Outside limits: centre of gravity outside envelope"],
+  ] as const) {
+    await load(page, "HC4-02", [...l]);
+    await expect(indication(page)).toHaveText(text);
+    await expect(indication(page)).toBeInViewport();
+    await shot(page, "N-790a55", `hc4-02-${name}`);
+  }
+  await load(page, "HC2-01", [75, 35], "/hc2/");
+  await expect(page.locator("#cg")).toHaveText("2.170 m");
+  await expect(indication(page)).toHaveText("Within limits (without fuel)");
+  await shot(page, "N-790a55", "hc2-edge");
   await load(page, "HC2-01", [60, 40], "/hc2/");
   await expect(indication(page)).toHaveText("Outside limits: centre of gravity outside envelope");
   await shot(page, "N-790a55", "hc2-outside");
@@ -66,6 +89,10 @@ test("walk-through need 98a54d see where the load acts", async ({ page }) => {
   await page.locator("#chart").scrollIntoViewIfNeeded();
   await expect(page.locator("#point-label")).toHaveText("Forward limit exceeded");
   await shot(page, "N-98a54d", "3-forward");
+  await load(page, "HC4-01", [180, 160, 50]);
+  await page.locator("#chart").scrollIntoViewIfNeeded();
+  await expect(page.locator("#point-label")).toHaveText("Mass limit exceeded");
+  await shot(page, "N-98a54d", "4-mass");
 });
 
 test("walk-through need e01992 phone without network", async ({ page, context }) => {
@@ -98,7 +125,11 @@ test("walk-through need 2c5472 cross-check the calculation", async ({ page }) =>
   await load(page, "HC4-01", [160, 0, 20]);
   await page.locator("#table").scrollIntoViewIfNeeded();
   await expect(page.locator("#rounding")).toBeVisible();
-  await shot(page, "N-2c5472", "table");
+  await shot(page, "N-2c5472", "table-1");
+  await load(page, "HC4-02", [100, 100, 10]);
+  await page.locator("#table").scrollIntoViewIfNeeded();
+  await expect(page.locator("#table tr.total td").first()).toHaveText("988 kg");
+  await shot(page, "N-2c5472", "table-2");
 });
 
 test("walk-through need 1e786e never a wrong within limits", async ({ page }) => {
@@ -116,4 +147,29 @@ test("walk-through need 1e786e never a wrong within limits", async ({ page }) =>
     await expect(page.getByText("Within limits")).toHaveCount(0);
     await shot(page, "N-1e786e", name);
   }
+});
+
+test("walk-through need e67c17 new empty mass after a re-weighing", async ({ page, context }) => {
+  // First visit: the phone has the app and its offline cache with the current fleet data.
+  await open(page);
+  await page.evaluate(() => navigator.serviceWorker.ready);
+  await page.reload();
+  await page.selectOption("#aircraft", "HC4-01");
+  await expect(page.locator("#empty-data")).toContainText("Empty mass 765 kg");
+  await shot(page, "N-e67c17", "reweigh-1-before");
+  // A new build with the re-weighed aircraft is published (fleet data is compiled into the core).
+  const wasm = readFileSync("dist/wb_core.wasm");
+  const from = Buffer.from("HC4-01,hc4,765,2220,2026-03-02");
+  const to = Buffer.from("HC4-01,hc4,771,2224,2026-10-30");
+  const at = wasm.indexOf(from);
+  expect(at).toBeGreaterThan(0);
+  const next = Buffer.from(wasm);
+  to.copy(next, at);
+  await context.route("**/wb_core.wasm", (r) => r.fulfill({ body: next, contentType: "application/wasm" }));
+  // Next opening with network, before the flight: the new empty mass is shown.
+  await page.reload();
+  await page.selectOption("#aircraft", "HC4-01");
+  await expect(page.locator("#empty-data")).toContainText("Empty mass 771 kg");
+  await expect(page.locator("#empty-data")).toContainText("2026-10-30");
+  await shot(page, "N-e67c17", "reweigh-2-after");
 });

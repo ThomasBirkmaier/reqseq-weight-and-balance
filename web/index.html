@@ -20,6 +20,7 @@
     <section class="card" aria-labelledby="aircraft-label">
       <label id="aircraft-label" for="aircraft">Aircraft</label>
       <select id="aircraft"><option value="">Select the aircraft</option></select>
+      <p class="load-error" id="load-error" role="alert" hidden>The app could not load its data. Reload the page.</p>
       <p class="hint" id="select-hint">Select the aircraft</p>
       <div id="aircraft-info" hidden>
         <p class="selected" id="selected"></p>
@@ -36,6 +37,7 @@
       </section>
 
       <section class="result" id="result" aria-live="polite">
+        <p class="result-aircraft" id="result-aircraft"></p>
         <p class="indication" id="indication"></p>
         <p class="fuel" id="fuel">Fuel is not included in this version.</p>
         <dl class="figures" id="figures">

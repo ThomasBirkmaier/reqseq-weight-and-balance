@@ -5,11 +5,18 @@ import { startApp } from "./app.js";
 const base = document.body.dataset.base ?? "./";
 const typeKey = document.body.dataset.type ?? "hc4";
 
-Core.load(`${base}wb_core.wasm`).then((core) => {
-  startApp(core, typeKey);
-  document.body.dataset.ready = "true";
-});
+Core.load(`${base}wb_core.wasm`)
+  .then((core) => {
+    startApp(core, typeKey);
+    document.body.dataset.ready = "true";
+  })
+  .catch(() => {
+    // No result without data: say so instead of leaving an empty selection.
+    document.getElementById("load-error")!.hidden = false;
+    document.getElementById("select-hint")!.hidden = true;
+    document.body.dataset.ready = "error";
+  });
 
 if ("serviceWorker" in navigator && location.protocol !== "file:") {
-  navigator.serviceWorker.register("sw.js").catch(() => undefined);
+  navigator.serviceWorker.register("sw.js", { scope: "./" }).catch(() => undefined);
 }

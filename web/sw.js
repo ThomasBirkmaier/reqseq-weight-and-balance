@@ -1,4 +1,6 @@
 // Offline cache: the app opens and calculates without network after the first visit.
+// Network first: with network the current build (and so the current fleet data) is
+// always used; the cache is only the fallback without network.
 const CACHE = "wb-__VERSION__";
 const FILES = ["./", "./index.html", "./sw.js"];
 const SHARED = ["style.css", "manifest.webmanifest", "wb_core.wasm", "js/main.js", "js/app.js", "js/core.js", "js/draw.js", "js/format.js"];
@@ -11,5 +13,12 @@ self.addEventListener("activate", (e) => {
 });
 self.addEventListener("fetch", (e) => {
   if (e.request.method !== "GET") return;
-  e.respondWith(caches.match(e.request, { ignoreSearch: true }).then((r) => r ?? fetch(e.request)));
+  e.respondWith(
+    fetch(e.request)
+      .then((r) => {
+        if (r.ok) { const copy = r.clone(); caches.open(CACHE).then((c) => c.put(e.request, copy)); }
+        return r;
+      })
+      .catch(() => caches.match(e.request, { ignoreSearch: true }).then((r) => r ?? Response.error())),
+  );
 });
