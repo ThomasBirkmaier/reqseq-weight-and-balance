@@ -10,8 +10,9 @@ for v in hc4 hc2; do
   if [ "$v" = hc4 ]; then out=dist; base=./; else out=dist/hc2; base=../; fi
   mkdir -p "$out"
   sed -e "s/__TYPE__/$v/g" -e "s|__BASE__|$base|g" web/index.html > "$out/index.html"
+  sed -e "s/__VERSION__/$VERSION-$v/g" web/sw.js > "$out/sw.js"
 done
-cp web/style.css dist/
+cp web/style.css web/manifest.webmanifest dist/
 cp core/target/wasm32-unknown-unknown/release/wb_core.wasm dist/wb_core.wasm
 touch dist/.nojekyll
 echo "built dist/ ($VERSION)"
