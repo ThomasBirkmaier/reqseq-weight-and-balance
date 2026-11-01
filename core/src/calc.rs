@@ -6,7 +6,7 @@ use crate::fleet::{Aircraft, AircraftType, TYPES};
 pub const WITHIN: &str = "Within limits (without fuel)";
 pub const OUT_MASS: &str = "Outside limits: total mass above maximum take-off mass";
 pub const OUT_CG: &str = "Outside limits: centre of gravity outside envelope";
-pub const INCOMPLETE: &str = "Check not complete: correct the marked entries";
+pub const INCOMPLETE: &str = "Check not complete: fill in or correct the marked entries";
 
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub enum CgState {

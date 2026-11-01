@@ -30,6 +30,41 @@ test("entry messages are polite live regions, not alerts", async ({ page }) => {
   await expect(page.locator("#entries [role=alert]")).toHaveCount(0);
 });
 
+test.describe("phone screen", () => {
+  test.use({ viewport: { width: 360, height: 740 }, isMobile: true, hasTouch: true });
+  test("[SR-54e043/AK4] the result card never hides the entry being edited or its message", async ({ page }) => {
+    await load(page, "HC4-01", [160, 75, 60]);
+    for (const sel of ["#entry-baggage", "#entry-baggage-msg"]) {
+      const hit = await page.locator(sel).evaluate((el) => {
+        const r = el.getBoundingClientRect();
+        const top = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+        return top === el || el.contains(top);
+      });
+      expect(hit, sel).toBe(true);
+    }
+    await expect(page.locator("#entry-baggage-msg")).toHaveText("Enter 0 to 50 kg");
+  });
+});
+
+test("[SR-3f6229/AK4] envelope corners are listed as numbers", async ({ page }) => {
+  await load(page, "HC4-01", [0, 0, 0]);
+  const rows = page.locator("#corners tbody tr");
+  await expect(rows).toHaveCount(5);
+  await expect(rows.nth(0)).toHaveText(/650 kg\s*2\.100 m/);
+  await expect(rows.nth(3)).toHaveText(/1150 kg\s*2\.470 m/);
+  await load(page, "HC2-01", [0, 0], "/hc2/");
+  await expect(page.locator("#corners tbody tr").nth(2)).toHaveText(/880 kg\s*2\.130 m/);
+});
+
+test("[SR-384eab/AK4] without network the app says its aircraft data may be older", async ({ page, context }) => {
+  await load(page, "HC4-01", [0, 0, 0]);
+  await expect(page.locator("#offline")).toBeHidden();
+  await context.setOffline(true);
+  await expect(page.locator("#offline")).toHaveText("Offline: aircraft data as of the last opening with network. Check the weighing date against the aircraft documents.");
+  await context.setOffline(false);
+  await expect(page.locator("#offline")).toBeHidden();
+});
+
 test.describe("poor reception", () => {
   test.use({ serviceWorkers: "allow" });
   test("opens from the cache within 5 s when the network hangs", async ({ page, context }) => {

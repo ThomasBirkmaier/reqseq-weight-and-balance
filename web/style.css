@@ -132,3 +132,11 @@ tr.total th, tr.total td { font-weight: 700; border-top: 2px solid var(--text); 
   th, td { padding: 6px 2px; font-size: 0.8rem; }
   thead th { font-size: 0.75rem; }
 }
+
+/* The sticky result card must never hide the entry being edited or marked. */
+#entries input { scroll-margin-bottom: 14rem; scroll-margin-top: 1rem; }
+.offline { margin: 0.5rem 0 0; font-weight: 600; color: var(--warn); }
+.corners { width: 100%; border-collapse: collapse; margin-top: 0.5rem; font-size: 0.9rem; }
+.corners caption { text-align: left; font-weight: 600; padding-bottom: 0.25rem; }
+.corners th, .corners td { text-align: right; padding: 0.15rem 0.4rem; border-bottom: 1px solid var(--line, #ccc); }
+.corners th:first-child { text-align: left; }

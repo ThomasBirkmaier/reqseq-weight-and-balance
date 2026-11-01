@@ -36,13 +36,13 @@ test("[SR-181ae8/AK3] decimal baggage mass shows a message", async ({ page }) =>
 
 test("[SR-b59c9a/AK1] invalid entry gives check not complete", async ({ page }) => {
   await load(page, "HC4-01", [160, 201, 0]);
-  await expect(indication(page)).toHaveText("Check not complete: correct the marked entries");
+  await expect(indication(page)).toHaveText("Check not complete: fill in or correct the marked entries");
   await expect(page.getByText("Within limits")).toHaveCount(0);
 });
 
 test("[SR-b59c9a/AK2] empty entry gives check not complete", async ({ page }) => {
   await load(page, "HC4-01", [160, 0]);
-  await expect(indication(page)).toHaveText("Check not complete: correct the marked entries");
+  await expect(indication(page)).toHaveText("Check not complete: fill in or correct the marked entries");
   await expect(page.getByText("Within limits")).toHaveCount(0);
 });
 

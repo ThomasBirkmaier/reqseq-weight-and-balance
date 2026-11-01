@@ -22,6 +22,7 @@
       <select id="aircraft"><option value="">Select the aircraft</option></select>
       <p class="load-error" id="load-error" role="alert" hidden>The app could not load its data. Reload the page.</p>
       <p class="hint" id="select-hint">Select the aircraft</p>
+      <p class="offline" id="offline" hidden>Offline: aircraft data as of the last opening with network. Check the weighing date against the aircraft documents.</p>
       <div id="aircraft-info" hidden>
         <p class="selected" id="selected"></p>
         <p class="data" id="empty-data"></p>
@@ -54,6 +55,11 @@
       <section class="card" aria-labelledby="chart-title">
         <h2 id="chart-title">Envelope</h2>
         <svg id="chart" viewBox="0 0 340 260" role="img" aria-label="Envelope chart"></svg>
+        <table class="corners" id="corners">
+          <caption>Envelope corners (boundary included)</caption>
+          <thead><tr><th scope="col">Corner</th><th scope="col">Total mass</th><th scope="col">Centre of gravity</th></tr></thead>
+          <tbody></tbody>
+        </table>
       </section>
 
       <section class="card" aria-labelledby="table-title">
