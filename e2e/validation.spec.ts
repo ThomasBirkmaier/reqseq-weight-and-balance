@@ -109,6 +109,9 @@ test("walk-through need e01992 phone without network", async ({ page, context })
   });
   await expect(indication(page)).toHaveText("Within limits (without fuel)");
   await shot(page, "N-e01992", "offline");
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await expect(page.locator("#offline")).toBeInViewport();
+  await shot(page, "N-e01992", "offline-notice");
   await context.setOffline(false);
 });
 
