@@ -1,0 +1,72 @@
+reqseq-baseline: 1
+name: release-1
+date: 2026-11-01T15:54:46Z
+selection: {}
+repositories:
+  - { name: spec, commit: 304f960ac3e031238dc079339cc274516a7fc44e }
+elements:
+  - { id: 0041aa52-adb0-4a61-a6b0-4f3ed6b73090, version: n1:f7364e3cafd9a7b6 }
+  - { id: 05ae9286-bea0-45ad-9338-d1f959f23826, version: n1:67ebd0624004c969 }
+  - { id: 06510c41-64db-41cf-a63a-f8bb1ee95f42, version: n1:d9acc9665144e095 }
+  - { id: 0949deaf-3bdb-4aca-8f67-511a39083f2b, version: n1:dbc46960aff90f59 }
+  - { id: 09b067c4-bd9a-447b-9208-071791d192b3, version: n1:737df016c5876bfb }
+  - { id: 0ad97c1b-beb1-48a1-b1f8-30914e45a7c4, version: n1:67ebd0624004c969 }
+  - { id: 0fb61d58-3251-434b-b85d-fc0b6827839a, version: n1:67ebd0624004c969 }
+  - { id: 100e9969-73c0-423b-b96f-708da92c5472, version: n1:72d4d52a66d69898 }
+  - { id: 109946de-c77a-44bf-81ff-eeacde29562e, version: n1:edd358de7976a3d1 }
+  - { id: 153a5bdf-6759-4d0e-80d9-20b0c691084e, version: n1:362a6d6c8450bada }
+  - { id: 160ae277-8376-4c3f-b0d8-bd4b2e663a61, version: n1:c4e3a8b6aedc061c }
+  - { id: 1669da39-c0ed-4309-ae48-a60cc03a4905, version: n1:89c0a1b571a8f2fc }
+  - { id: 17e053f9-593d-4128-ba94-a15850fdab45, version: n1:67ebd0624004c969 }
+  - { id: 1e298834-92c8-438a-8296-9786b6e9c5c6, version: n1:09c413a62b2bc7f3 }
+  - { id: 200f4520-412d-42f3-b977-a2424ab59c9a, version: n1:1e0f41be72f25aa3 }
+  - { id: 220b66d8-6754-47ed-bb19-4a91bf98bc13, version: n1:67ebd0624004c969 }
+  - { id: 26a81038-3f7b-4df9-bfcb-e94f646010df, version: n1:b10ab801eb9fafcb }
+  - { id: 31d0e124-d78f-4db1-930e-d6ea013f6229, version: n1:814c63dee64f45a5 }
+  - { id: 38ee6d8c-f591-4c2b-bdec-114077d0fb6e, version: n1:11ddb551be17c0bc }
+  - { id: 3d7f9eda-d927-4a0f-9efe-917d8c687e88, version: n1:ac8eba4296459d4e }
+  - { id: 3f61ba4d-c324-4724-9e28-c8cbad070ac3, version: n1:e97995f886413da2 }
+  - { id: 41ff0349-53cf-4606-885a-f6f6d345198e, version: n1:374c4b13792d0a86 }
+  - { id: 422a5534-110c-4d7d-a0ef-6705a3fc8953, version: n1:a435cdc9d9cfb858 }
+  - { id: 465f8f9c-92dd-40c9-871b-b316a598a54d, version: n1:beda565c801198e5 }
+  - { id: 48d41b74-74f0-43aa-8b0e-0546f7447f9b, version: n1:b6855e5e8fdefa11 }
+  - { id: 527c5ef8-d857-4714-8db9-1ef7c126c65e, version: n1:8977798d49719372 }
+  - { id: 58b39af5-9221-4103-b703-10cba11329af, version: n1:555696ea58fa9d85 }
+  - { id: 6229222c-0f28-43aa-9f04-a41d4a5a05ae, version: n1:6fee060dc8c86945 }
+  - { id: 6348e5a1-fa96-41b1-b9ab-07dd281e786e, version: n1:52a5e51ae5a17dfa }
+  - { id: 6dfd18aa-ad50-4c68-9c54-1bb4df983f84, version: n1:67ebd0624004c969 }
+  - { id: 78a8cd99-84e8-41f7-9239-2ed99f790a55, version: n1:4023d54cdabf064f }
+  - { id: 7ca2dae5-b8a7-44de-a6c7-9542ff2e84f3, version: n1:67ebd0624004c969 }
+  - { id: 809e5c60-ce9b-4172-9799-29522197b156, version: n1:67ebd0624004c969 }
+  - { id: 88ea7b81-2883-4aad-a203-7d59b7dca8cb, version: n1:67ebd0624004c969 }
+  - { id: 897d76fa-49d6-4ac7-ab76-4afc91a61e10, version: n1:d7ace407787b97c0 }
+  - { id: 8af32ef6-642a-4c83-9c76-b554fd14600e, version: n1:9a75306b3ec6e5a1 }
+  - { id: 8afc50fd-8661-4635-bfba-38da5fc5b3b1, version: n1:7c245bad64bb8ba6 }
+  - { id: 8dc81884-b3d4-4548-9833-ff6064c77807, version: n1:67ebd0624004c969 }
+  - { id: 907506da-6f3e-48f8-9af4-97c8d27d3d25, version: n1:67ebd0624004c969 }
+  - { id: 928d06c2-e31e-4d1d-b65a-1540215c7c88, version: n1:b11ed15ea2e49a59 }
+  - { id: 940f506c-3351-448c-ae22-55695995b4e0, version: n1:eb15232032e0a12c }
+  - { id: 995bc5f6-f6e0-4418-b6f8-c627e054e043, version: n1:7202eff54dd2a36e }
+  - { id: a016275b-69c9-4bbe-bf70-4ee6afa30083, version: n1:7b4b5d9d039ec78e }
+  - { id: a6a364fe-92f9-4f63-a634-8233bde01992, version: n1:672f0e5cfae1911b }
+  - { id: b15a20a7-4f64-4872-9b9d-0d6c8d7e7b67, version: n1:67ebd0624004c969 }
+  - { id: b79a3b50-4ca3-4f60-bf8b-d5a310348143, version: n1:e0ddece86c89d654 }
+  - { id: b86460df-cb46-41bc-8760-b3a39fea1773, version: n1:9d3a604ccded8346 }
+  - { id: bb9524a6-e140-4287-9b91-b61ebe5e3579, version: n1:0e31156a7617d933 }
+  - { id: bfb90b84-5445-49d4-8987-8f37e3181ae8, version: n1:c9ef1908c00cc9f3 }
+  - { id: c0fbc4fc-dcc6-41e0-a0e9-7eb4084178df, version: n1:b14bfc5ef54c5182 }
+  - { id: cf93aa44-83dc-4ace-ba2d-3517bcf72d74, version: n1:67ebd0624004c969 }
+  - { id: d51503c2-c06a-4b0a-b1e3-d9da88d0c494, version: n1:67ebd0624004c969 }
+  - { id: d7078bec-9057-4354-8d7d-54538f4d6e55, version: n1:9134431c747fbfc7 }
+  - { id: d9378504-282e-4688-918c-d6c354e582bf, version: n1:b671cab842587e57 }
+  - { id: d98bcae8-ee2e-4c9e-b4ac-9fedb8588924, version: n1:77e5f7c37caf90d3 }
+  - { id: e8714b03-f817-4618-84d3-48c51eabb65a, version: n1:67ebd0624004c969 }
+  - { id: e87f1b0c-7e66-448f-9153-164ce9384eab, version: n1:6b72b5356a1d0111 }
+  - { id: ee6bdaf4-f622-4bf4-b9ad-1273af0b76d9, version: n1:908e703cfc6a923b }
+  - { id: f573b4a4-7db5-4d3d-b735-45fedf31fdae, version: n1:67ebd0624004c969 }
+  - { id: f8200de1-b278-4da6-96d5-d17311ef6f63, version: n1:f14d37940c3830b6 }
+  - { id: f9ba2c1d-005d-41a5-bb18-ad8665bdab78, version: n1:3f41cc610c27576b }
+  - { id: f9e29a66-53a6-4151-93bc-9d12056ff8e6, version: n1:67ebd0624004c969 }
+  - { id: fc0af77d-c9e3-4a32-ab7d-619142800c9e, version: n1:67ebd0624004c969 }
+  - { id: fd4c0543-9439-46c0-8519-d50f6fe67c17, version: n1:2498de6a7c489c02 }
+  - { id: fde03aa6-b771-493d-8726-e43512914500, version: n1:1e7452473681cfbc }
