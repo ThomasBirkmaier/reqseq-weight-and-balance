@@ -202,13 +202,20 @@ fn limit_rule_hc2_forward_and_mass() {
 }
 
 #[test]
+fn fleet_file_errors_are_reported() {
+    assert!(parse_fleet("HC4-01,hc4,765").is_err());
+    assert!(parse_fleet("HC4-01,hc9,765,2220,2026-01-01").is_err());
+}
+
+#[test]
 fn fleet_file_parses() {
     assert_eq!(parse_fleet(FLEET_CSV).unwrap().len(), 3);
 }
 
 #[test]
 fn json_interface_round_trip() {
-    let j = wb_core::evaluate_json("HC4-01\n160\n0\n20");
+    let j = wb_core::evaluate_json("hc4\nHC4-01\n160\n0\n20");
+    assert!(wb_core::evaluate_json("hc2\nHC4-01\n0\n0").contains("unknown aircraft"));
     assert!(j.contains("\"totalKg\":945"));
     assert!(j.contains("\"cgMm\":2219"));
     assert!(j.contains("Within limits (without fuel)"));

@@ -29,8 +29,11 @@ fn frac(f: (i128, i128)) -> String {
 
 /// JSON of the build's fleet with the data of its aircraft type.
 pub fn fleet_json(type_key: &str) -> String {
+    if let Err(e) = fleet::parse_fleet(FLEET_CSV) {
+        return format!("{{\"error\":{}}}", esc(&format!("fleet data file: {}", e)));
+    }
     let list = fleet_of_type(FLEET_CSV, type_key);
-    let Some(ti) = fleet::type_index(type_key) else { return "{\"aircraft\":[]}".into() };
+    let Some(ti) = fleet::type_index(type_key) else { return "{\"error\":\"unknown aircraft type\"}".into() };
     let t = &TYPES[ti];
     let stations: Vec<String> = t
         .stations
@@ -61,11 +64,13 @@ pub fn fleet_json(type_key: &str) -> String {
     )
 }
 
-/// JSON of the evaluation of one loading. `input` is the aircraft id, then one line per station.
+/// JSON of the evaluation of one loading. `input` is the type key of the build, the aircraft id,
+/// then one line per station. Only an aircraft of the build's type is evaluated.
 pub fn evaluate_json(input: &str) -> String {
     let mut lines = input.split('\n');
+    let type_key = lines.next().unwrap_or("").trim();
     let id = lines.next().unwrap_or("").trim();
-    let all = fleet::parse_fleet(FLEET_CSV).unwrap_or_default();
+    let all = fleet_of_type(FLEET_CSV, type_key);
     let Some(a): Option<&Aircraft> = all.iter().find(|a| a.id == id) else {
         return "{\"error\":\"unknown aircraft\"}".into();
     };

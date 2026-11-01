@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Weight and Balance</title>
+  <meta name="description" content="Weight and balance check for an invented aircraft. Not for flight operations.">
+  <link rel="stylesheet" href="__BASE__style.css">
+</head>
+<body data-type="__TYPE__" data-base="__BASE__">
+  <p class="banner" id="banner">Invented aircraft. Not for flight operations.</p>
+  <main>
+    <header>
+      <h1>Weight and Balance</h1>
+      <p class="aid" id="aid">This app is an aid. The pilot in command remains responsible for mass and balance according to the flight manual.</p>
+    </header>
+
+    <section class="card" aria-labelledby="aircraft-label">
+      <label id="aircraft-label" for="aircraft">Aircraft</label>
+      <select id="aircraft"><option value="">Select the aircraft</option></select>
+      <p class="hint" id="select-hint">Select the aircraft</p>
+      <div id="aircraft-info" hidden>
+        <p class="selected" id="selected"></p>
+        <p class="data" id="empty-data"></p>
+        <p class="data" id="mtom"></p>
+      </div>
+    </section>
+
+    <div id="work" hidden>
+      <section class="card" aria-labelledby="loading-title">
+        <h2 id="loading-title">Loading</h2>
+        <p class="hint">Enter whole kilograms. Enter 0 for a loading station with nothing on it.</p>
+        <div id="entries"></div>
+      </section>
+
+      <section class="result" id="result" aria-live="polite">
+        <p class="indication" id="indication"></p>
+        <p class="fuel" id="fuel">Fuel is not included in this version.</p>
+        <dl class="figures" id="figures">
+          <div><dt>Total mass</dt><dd id="total"></dd></div>
+          <div><dt>Centre of gravity</dt><dd id="cg"></dd></div>
+        </dl>
+      </section>
+
+      <section class="card" aria-labelledby="view-title">
+        <h2 id="view-title">Where the load is</h2>
+        <svg id="topview" viewBox="0 0 320 420" role="img" aria-label="Top view of the aircraft"></svg>
+      </section>
+
+      <section class="card" aria-labelledby="chart-title">
+        <h2 id="chart-title">Envelope</h2>
+        <svg id="chart" viewBox="0 0 340 260" role="img" aria-label="Envelope chart"></svg>
+      </section>
+
+      <section class="card" aria-labelledby="table-title">
+        <h2 id="table-title">Calculation</h2>
+        <div class="table-wrap">
+          <table id="table">
+            <thead><tr><th scope="col">Item</th><th scope="col">Mass</th><th scope="col">Arm</th><th scope="col">Moment</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="hint" id="rounding">Masses rounded to 1 kg, lever arms to 0.001 m, moments to 0.1 kg·m</p>
+      </section>
+    </div>
+  </main>
+  <script type="module" src="__BASE__js/main.js"></script>
+</body>
+</html>
