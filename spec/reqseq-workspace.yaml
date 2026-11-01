@@ -1,0 +1,12 @@
+reqseq-workspace: 1
+name: Weight and Balance
+repositories:
+  - name: spec
+    url: "https://github.com/ThomasBirkmaier/reqseq-weight-and-balance"
+    main: true
+metamodel:
+  repository: spec
+  path: metamodel
+evidence:
+  - repository: spec
+    path: evidence

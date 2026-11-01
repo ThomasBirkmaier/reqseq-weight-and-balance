@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  spec:
+    name: spec
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install ReqSeq 0.7.0
+        run: |
+          mkdir -p "$RUNNER_TEMP/reqseq" && cd "$RUNNER_TEMP/reqseq"
+          curl -fsSLO https://github.com/ThomasBirkmaier/ReqSeq/releases/download/v0.7/reqseq-cli-0.7.0.tgz
+          curl -fsSLO https://github.com/ThomasBirkmaier/ReqSeq/releases/download/v0.7/SHA256SUMS.txt
+          sha256sum -c --ignore-missing SHA256SUMS.txt
+          npm install -g --offline ./reqseq-cli-0.7.0.tgz
+          reqseq --version
+      - name: Check the ReqSeq workspace
+        run: reqseq workspace check --workspace spec
