@@ -1,0 +1,84 @@
+# Pilot extension of the standard model: stakeholders, hazards, glossary.
+reqseq-metamodel: 1
+
+types:
+  - key: stakeholder
+    name: Stakeholder
+    description: "A person or organisation with an interest in the system. Every need names at least one stakeholder."
+    prefix: STK
+    properties: [title, rationale]
+    required: [title]
+  - key: hazard
+    name: Hazard
+    description: "A potential source of harm in the use of the system. Every hazard is mitigated by at least one safety-related system requirement."
+    prefix: HAZ
+    properties: [title, rationale, severity]
+    required: [title, severity]
+  - key: glossary-term
+    name: Glossary Term
+    description: "A domain term with its one meaning in this workspace."
+    prefix: GT
+    properties: [title, definition]
+    required: [title, definition]
+
+properties:
+  # Added to standard types in standard-model.yaml: priority and validation-criteria on need,
+  # criticality and safety-related on system-requirement.
+  - key: priority
+    name: Priority
+    description: "How important the need is to its stakeholders."
+    kind: choice
+    choices:
+      - { key: must, name: Must }
+      - { key: should, name: Should }
+      - { key: could, name: Could }
+  - key: validation-criteria
+    name: Validation Criteria
+    description: "How the stakeholder judges in the context of use that the need is met, one per entry."
+    kind: text
+    many: true
+    markdown: true
+  - key: criticality
+    name: Criticality
+    description: "How severe the effect of a failure to meet the requirement is."
+    kind: choice
+    choices:
+      - { key: high, name: High }
+      - { key: medium, name: Medium }
+      - { key: low, name: Low }
+  - key: safety-related
+    name: Safety-related
+    description: "Whether the requirement mitigates a hazard."
+    kind: choice
+    choices:
+      - { key: "yes", name: "Yes" }
+      - { key: "no", name: "No" }
+  - key: severity
+    name: Severity
+    description: "The worst credible consequence of the hazard."
+    kind: choice
+    choices:
+      - { key: catastrophic, name: Catastrophic }
+      - { key: hazardous, name: Hazardous }
+      - { key: major, name: Major }
+      - { key: minor, name: Minor }
+  - key: definition
+    name: Definition
+    description: "The meaning of the term."
+    kind: text
+    markdown: true
+
+relations:
+  - key: has-stakeholder
+    name: Has stakeholder
+    description: "A need names a stakeholder who has it."
+    inverse-name: Stakeholder of
+    source-types: [need]
+    target-types: [stakeholder]
+  - key: mitigates
+    name: Mitigates
+    description: "A safety-related system requirement mitigates a hazard. A chain follows it from hazard to requirement."
+    inverse-name: Mitigated by
+    source-types: [system-requirement]
+    target-types: [hazard]
+    meaning: derivation
