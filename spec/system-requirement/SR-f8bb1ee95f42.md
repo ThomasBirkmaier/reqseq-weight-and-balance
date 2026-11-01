@@ -1,7 +1,7 @@
 ---
 id: 06510c41-64db-41cf-a63a-f8bb1ee95f42
 type: system-requirement
-status: draft
+status: approved
 title: Mass entry per loading station
 rationale: The pilot enters what is on board per place where it is loaded; showing the maximum helps to enter a valid mass.
 requirement-type: functional
