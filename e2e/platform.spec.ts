@@ -43,7 +43,7 @@ for (const scheme of ["light", "dark"] as const) {
           expect(await contrast(page, sel), `${sel} ${loading}`).toBeGreaterThanOrEqual(4.5);
         }
       }
-      await page.screenshot({ path: test.info().outputPath(`${scheme}.png`), fullPage: true });
+      await page.screenshot({ path: test.info().outputPath(`${scheme}.png`) });
     });
   });
 }
