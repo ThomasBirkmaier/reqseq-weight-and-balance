@@ -17,7 +17,7 @@ safety-related: "no"
 derives-from:
   - { id: fd4c0543-9439-46c0-8519-d50f6fe67c17, version: n1:2498de6a7c489c02, title: Right data for the individual aircraft }
 based-on:
-  - { id: 8af32ef6-642a-4c83-9c76-b554fd14600e, version: n1:0619dec84f91c012, title: Type data of the Halcyra HC-4 }
+  - { id: 8af32ef6-642a-4c83-9c76-b554fd14600e, version: n1:9a75306b3ec6e5a1, title: Type data of the Halcyra HC-4 }
 ---
 
-If an aircraft of the type Halcyra HC-4 is selected, the system shall use the type data of the Halcyra HC-4 and the empty mass of the selected aircraft as recorded in the type data decision.
+If an aircraft of the type Halcyra HC-4 is selected, the system shall use the type data of the Halcyra HC-4 together with the empty mass and the empty-mass lever arm of the selected aircraft as recorded in the type data decision.

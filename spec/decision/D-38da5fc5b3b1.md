@@ -19,6 +19,8 @@ The client (flight school operator) confirmed on 2026-11-01 the 8 needs of relea
 - reqseq:N-2c5472
 - reqseq:N-1e786e
 
+After round 3 the requirements role made editorial changes requested by IV&V, which do not change what the client confirmed: the criterion "visible without scrolling or pressing a button" also on the centre of gravity need, the empty aircraft and the on-screen rounding named in the cross-check need, "dim hangar" used in text and criterion of the phone need, and an observable wording of the re-weighing criterion of the data need.
+
 Conditions of the confirmation:
 
 1. Release 1 shows "Invented aircraft. Not for flight operations." at the top, "Within limits (without fuel)" as the positive limit indication and "Fuel is not included in this version." next to the results; without any of these, release 1 is not accepted.

@@ -8,6 +8,7 @@ requirement-type: quality
 acceptance-criteria:
   - Given the device is set to light mode, when the app is open with a valid loading, then the contrast ratio of the limit indication and of the body text against their background is at least 4.5:1.
   - Given the device is set to dark mode, when the app is open with a valid loading, then the contrast ratio of the limit indication and of the body text against their background is at least 4.5:1.
+  - Given the device is set to light mode or to dark mode, when the chart and the top view are shown, then the envelope line, the loading point and the loading station marks have a contrast ratio of at least 3:1 against their background.
 packages:
   - { id: b15a20a7-4f64-4872-9b9d-0d6c8d7e7b67, version: n1:67ebd0624004c969, title: Platform and quality }
 verification-method: test
