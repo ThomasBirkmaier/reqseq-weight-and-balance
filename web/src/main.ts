@@ -18,5 +18,5 @@ Core.load(`${base}wb_core.wasm`)
   });
 
 if ("serviceWorker" in navigator && location.protocol !== "file:") {
-  navigator.serviceWorker.register("sw.js").catch(() => undefined);
+  navigator.serviceWorker.register("sw.js", { scope: "./" }).catch(() => undefined);
 }
