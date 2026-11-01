@@ -96,6 +96,8 @@ input.invalid, input.missing { border: 2px solid var(--bad); }
 .result[data-state="within"] { border-color: var(--ok); background: var(--ok-bg); }
 .result[data-state="outside"] { border-color: var(--bad); background: var(--bad-bg); }
 .result[data-state="incomplete"] { border-color: var(--warn); background: var(--warn-bg); }
+.result-aircraft { margin: 0 0 0.25rem; font-weight: 600; }
+.load-error { margin: 0; font-weight: 700; color: var(--bad); }
 .indication { margin: 0; font-weight: 700; font-size: 1.1rem; }
 .indication span { display: block; }
 .result[data-state="within"] .indication { color: var(--ok); }

@@ -18,7 +18,7 @@ export function startApp(core: Core, typeKey: string): void {
     const id = `entry-${s.key}`;
     row.innerHTML = `<label for="${id}">${s.name} (max ${s.maxKg} kg)</label>
       <div class="field"><input id="${id}" name="${s.key}" type="text" inputmode="numeric" autocomplete="off" aria-describedby="${id}-msg"><span class="unit">kg</span></div>
-      <p class="message" id="${id}-msg" role="alert"></p>`;
+      <p class="message" id="${id}-msg" aria-live="polite"></p>`;
     entriesBox.append(row);
     inputs[i] = row.querySelector("input")!;
     messages[i] = row.querySelector(".message")!;
@@ -39,13 +39,15 @@ export function startApp(core: Core, typeKey: string): void {
     $("selected").textContent = `${a.id} · ${fleet.type.name}`;
     $("empty-data").textContent = `Empty mass ${kg(a.emptyKg)} at ${m(a.emptyArmMm)}, weighed ${a.weighingDate}`;
     $("mtom").textContent = `Maximum take-off mass ${kg(fleet.type.mtomKg)}`;
+    $("result-aircraft").textContent = `For ${a.id}`;
     const e = core.evaluate(typeKey, a.id, inputs.map((i) => i.value));
     render(e);
   }
 
   function render(e: Evaluation): void {
     e.entries.forEach((x, i) => {
-      messages[i].textContent = x.message ?? "";
+      const text = x.message ?? "";
+      if (messages[i].textContent !== text) messages[i].textContent = text;
       inputs[i].setAttribute("aria-invalid", String(!!x.message || (!e.complete && x.empty)));
       inputs[i].classList.toggle("invalid", !!x.message);
       inputs[i].classList.toggle("missing", !e.complete && x.empty && inputs.some((j) => j.value !== ""));
