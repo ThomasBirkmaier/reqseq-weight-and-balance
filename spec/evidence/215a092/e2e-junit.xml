@@ -1,0 +1,504 @@
+<testsuites id="" name="" tests="70" failures="0" skipped="0" errors="0" time="17.828731">
+<testsuite name="app.spec.ts" timestamp="2026-11-01T13:28:23.162Z" hostname="" tests="38" failures="0" skipped="0" time="12.225" errors="0">
+<testcase name="[SR-e95f42/AK1] shows one labelled entry per loading station" classname="app.spec.ts" time="0.45"><properties><property name="reqseq:element" value="06510c41-64db-41cf-a63a-f8bb1ee95f42"/><property name="reqseq:version" value="n1:d9acc9665144e095"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-e95f42-AK1-shows-o-eeebe-d-entry-per-loading-station/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-e95f42/AK2] entered front seats mass gives total mass 925 kg" classname="app.spec.ts" time="0.493"><properties><property name="reqseq:element" value="06510c41-64db-41cf-a63a-f8bb1ee95f42"/><property name="reqseq:version" value="n1:d9acc9665144e095"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-e95f42-AK2-entered-17823-ass-gives-total-mass-925-kg/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-181ae8/AK1] rear seats 201 kg shows a message next to the entry" classname="app.spec.ts" time="0.323"><properties><property name="reqseq:element" value="bfb90b84-5445-49d4-8987-8f37e3181ae8"/><property name="reqseq:version" value="n1:c9ef1908c00cc9f3"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-181ae8-AK1-rear-se-e604a-a-message-next-to-the-entry/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-181ae8/AK2] negative front seats mass shows a message" classname="app.spec.ts" time="0.304"><properties><property name="reqseq:element" value="bfb90b84-5445-49d4-8987-8f37e3181ae8"/><property name="reqseq:version" value="n1:c9ef1908c00cc9f3"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-181ae8-AK2-negative-front-seats-mass-shows-a-message/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-181ae8/AK3] decimal baggage mass shows a message" classname="app.spec.ts" time="0.307"><properties><property name="reqseq:element" value="bfb90b84-5445-49d4-8987-8f37e3181ae8"/><property name="reqseq:version" value="n1:c9ef1908c00cc9f3"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-181ae8-AK3-decimal-baggage-mass-shows-a-message/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-b59c9a/AK1] invalid entry gives check not complete" classname="app.spec.ts" time="0.298"><properties><property name="reqseq:element" value="200f4520-412d-42f3-b977-a2424ab59c9a"/><property name="reqseq:version" value="n1:1e0f41be72f25aa3"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-b59c9a-AK1-invalid-entry-gives-check-not-complete/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-b59c9a/AK2] empty entry gives check not complete" classname="app.spec.ts" time="0.31"><properties><property name="reqseq:element" value="200f4520-412d-42f3-b977-a2424ab59c9a"/><property name="reqseq:version" value="n1:1e0f41be72f25aa3"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-b59c9a-AK2-empty-entry-gives-check-not-complete/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-b59c9a/AK3] corrected entry gives a limit indication" classname="app.spec.ts" time="0.368"><properties><property name="reqseq:element" value="200f4520-412d-42f3-b977-a2424ab59c9a"/><property name="reqseq:version" value="n1:1e0f41be72f25aa3"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-b59c9a-AK3-corrected-entry-gives-a-limit-indication/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-348143/AK1] total mass 945 kg" classname="app.spec.ts" time="0.343"><properties><property name="reqseq:element" value="b79a3b50-4ca3-4f60-bf8b-d5a310348143"/><property name="reqseq:version" value="n1:e0ddece86c89d654"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-348143-AK1-total-mass-945-kg/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-348143/AK2] total mass of the empty aircraft 765 kg" classname="app.spec.ts" time="0.316"><properties><property name="reqseq:element" value="b79a3b50-4ca3-4f60-bf8b-d5a310348143"/><property name="reqseq:version" value="n1:e0ddece86c89d654"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-348143-AK2-total-mass-of-the-empty-aircraft-765-kg/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-29562e/AK1] centre of gravity 2.219 m" classname="app.spec.ts" time="0.329"><properties><property name="reqseq:element" value="109946de-c77a-44bf-81ff-eeacde29562e"/><property name="reqseq:version" value="n1:edd358de7976a3d1"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-29562e-AK1-centre-of-gravity-2-219-m/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-29562e/AK2] centre of gravity 2.475 m" classname="app.spec.ts" time="0.325"><properties><property name="reqseq:element" value="109946de-c77a-44bf-81ff-eeacde29562e"/><property name="reqseq:version" value="n1:edd358de7976a3d1"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-29562e-AK2-centre-of-gravity-2-475-m/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-45198e/AK1] 1155 kg shows mass above maximum take-off mass" classname="app.spec.ts" time="0.31"><properties><property name="reqseq:element" value="41ff0349-53cf-4606-885a-f6f6d345198e"/><property name="reqseq:version" value="n1:374c4b13792d0a86"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-45198e-AK1-1155-kg-c6d46-above-maximum-take-off-mass/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-45198e/AK2] exactly 1150 kg does not show the mass indication" classname="app.spec.ts" time="0.319"><properties><property name="reqseq:element" value="41ff0349-53cf-4606-885a-f6f6d345198e"/><property name="reqseq:version" value="n1:374c4b13792d0a86"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-45198e-AK2-exactly-81619-ot-show-the-mass-indication/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-687e88/AK1] aft of the aft limit shows centre of gravity outside envelope" classname="app.spec.ts" time="0.314"><properties><property name="reqseq:element" value="3d7f9eda-d927-4a0f-9efe-917d8c687e88"/><property name="reqseq:version" value="n1:ac8eba4296459d4e"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-687e88-AK1-aft-of--728ce-of-gravity-outside-envelope/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-687e88/AK2] forward of the forward limit shows centre of gravity outside envelope" classname="app.spec.ts" time="0.301"><properties><property name="reqseq:element" value="3d7f9eda-d927-4a0f-9efe-917d8c687e88"/><property name="reqseq:version" value="n1:ac8eba4296459d4e"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-687e88-AK2-forward-fcbe8-of-gravity-outside-envelope/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-687e88/AK3] exactly on the forward limit is not outside" classname="app.spec.ts" time="0.311"><properties><property name="reqseq:element" value="3d7f9eda-d927-4a0f-9efe-917d8c687e88"/><property name="reqseq:version" value="n1:ac8eba4296459d4e"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-687e88-AK3-exactly-de701-orward-limit-is-not-outside/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-3a4905/AK1] 945 kg at 2.219 m is within limits" classname="app.spec.ts" time="0.342"><properties><property name="reqseq:element" value="1669da39-c0ed-4309-ae48-a60cc03a4905"/><property name="reqseq:version" value="n1:89c0a1b571a8f2fc"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-3a4905-AK1-945-kg-at-2-219-m-is-within-limits/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-3a4905/AK2] exactly the maximum take-off mass is within limits" classname="app.spec.ts" time="0.38"><properties><property name="reqseq:element" value="1669da39-c0ed-4309-ae48-a60cc03a4905"/><property name="reqseq:version" value="n1:89c0a1b571a8f2fc"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-3a4905-AK2-exactly-26bb5-e-off-mass-is-within-limits/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-3a4905/AK3] exactly on the aft limit is within limits" classname="app.spec.ts" time="0.352"><properties><property name="reqseq:element" value="1669da39-c0ed-4309-ae48-a60cc03a4905"/><property name="reqseq:version" value="n1:89c0a1b571a8f2fc"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-3a4905-AK3-exactly-on-the-aft-limit-is-within-limits/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-588924/AK1] results update within 100 ms without a button" classname="app.spec.ts" time="0.319"><properties><property name="reqseq:element" value="d98bcae8-ee2e-4c9e-b4ac-9fedb8588924"/><property name="reqseq:version" value="n1:77e5f7c37caf90d3"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-588924-AK1-results-b0cf4-hin-100-ms-without-a-button/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-0b76d9/AK1] table rows with mass, lever arm and moment" classname="app.spec.ts" time="0.313"><properties><property name="reqseq:element" value="ee6bdaf4-f622-4bf4-b9ad-1273af0b76d9"/><property name="reqseq:version" value="n1:908e703cfc6a923b"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-0b76d9-AK1-table-rows-with-mass-lever-arm-and-moment/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-0b76d9/AK2] rounding is stated below the table" classname="app.spec.ts" time="0.296"><properties><property name="reqseq:element" value="ee6bdaf4-f622-4bf4-b9ad-1273af0b76d9"/><property name="reqseq:version" value="n1:908e703cfc6a923b"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-0b76d9-AK2-rounding-is-stated-below-the-table/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-5e3579/AK1] top view marks the loading stations front to back" classname="app.spec.ts" time="0.33"><properties><property name="reqseq:element" value="bb9524a6-e140-4287-9b91-b61ebe5e3579"/><property name="reqseq:version" value="n1:0e31156a7617d933"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-5e3579-AK1-top-vie-99e9a-ding-stations-front-to-back/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-5e3579/AK2] changed baggage mass updates its mark" classname="app.spec.ts" time="0.355"><properties><property name="reqseq:element" value="bb9524a6-e140-4287-9b91-b61ebe5e3579"/><property name="reqseq:version" value="n1:0e31156a7617d933"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-5e3579-AK2-changed-baggage-mass-updates-its-mark/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-3f6229/AK1] chart shows the envelope and the point inside" classname="app.spec.ts" time="0.333"><properties><property name="reqseq:element" value="31d0e124-d78f-4db1-930e-d6ea013f6229"/><property name="reqseq:version" value="n1:814c63dee64f45a5"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-3f6229-AK1-chart-s-71848-velope-and-the-point-inside/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-3f6229/AK2] point aft of the aft limit is labelled" classname="app.spec.ts" time="0.333"><properties><property name="reqseq:element" value="31d0e124-d78f-4db1-930e-d6ea013f6229"/><property name="reqseq:version" value="n1:814c63dee64f45a5"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-3f6229-AK2-point-aft-of-the-aft-limit-is-labelled/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-3f6229/AK3] point forward of the forward limit is labelled" classname="app.spec.ts" time="0.33"><properties><property name="reqseq:element" value="31d0e124-d78f-4db1-930e-d6ea013f6229"/><property name="reqseq:version" value="n1:814c63dee64f45a5"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-3f6229-AK3-point-f-9ce46-e-forward-limit-is-labelled/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-fc8953/AK1] selected aircraft is named above the results" classname="app.spec.ts" time="0.287"><properties><property name="reqseq:element" value="422a5534-110c-4d7d-a0ef-6705a3fc8953"/><property name="reqseq:version" value="n1:a435cdc9d9cfb858"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-fc8953-AK1-selecte-a8bec--is-named-above-the-results/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-fc8953/AK2] aircraft selection lists the HC-4 fleet" classname="app.spec.ts" time="0.199"><properties><property name="reqseq:element" value="422a5534-110c-4d7d-a0ef-6705a3fc8953"/><property name="reqseq:version" value="n1:a435cdc9d9cfb858"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-fc8953-AK2-aircraft-selection-lists-the-HC-4-fleet/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-fc8953/AK3] no aircraft is preselected" classname="app.spec.ts" time="0.237"><properties><property name="reqseq:element" value="422a5534-110c-4d7d-a0ef-6705a3fc8953"/><property name="reqseq:version" value="n1:a435cdc9d9cfb858"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-fc8953-AK3-no-aircraft-is-preselected/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-bdab78/AK1] HC4-01 empty: 765 kg at 2.220 m" classname="app.spec.ts" time="0.334"><properties><property name="reqseq:element" value="f9ba2c1d-005d-41a5-bb18-ad8665bdab78"/><property name="reqseq:version" value="n1:3f41cc610c27576b"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-bdab78-AK1-HC4-01-empty-765-kg-at-2-220-m/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-bdab78/AK2] HC4-02 empty: 778 kg at 2.236 m" classname="app.spec.ts" time="0.303"><properties><property name="reqseq:element" value="f9ba2c1d-005d-41a5-bb18-ad8665bdab78"/><property name="reqseq:version" value="n1:3f41cc610c27576b"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-bdab78-AK2-HC4-02-empty-778-kg-at-2-236-m/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-bdab78/AK3] maximum take-off mass 1150 kg" classname="app.spec.ts" time="0.249"><properties><property name="reqseq:element" value="f9ba2c1d-005d-41a5-bb18-ad8665bdab78"/><property name="reqseq:version" value="n1:3f41cc610c27576b"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-bdab78-AK3-maximum-take-off-mass-1150-kg/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-663a61/AK1] empty mass, lever arm and weighing date from the fleet data file" classname="app.spec.ts" time="0.238"><properties><property name="reqseq:element" value="160ae277-8376-4c3f-b0d8-bd4b2e663a61"/><property name="reqseq:version" value="n1:c4e3a8b6aedc061c"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-663a61-AK1-empty-m-62ad3-te-from-the-fleet-data-file/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-1329af/AK1] invented aircraft notice is the first text" classname="app.spec.ts" time="0.195"><properties><property name="reqseq:element" value="58b39af5-9221-4103-b703-10cba11329af"/><property name="reqseq:version" value="n1:555696ea58fa9d85"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-1329af-AK1-invente-edd9c-ft-notice-is-the-first-text/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-1329af/AK2] responsibility statement above the first result" classname="app.spec.ts" time="0.421"><properties><property name="reqseq:element" value="58b39af5-9221-4103-b703-10cba11329af"/><property name="reqseq:version" value="n1:555696ea58fa9d85"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-1329af-AK2-respons-c676a-ment-above-the-first-result/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-1329af/AK3] fuel note directly below the limit indication" classname="app.spec.ts" time="0.358"><properties><property name="reqseq:element" value="58b39af5-9221-4103-b703-10cba11329af"/><property name="reqseq:version" value="n1:555696ea58fa9d85"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/app--SR-1329af-AK3-fuel-no-2d009--below-the-limit-indication/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="platform.spec.ts" timestamp="2026-11-01T13:28:23.162Z" hostname="" tests="9" failures="0" skipped="0" time="5.216" errors="0">
+<testcase name="phone › [SR-54e043/AK1] page is at most 360 px wide" classname="platform.spec.ts" time="0.358"><properties><property name="reqseq:element" value="995bc5f6-f6e0-4418-b6f8-c627e054e043"/><property name="reqseq:version" value="n1:7202eff54dd2a36e"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/platform-phone-SR-54e043-AK1-page-is-at-most-360-px-wide/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="phone › [SR-54e043/AK2] total mass and limit indication without horizontal scrolling" classname="platform.spec.ts" time="0.349"><properties><property name="reqseq:element" value="995bc5f6-f6e0-4418-b6f8-c627e054e043"/><property name="reqseq:version" value="n1:7202eff54dd2a36e"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/platform-phone-SR-54e043-A-8c3f5-ithout-horizontal-scrolling/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="phone › [SR-54e043/AK3] limit indication in the viewport after the baggage entry" classname="platform.spec.ts" time="0.376"><properties><property name="reqseq:element" value="995bc5f6-f6e0-4418-b6f8-c627e054e043"/><property name="reqseq:version" value="n1:7202eff54dd2a36e"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/platform-phone-SR-54e043-A-b9acb-ort-after-the-baggage-entry/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="light mode › [SR-070ac3/AK1] text contrast at least 4.5:1 in light mode" classname="platform.spec.ts" time="1.19"><properties><property name="reqseq:element" value="3f61ba4d-c324-4724-9e28-c8cbad070ac3"/><property name="reqseq:version" value="n1:e97995f886413da2"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/platform-light-mode-SR-070-d3837-t-least-4-5-1-in-light-mode/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="dark mode › [SR-070ac3/AK2] text contrast at least 4.5:1 in dark mode" classname="platform.spec.ts" time="1.131"><properties><property name="reqseq:element" value="3f61ba4d-c324-4724-9e28-c8cbad070ac3"/><property name="reqseq:version" value="n1:e97995f886413da2"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/platform-dark-mode-SR-070a-a25f8-at-least-4-5-1-in-dark-mode/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-070ac3/AK3] graphics contrast at least 3:1 in light and dark mode" classname="platform.spec.ts" time="0.753"><properties><property name="reqseq:element" value="3f61ba4d-c324-4724-9e28-c8cbad070ac3"/><property name="reqseq:version" value="n1:e97995f886413da2"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/platform--SR-070ac3-AK3-gr-11571--3-1-in-light-and-dark-mode/test-finished-1.png]]
+
+[[ATTACHMENT|e2e/platform--SR-070ac3-AK3-gr-11571--3-1-in-light-and-dark-mode/test-finished-2.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-384eab/AK1] opens and calculates without network after the first visit" classname="platform.spec.ts" time="0.511"><properties><property name="reqseq:element" value="e87f1b0c-7e66-448f-9153-164ce9384eab"/><property name="reqseq:version" value="n1:6b72b5356a1d0111"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/platform--SR-384eab-AK1-op-03603-twork-after-the-first-visit/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-384eab/AK2] entering a loading sends no network request" classname="platform.spec.ts" time="0.318"><properties><property name="reqseq:element" value="e87f1b0c-7e66-448f-9153-164ce9384eab"/><property name="reqseq:version" value="n1:6b72b5356a1d0111"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/platform--SR-384eab-AK2-en-18701-ng-sends-no-network-request/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-384eab/AK3] no sign-in or installation step" classname="platform.spec.ts" time="0.23"><properties><property name="reqseq:element" value="e87f1b0c-7e66-448f-9153-164ce9384eab"/><property name="reqseq:version" value="n1:6b72b5356a1d0111"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/platform--SR-384eab-AK3-no-sign-in-or-installation-step/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="robustness.spec.ts" timestamp="2026-11-01T13:28:23.162Z" hostname="" tests="7" failures="0" skipped="0" time="5.303" errors="0">
+<testcase name="result card names the selected aircraft" classname="robustness.spec.ts" time="0.303">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/robustness-result-card-names-the-selected-aircraft/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="a load failure shows a message and no selection" classname="robustness.spec.ts" time="0.221">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/robustness-a-load-failure-shows-a-message-and-no-selection/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="entry messages are polite live regions, not alerts" classname="robustness.spec.ts" time="0.272">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/robustness-entry-messages-are-polite-live-regions-not-alerts/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="phone screen › [SR-54e043/AK4] the result card never hides the entry being edited or its message" classname="robustness.spec.ts" time="0.292"><properties><property name="reqseq:element" value="995bc5f6-f6e0-4418-b6f8-c627e054e043"/><property name="reqseq:version" value="n1:7202eff54dd2a36e"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/robustness-phone-screen-SR-0e396-being-edited-or-its-message/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-3f6229/AK4] envelope corners are listed as numbers" classname="robustness.spec.ts" time="0.442"><properties><property name="reqseq:element" value="31d0e124-d78f-4db1-930e-d6ea013f6229"/><property name="reqseq:version" value="n1:814c63dee64f45a5"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/robustness--SR-3f6229-AK4--a3b43-rners-are-listed-as-numbers/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-384eab/AK4] without network the app says its aircraft data may be older" classname="robustness.spec.ts" time="0.292"><properties><property name="reqseq:element" value="e87f1b0c-7e66-448f-9153-164ce9384eab"/><property name="reqseq:version" value="n1:6b72b5356a1d0111"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/robustness--SR-384eab-AK4--21e68--aircraft-data-may-be-older/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="poor reception › opens from the cache within 5 s when the network hangs" classname="robustness.spec.ts" time="3.481">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/robustness-poor-reception--3b8a4--5-s-when-the-network-hangs/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="validation.spec.ts" timestamp="2026-11-01T13:28:23.162Z" hostname="" tests="10" failures="0" skipped="0" time="8.301" errors="0">
+<testcase name="walk-through need 6010df enter what is on board" classname="validation.spec.ts" time="0.576">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/validation-walk-through-need-6010df-enter-what-is-on-board/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="walk-through need e9c5c6 mass permitted at once" classname="validation.spec.ts" time="1.108">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/validation-walk-through-need-e9c5c6-mass-permitted-at-once/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="walk-through need 790a55 centre of gravity permitted at once" classname="validation.spec.ts" time="1.207">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/validation-walk-through-ne-25017-f-gravity-permitted-at-once/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="walk-through need 98a54d see where the load acts" classname="validation.spec.ts" time="0.918">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/validation-walk-through-need-98a54d-see-where-the-load-acts/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="walk-through need e01992 phone without network" classname="validation.spec.ts" time="0.618">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/validation-walk-through-need-e01992-phone-without-network/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="walk-through need e01992 dark mode" classname="validation.spec.ts" time="0.383">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/validation-walk-through-need-e01992-dark-mode/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="walk-through need e67c17 data of the individual aircraft" classname="validation.spec.ts" time="0.971">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/validation-walk-through-ne-315c1--of-the-individual-aircraft/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="walk-through need 2c5472 cross-check the calculation" classname="validation.spec.ts" time="0.61">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/validation-walk-through-ne-d890c-cross-check-the-calculation/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="walk-through need 1e786e never a wrong within limits" classname="validation.spec.ts" time="1.372">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/validation-walk-through-ne-c1d6e-never-a-wrong-within-limits/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="walk-through need e67c17 new empty mass after a re-weighing" classname="validation.spec.ts" time="0.538">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/validation-walk-through-ne-14b01-ty-mass-after-a-re-weighing/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="variant-hc2.spec.ts" timestamp="2026-11-01T13:28:23.162Z" hostname="" tests="6" failures="0" skipped="0" time="1.604" errors="0">
+<testcase name="[SR-d0fb6e/AK1] HC2-01 empty: 640 kg at 2.150 m" classname="variant-hc2.spec.ts" time="0.273"><properties><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:element" value="38ee6d8c-f591-4c2b-bdec-114077d0fb6e"/><property name="reqseq:version" value="n1:11ddb551be17c0bc"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant-hc2--SR-d0fb6e-AK1-HC2-01-empty-640-kg-at-2-150-m/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-d0fb6e/AK2] HC2-01 entries without rear seats" classname="variant-hc2.spec.ts" time="0.276"><properties><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:element" value="38ee6d8c-f591-4c2b-bdec-114077d0fb6e"/><property name="reqseq:version" value="n1:11ddb551be17c0bc"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant-hc2--SR-d0fb6e-AK2-HC2-01-entries-without-rear-seats/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-d0fb6e/AK3] HC2-01 aft of the aft limit" classname="variant-hc2.spec.ts" time="0.346"><properties><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:element" value="38ee6d8c-f591-4c2b-bdec-114077d0fb6e"/><property name="reqseq:version" value="n1:11ddb551be17c0bc"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant-hc2--SR-d0fb6e-AK3-HC2-01-aft-of-the-aft-limit/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-b73090/AK1] HC-2 build names the selected aircraft" classname="variant-hc2.spec.ts" time="0.269"><properties><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:element" value="0041aa52-adb0-4a61-a6b0-4f3ed6b73090"/><property name="reqseq:version" value="n1:f7364e3cafd9a7b6"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant-hc2--SR-b73090-AK1-ac31b-names-the-selected-aircraft/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-b73090/AK2] HC-2 build lists HC2-01 only" classname="variant-hc2.spec.ts" time="0.214"><properties><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:element" value="0041aa52-adb0-4a61-a6b0-4f3ed6b73090"/><property name="reqseq:version" value="n1:f7364e3cafd9a7b6"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant-hc2--SR-b73090-AK2-HC-2-build-lists-HC2-01-only/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-b73090/AK3] HC-2 build has no aircraft preselected" classname="variant-hc2.spec.ts" time="0.226"><properties><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:element" value="0041aa52-adb0-4a61-a6b0-4f3ed6b73090"/><property name="reqseq:version" value="n1:f7364e3cafd9a7b6"/><property name="reqseq:item" value="215a092"/><property name="reqseq:date" value="2026-11-01T13:28:23.162Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant-hc2--SR-b73090-AK3-616e0-has-no-aircraft-preselected/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
