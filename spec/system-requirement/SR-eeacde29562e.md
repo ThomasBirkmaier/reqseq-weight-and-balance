@@ -15,9 +15,9 @@ criticality: high
 safety-related: "no"
 derives-from:
   - { id: 78a8cd99-84e8-41f7-9239-2ed99f790a55, version: n1:4023d54cdabf064f, title: Know at once whether the centre of gravity is permitted }
-  - { id: 100e9969-73c0-423b-b96f-708da92c5472, version: n1:6be63f5bdc19bc58, title: Cross-check the calculation }
+  - { id: 100e9969-73c0-423b-b96f-708da92c5472, version: n1:72d4d52a66d69898, title: Cross-check the calculation }
 based-on:
-  - { id: d9378504-282e-4688-918c-d6c354e582bf, version: n1:4c2143a0ef586692, title: "Units, input resolution and rounding" }
+  - { id: d9378504-282e-4688-918c-d6c354e582bf, version: n1:b8fd64bb1fe5b5cf, title: "Units, input resolution and rounding" }
 ---
 
 If every mass entry of the loading is valid, the system shall show the centre of gravity in m rounded to 0.001 m.

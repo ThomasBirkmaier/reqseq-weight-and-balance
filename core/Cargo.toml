@@ -1,0 +1,15 @@
+[package]
+name = "wb-core"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "Mass and balance calculation core of the Weight and Balance demo (invented aircraft, not for flight operations)."
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[profile.release]
+opt-level = "s"
+lto = true
+panic = "abort"
