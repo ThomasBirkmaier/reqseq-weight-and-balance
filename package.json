@@ -1,0 +1,17 @@
+{
+  "name": "reqseq-weight-and-balance",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "description": "Weight and Balance demo for an invented aircraft. Not for flight operations.",
+  "type": "module",
+  "scripts": {
+    "build": "sh scripts/build.sh",
+    "serve": "node scripts/serve.mjs dist 4173",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "typescript": "6.0.2"
+  }
+}

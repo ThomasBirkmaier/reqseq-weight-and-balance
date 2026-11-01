@@ -16,8 +16,8 @@ jobs:
     name: spec
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
       - name: Install ReqSeq 0.7.0
@@ -35,14 +35,14 @@ jobs:
     name: core
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
         with:
           targets: wasm32-unknown-unknown
-      - uses: taiki-e/install-action@v2
+      - uses: taiki-e/install-action@68a389c788b2cd04016ce8c80ee23b80d2ab3d68 # v2
         with:
           tool: cargo-nextest
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
       - name: Install ReqSeq 0.7.0
@@ -63,9 +63,48 @@ jobs:
           mkdir -p evidence-out
           python3 scripts/junit-map.py core/target/nextest/ci/junit.xml evidence-out/core-junit.xml
           reqseq evidence enrich-junit evidence-out/core-junit.xml "${GITHUB_SHA::7}" --workspace spec
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: core-junit
           path: evidence-out/
 
+  e2e:
+    name: e2e
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+      - name: Install ReqSeq 0.7.0
+        run: |
+          mkdir -p "$RUNNER_TEMP/reqseq" && cd "$RUNNER_TEMP/reqseq"
+          curl -fsSLO "$REQSEQ_URL/reqseq-cli-0.7.0.tgz"
+          curl -fsSLO "$REQSEQ_URL/SHA256SUMS.txt"
+          sha256sum -c --ignore-missing SHA256SUMS.txt
+          npm install -g --offline ./reqseq-cli-0.7.0.tgz
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Build the web app
+        run: sh scripts/build.sh
+      - name: End-to-end tests (JUnit and screenshots)
+        run: npx playwright test
+        env:
+          CI: "true"
+      - name: Enrich JUnit with ReqSeq
+        if: always()
+        run: |
+          mkdir -p evidence-out
+          cp test-results/e2e-junit.xml evidence-out/e2e-junit.xml
+          reqseq evidence enrich-junit evidence-out/e2e-junit.xml "${GITHUB_SHA::7}" --workspace spec
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: e2e-results
+          path: |
+            evidence-out/
+            test-results/
