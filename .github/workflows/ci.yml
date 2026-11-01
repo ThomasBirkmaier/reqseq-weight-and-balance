@@ -8,6 +8,9 @@ on:
 permissions:
   contents: read
 
+env:
+  REQSEQ_URL: https://github.com/ThomasBirkmaier/ReqSeq/releases/download/v0.7
+
 jobs:
   spec:
     name: spec
@@ -20,10 +23,49 @@ jobs:
       - name: Install ReqSeq 0.7.0
         run: |
           mkdir -p "$RUNNER_TEMP/reqseq" && cd "$RUNNER_TEMP/reqseq"
-          curl -fsSLO https://github.com/ThomasBirkmaier/ReqSeq/releases/download/v0.7/reqseq-cli-0.7.0.tgz
-          curl -fsSLO https://github.com/ThomasBirkmaier/ReqSeq/releases/download/v0.7/SHA256SUMS.txt
+          curl -fsSLO "$REQSEQ_URL/reqseq-cli-0.7.0.tgz"
+          curl -fsSLO "$REQSEQ_URL/SHA256SUMS.txt"
           sha256sum -c --ignore-missing SHA256SUMS.txt
           npm install -g --offline ./reqseq-cli-0.7.0.tgz
           reqseq --version
       - name: Check the ReqSeq workspace
         run: reqseq workspace check --workspace spec
+
+  core:
+    name: core
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-nextest
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install ReqSeq 0.7.0
+        run: |
+          mkdir -p "$RUNNER_TEMP/reqseq" && cd "$RUNNER_TEMP/reqseq"
+          curl -fsSLO "$REQSEQ_URL/reqseq-cli-0.7.0.tgz"
+          curl -fsSLO "$REQSEQ_URL/SHA256SUMS.txt"
+          sha256sum -c --ignore-missing SHA256SUMS.txt
+          npm install -g --offline ./reqseq-cli-0.7.0.tgz
+      - name: Unit and acceptance tests (JUnit)
+        working-directory: core
+        run: cargo nextest run --profile ci
+      - name: Build WebAssembly
+        run: cargo build --release --target wasm32-unknown-unknown --manifest-path core/Cargo.toml
+      - name: Map Rust test names and enrich JUnit with ReqSeq
+        if: always()
+        run: |
+          mkdir -p evidence-out
+          python3 scripts/junit-map.py core/target/nextest/ci/junit.xml evidence-out/core-junit.xml
+          reqseq evidence enrich-junit evidence-out/core-junit.xml "${GITHUB_SHA::7}" --workspace spec
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: core-junit
+          path: evidence-out/
+
