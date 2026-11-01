@@ -1,4 +1,4 @@
-// Entry point: load the core and start the app.
+// Entry point: load the core, start the app, register the offline cache.
 import { Core } from "./core.js";
 import { startApp } from "./app.js";
 
@@ -10,3 +10,6 @@ Core.load(`${base}wb_core.wasm`).then((core) => {
   document.body.dataset.ready = "true";
 });
 
+if ("serviceWorker" in navigator && location.protocol !== "file:") {
+  navigator.serviceWorker.register("sw.js").catch(() => undefined);
+}
