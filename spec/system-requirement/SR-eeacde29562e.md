@@ -1,7 +1,7 @@
 ---
 id: 109946de-c77a-44bf-81ff-eeacde29562e
 type: system-requirement
-status: draft
+status: approved
 title: Centre of gravity
 rationale: The pilot and the instructor read the centre of gravity to compare it with the envelope and the paper loading sheet.
 requirement-type: functional
