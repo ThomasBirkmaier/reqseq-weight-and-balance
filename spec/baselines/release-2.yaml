@@ -1,0 +1,132 @@
+reqseq-baseline: 1
+name: release-2
+date: 2026-11-02T07:07:54Z
+selection: {}
+repositories:
+  - { name: spec, commit: 0170c3e47f59518bdd4926ffd1288a464daacfd4 }
+  - { name: fuel, commit: 89330c3507f9037ebfbc5c8404012739737a006f }
+elements:
+  - { id: 0041aa52-adb0-4a61-a6b0-4f3ed6b73090, version: n1:5b97da4a1cb25de7 }
+  - { id: 031a08ff-81c7-41c9-b740-156684a02a77, version: n1:119f7845779c91b3 }
+  - { id: 054e2e82-61c5-48e8-853c-2747fdcff282, version: n1:54cdd92b799c8af1, repository: fuel }
+  - { id: 05ae9286-bea0-45ad-9338-d1f959f23826, version: n1:67ebd0624004c969 }
+  - { id: 06510c41-64db-41cf-a63a-f8bb1ee95f42, version: n1:ead386dee15763f1 }
+  - { id: 0949deaf-3bdb-4aca-8f67-511a39083f2b, version: n1:dbc46960aff90f59 }
+  - { id: 09b067c4-bd9a-447b-9208-071791d192b3, version: n1:737df016c5876bfb }
+  - { id: 0ad97c1b-beb1-48a1-b1f8-30914e45a7c4, version: n1:67ebd0624004c969 }
+  - { id: 0fb61d58-3251-434b-b85d-fc0b6827839a, version: n1:18f0db733509459a }
+  - { id: 100e9969-73c0-423b-b96f-708da92c5472, version: n1:2141600b57cc64b3 }
+  - { id: 109946de-c77a-44bf-81ff-eeacde29562e, version: n1:ef28bba89d959368 }
+  - { id: 153a5bdf-6759-4d0e-80d9-20b0c691084e, version: n1:362a6d6c8450bada }
+  - { id: 160ae277-8376-4c3f-b0d8-bd4b2e663a61, version: n1:b8208d84c4b75bf9 }
+  - { id: 1669da39-c0ed-4309-ae48-a60cc03a4905, version: n1:8860bb47ea335df2 }
+  - { id: 17e053f9-593d-4128-ba94-a15850fdab45, version: n1:624342f04c870c39 }
+  - { id: 1c3c52e1-3b91-4670-81a2-5ad5fdd10f50, version: n1:cfbe9a41de59ffad, repository: fuel }
+  - { id: 1e298834-92c8-438a-8296-9786b6e9c5c6, version: n1:574c5c59f92846ee }
+  - { id: 1e3100f3-0087-4ba8-8224-44298fbbffcf, version: n1:4490df1bbe9099d8, repository: fuel }
+  - { id: 200f4520-412d-42f3-b977-a2424ab59c9a, version: n1:c76f339f8fcc4925 }
+  - { id: 220b66d8-6754-47ed-bb19-4a91bf98bc13, version: n1:132783ddf9c4ce30 }
+  - { id: 22dc3664-8930-42a9-a638-a032b011bc2a, version: n1:6991d9ca87f2ec3f }
+  - { id: 2307ded2-d362-44ad-8de7-24ab1c2dc652, version: n1:529e16f08ff4671b }
+  - { id: 26a81038-3f7b-4df9-bfcb-e94f646010df, version: n1:9267ec38b2832981 }
+  - { id: 2848e6d3-5cb0-401e-8628-8df7a84b1af6, version: n1:cadd862570007ed8, repository: fuel }
+  - { id: 295dce99-cc07-442a-8523-f952686eec64, version: n1:66f67fe0c2d9e99e, repository: fuel }
+  - { id: 2f23eb42-057f-44ec-88cd-10a960b70292, version: n1:5fca6e7d29589ff2 }
+  - { id: 308dd1a5-5582-4161-aa9d-e748de5554e5, version: n1:4ee5cde0fffafc74, repository: fuel }
+  - { id: 31d0e124-d78f-4db1-930e-d6ea013f6229, version: n1:5c5dacc502feb54d }
+  - { id: 32c401e5-8e3a-4806-98d6-4d255277d31f, version: n1:79eca97ec6cd9b65, repository: fuel }
+  - { id: 38ee6d8c-f591-4c2b-bdec-114077d0fb6e, version: n1:c44a91663e749dc8 }
+  - { id: 3ba5e5f9-a782-4223-8a12-049a69c46775, version: n1:5d17b1a292a0d6d8, repository: fuel }
+  - { id: 3d7f9eda-d927-4a0f-9efe-917d8c687e88, version: n1:09c9f3ad9e6d728d }
+  - { id: 3e5eeb97-469a-41da-bb34-a3f97b6e30b5, version: n1:67ebd0624004c969 }
+  - { id: 3f61ba4d-c324-4724-9e28-c8cbad070ac3, version: n1:278599a5bb55c852 }
+  - { id: 41ff0349-53cf-4606-885a-f6f6d345198e, version: n1:b2f3f9194b320820 }
+  - { id: 42090d84-929f-4081-98be-9ef3b079804b, version: n1:7e656d5d1a122322 }
+  - { id: 422a5534-110c-4d7d-a0ef-6705a3fc8953, version: n1:40951c734bcbba0e }
+  - { id: 4323b402-d04a-4c41-b75b-9f87645689df, version: n1:d63f87e1f7aa50e8 }
+  - { id: 465f8f9c-92dd-40c9-871b-b316a598a54d, version: n1:0c018eece32eea3c }
+  - { id: 4683ae2d-6724-44c0-9fa0-f8554355a648, version: n1:93de4b601207a5b2 }
+  - { id: 48d41b74-74f0-43aa-8b0e-0546f7447f9b, version: n1:36ad2fe551a9f88a }
+  - { id: 508bacd4-4c7c-422e-95a9-1a8c25bd1cee, version: n1:a7c6836e25047e96, repository: fuel }
+  - { id: 5228465d-55ca-4435-b791-5eb9afd2ad9d, version: n1:b88e670b82d36400, repository: fuel }
+  - { id: 527c5ef8-d857-4714-8db9-1ef7c126c65e, version: n1:8977798d49719372 }
+  - { id: 533b684c-dc9b-4ee1-8e99-ba18be32cf55, version: n1:2efbc86bfff05bf6, repository: fuel }
+  - { id: 56927378-bfa8-4bfb-91c0-7792b31af77a, version: n1:236c808873fea0c1 }
+  - { id: 58b39af5-9221-4103-b703-10cba11329af, version: n1:83fb901af2d11f41 }
+  - { id: 6229222c-0f28-43aa-9f04-a41d4a5a05ae, version: n1:6fee060dc8c86945 }
+  - { id: 6348e5a1-fa96-41b1-b9ab-07dd281e786e, version: n1:708869b8e5bf1728 }
+  - { id: 67da2d98-c5ec-4b51-a9a8-e92d14c74a67, version: n1:373afe040240cc6a }
+  - { id: 6dfd18aa-ad50-4c68-9c54-1bb4df983f84, version: n1:67ebd0624004c969 }
+  - { id: 75cea118-3be1-494a-b0c1-b02fcfb6797d, version: n1:70a5ba4cbc5bc619 }
+  - { id: 78a8cd99-84e8-41f7-9239-2ed99f790a55, version: n1:997da7ed8d9f3ec8 }
+  - { id: 7ca2dae5-b8a7-44de-a6c7-9542ff2e84f3, version: n1:67ebd0624004c969 }
+  - { id: 7f80cf33-cef8-4c23-be08-7057099f8a9e, version: n1:fb106aeeca19b05f, repository: fuel }
+  - { id: 809e5c60-ce9b-4172-9799-29522197b156, version: n1:f86df226630158f6 }
+  - { id: 839327a2-b7df-4a6d-b0de-767d8d77421d, version: n1:2c5c389b46ccc960 }
+  - { id: 8782d1ab-a0a4-4198-92b5-b5fe95c1fe36, version: n1:711572825ad6ef5f }
+  - { id: 888ecfdb-9a9e-4faf-8b8c-14f27add77e6, version: n1:6f0408d56a1e0b29, repository: fuel }
+  - { id: 88ea7b81-2883-4aad-a203-7d59b7dca8cb, version: n1:b7c77ab9fbbc35b9 }
+  - { id: 897d76fa-49d6-4ac7-ab76-4afc91a61e10, version: n1:e5a5cc28f0015996 }
+  - { id: 8af0a477-1bc7-4852-8f93-62382fa0ae59, version: n1:abae0c184154ab9d, repository: fuel }
+  - { id: 8af32ef6-642a-4c83-9c76-b554fd14600e, version: n1:9a75306b3ec6e5a1 }
+  - { id: 8afc50fd-8661-4635-bfba-38da5fc5b3b1, version: n1:3cf3db6906221f00 }
+  - { id: 8dbdf33f-60fd-4a00-a96b-d7f629833e71, version: n1:5d9c07052ebcf1ac }
+  - { id: 8dc81884-b3d4-4548-9833-ff6064c77807, version: n1:ee0e08c29d6dd534 }
+  - { id: 8f310751-aea4-4055-98f9-9c25533db08b, version: n1:6c920fe9d8c42d4b, repository: fuel }
+  - { id: 907506da-6f3e-48f8-9af4-97c8d27d3d25, version: n1:26f1367f8e7d47c4 }
+  - { id: 928d06c2-e31e-4d1d-b65a-1540215c7c88, version: n1:1da1218be6613add }
+  - { id: 92f91bce-0e05-4497-90b6-b64b9e6dcf49, version: n1:409d6967a1e60a8f, repository: fuel }
+  - { id: 940f506c-3351-448c-ae22-55695995b4e0, version: n1:e936e8ea198de840 }
+  - { id: 95913f7e-e883-4be7-b775-3526d87bfc52, version: n1:888c9a734bb83e9c }
+  - { id: 965130a0-3b7c-4d08-95f7-0f7d4ff76b67, version: n1:cfb79a5b52e7306e, repository: fuel }
+  - { id: 995bc5f6-f6e0-4418-b6f8-c627e054e043, version: n1:23eaf3d5467106f4 }
+  - { id: 9da6302a-c9a7-4f30-b50f-ee84e51c8299, version: n1:238bd4865879e8fd, repository: fuel }
+  - { id: a016275b-69c9-4bbe-bf70-4ee6afa30083, version: n1:eae5c7067a5e86f0 }
+  - { id: a37b47bd-cf97-4a5f-9fdd-1a58450588ba, version: n1:84b507c494c73b64 }
+  - { id: a48923c8-dac7-4902-9747-0ef79e028748, version: n1:22d1ef648ed9ebbb }
+  - { id: a6a364fe-92f9-4f63-a634-8233bde01992, version: n1:1b7623255b6ceebb }
+  - { id: a8d3b58d-2f2e-4be6-bc95-5e1104b57070, version: n1:d86e1553a4ad8844, repository: fuel }
+  - { id: a9d7b662-2032-4c4e-87d4-94974dd26ffc, version: n1:490a1dcee396eeaa }
+  - { id: b1316184-1a00-4ae7-ad09-bcb88d40610e, version: n1:addc4b1e91e8d6e6, repository: fuel }
+  - { id: b15a20a7-4f64-4872-9b9d-0d6c8d7e7b67, version: n1:67ebd0624004c969 }
+  - { id: b388d051-106d-4095-b8ff-a6048beb5220, version: n1:5cb96473713a173a, repository: fuel }
+  - { id: b3adb056-1e48-4cf5-86f1-1efda0f7819f, version: n1:1bc1380739c76d54, repository: fuel }
+  - { id: b3c3ff92-9e5f-4388-a160-6239f051e2a9, version: n1:52597e6c01c655de, repository: fuel }
+  - { id: b79a3b50-4ca3-4f60-bf8b-d5a310348143, version: n1:c68d365c8f0b110e }
+  - { id: b86460df-cb46-41bc-8760-b3a39fea1773, version: n1:9d3a604ccded8346 }
+  - { id: bae8fc9d-d20d-4691-94ae-f3fc52e61c4a, version: n1:73e31e5581bd3a6d }
+  - { id: bb9524a6-e140-4287-9b91-b61ebe5e3579, version: n1:010aeae8f12b3f2e }
+  - { id: bfb90b84-5445-49d4-8987-8f37e3181ae8, version: n1:1dd68a57c15bc8eb }
+  - { id: c01c78a7-7920-43cc-aadb-45a5f709ad87, version: n1:d3c60af51090e757 }
+  - { id: c0fbc4fc-dcc6-41e0-a0e9-7eb4084178df, version: n1:b14bfc5ef54c5182 }
+  - { id: c263c2ad-4194-4e54-b6fe-707a1af13269, version: n1:c6b589dc92a28113, repository: fuel }
+  - { id: c2719292-cf52-4e48-b4c9-761dd4cac39d, version: n1:e1e2cd8d926125dd }
+  - { id: ce7083ad-65ee-460f-a029-f7b597e026e1, version: n1:dd60fa510bd7956a, repository: fuel }
+  - { id: cf93aa44-83dc-4ace-ba2d-3517bcf72d74, version: n1:42aa9fbecfe2341d }
+  - { id: d02e8346-da60-41c6-8f89-7704232a2773, version: n1:b7796d072afa7b79 }
+  - { id: d4760376-6be2-4800-9cd1-551bc81b6118, version: n1:d551909122774493, repository: fuel }
+  - { id: d51503c2-c06a-4b0a-b1e3-d9da88d0c494, version: n1:717fdd8c95f96519 }
+  - { id: d7078bec-9057-4354-8d7d-54538f4d6e55, version: n1:9134431c747fbfc7 }
+  - { id: d806da35-ea11-40a8-b925-e323f95d84c1, version: n1:34c75d141abdc9c8, repository: fuel }
+  - { id: d9378504-282e-4688-918c-d6c354e582bf, version: n1:49bc78ee17b2010d }
+  - { id: d98bcae8-ee2e-4c9e-b4ac-9fedb8588924, version: n1:8926619dff6676d6 }
+  - { id: e405c19b-4d09-4350-99d5-80a20606ccb4, version: n1:a8c8f6922672f232, repository: fuel }
+  - { id: e7f0dfe9-3598-4039-890b-befb995de57d, version: n1:de8a745c495fafd5, repository: fuel }
+  - { id: e8714b03-f817-4618-84d3-48c51eabb65a, version: n1:cd5b8530e02dee06 }
+  - { id: e87f1b0c-7e66-448f-9153-164ce9384eab, version: n1:fab566c6eaa97c2e }
+  - { id: e8c28dc9-cd3f-4b2e-8f8e-c9116d1c45ec, version: n1:b652bf0a873e914d, repository: fuel }
+  - { id: ee6bdaf4-f622-4bf4-b9ad-1273af0b76d9, version: n1:1bdd6727e14ceec5 }
+  - { id: ee6fb5c3-082e-4a03-b583-633ab4dcf54d, version: n1:47d829c0ae4e89c6, repository: fuel }
+  - { id: f0c9db01-b9b7-4c81-b9d7-8776ac0fded2, version: n1:2b921566cb205e91, repository: fuel }
+  - { id: f2da60ee-8e39-48c4-b4b4-88203190608c, version: n1:abbd72709674572d }
+  - { id: f573b4a4-7db5-4d3d-b735-45fedf31fdae, version: n1:577221588aca7672 }
+  - { id: f8200de1-b278-4da6-96d5-d17311ef6f63, version: n1:4658bffefaa3202b }
+  - { id: f8d61705-1eee-4ee2-b91f-71016206d8df, version: n1:291e6cecdab893ae }
+  - { id: f9ba2c1d-005d-41a5-bb18-ad8665bdab78, version: n1:6ea685cc2e67b7cf }
+  - { id: f9c5cdfd-265d-4167-ac36-b51795e77efe, version: n1:19b28ccb269bec63, repository: fuel }
+  - { id: f9e29a66-53a6-4151-93bc-9d12056ff8e6, version: n1:3e7f534003d08ef9 }
+  - { id: fa7ca924-83a6-4cf6-970a-168b9587691b, version: n1:408f258c4acd049e }
+  - { id: fc0af77d-c9e3-4a32-ab7d-619142800c9e, version: n1:8a260767d659339f }
+  - { id: fd4c0543-9439-46c0-8519-d50f6fe67c17, version: n1:1a266544c44e0977 }
+  - { id: fde03aa6-b771-493d-8726-e43512914500, version: n1:b741c1d390614c09 }
+  - { id: ff89a7cb-d250-4658-b645-e93d416d2299, version: n1:cae7e6241270b074 }
