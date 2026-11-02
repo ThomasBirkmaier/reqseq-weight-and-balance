@@ -1,0 +1,251 @@
+<testsuites id="" name="" tests="35" failures="0" skipped="0" errors="0" time="9.505632">
+<testsuite name="hc2/variant.spec.ts" timestamp="2026-11-02T06:55:25.587Z" hostname="hc2" tests="35" failures="0" skipped="0" time="15.727" errors="0">
+<testcase name="[SR-d0fb6e/AK1] HC2-01 empty: 640 kg at 2.150 m" classname="hc2/variant.spec.ts" time="0.584"><properties><property name="reqseq:element" value="38ee6d8c-f591-4c2b-bdec-114077d0fb6e"/><property name="reqseq:version" value="n1:c44a91663e749dc8"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-d0fb6e-AK1-HC2-01-empty-640-kg-at-2-150-m-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-d0fb6e/AK2] HC2-01 entries without rear seats" classname="hc2/variant.spec.ts" time="0.436"><properties><property name="reqseq:element" value="38ee6d8c-f591-4c2b-bdec-114077d0fb6e"/><property name="reqseq:version" value="n1:c44a91663e749dc8"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-d0fb6e-AK2-HC2-01-entries-without-rear-seats-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-d0fb6e/AK3] HC2-01 aft of the aft limit" classname="hc2/variant.spec.ts" time="0.486"><properties><property name="reqseq:element" value="38ee6d8c-f591-4c2b-bdec-114077d0fb6e"/><property name="reqseq:version" value="n1:c44a91663e749dc8"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-d0fb6e-AK3-HC2-01-aft-of-the-aft-limit-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-b73090/AK1] HC-2 build names the selected aircraft" classname="hc2/variant.spec.ts" time="0.278"><properties><property name="reqseq:element" value="0041aa52-adb0-4a61-a6b0-4f3ed6b73090"/><property name="reqseq:version" value="n1:5b97da4a1cb25de7"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-b73090-AK1-HC--9c303-names-the-selected-aircraft-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-b73090/AK2] HC-2 build lists HC2-01 only" classname="hc2/variant.spec.ts" time="0.244"><properties><property name="reqseq:element" value="0041aa52-adb0-4a61-a6b0-4f3ed6b73090"/><property name="reqseq:version" value="n1:5b97da4a1cb25de7"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-b73090-AK2-HC-2-build-lists-HC2-01-only-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-b73090/AK3] HC-2 build has no aircraft preselected" classname="hc2/variant.spec.ts" time="0.318"><properties><property name="reqseq:element" value="0041aa52-adb0-4a61-a6b0-4f3ed6b73090"/><property name="reqseq:version" value="n1:5b97da4a1cb25de7"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-b73090-AK3-HC--171e0-has-no-aircraft-preselected-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-e95f42] HC-2: one labelled mass entry per seat row and baggage compartment" classname="hc2/variant.spec.ts" time="0.451"><properties><property name="reqseq:element" value="06510c41-64db-41cf-a63a-f8bb1ee95f42"/><property name="reqseq:version" value="n1:ead386dee15763f1"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-e95f42-HC-2-on-ed5c8-row-and-baggage-compartment-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-181ae8] HC-2: front seats 221 kg and baggage 41 kg show messages" classname="hc2/variant.spec.ts" time="0.332"><properties><property name="reqseq:element" value="bfb90b84-5445-49d4-8987-8f37e3181ae8"/><property name="reqseq:version" value="n1:1dd68a57c15bc8eb"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-181ae8-HC-2-fr-36bdd-baggage-41-kg-show-messages-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-b59c9a] HC-2: missing baggage gives check not complete at take-off and landing" classname="hc2/variant.spec.ts" time="0.447"><properties><property name="reqseq:element" value="200f4520-412d-42f3-b977-a2424ab59c9a"/><property name="reqseq:version" value="n1:c76f339f8fcc4925"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-b59c9a-HC-2-mi-00c41-ete-at-take-off-and-landing-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-348143] HC-2: total mass at take-off 856 kg" classname="hc2/variant.spec.ts" time="0.451"><properties><property name="reqseq:element" value="b79a3b50-4ca3-4f60-bf8b-d5a310348143"/><property name="reqseq:version" value="n1:c68d365c8f0b110e"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-348143-HC-2-total-mass-at-take-off-856-kg-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-29562e] HC-2: centre of gravity at take-off 2.137 m" classname="hc2/variant.spec.ts" time="0.382"><properties><property name="reqseq:element" value="109946de-c77a-44bf-81ff-eeacde29562e"/><property name="reqseq:version" value="n1:ef28bba89d959368"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-29562e-HC-2-ce-ad569-gravity-at-take-off-2-137-m-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-45198e] HC-2: 900 kg shows mass above maximum take-off mass" classname="hc2/variant.spec.ts" time="0.39"><properties><property name="reqseq:element" value="41ff0349-53cf-4606-885a-f6f6d345198e"/><property name="reqseq:version" value="n1:b2f3f9194b320820"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-45198e-HC-2-90-b56b7-above-maximum-take-off-mass-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-687e88] HC-2: forward of the forward limit (860 kg at 2.112 m)" classname="hc2/variant.spec.ts" time="0.52"><properties><property name="reqseq:element" value="3d7f9eda-d927-4a0f-9efe-917d8c687e88"/><property name="reqseq:version" value="n1:09c9f3ad9e6d728d"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-687e88-HC-2-fo-e3499-rd-limit-860-kg-at-2-112-m--hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-3a4905] HC-2: exactly 880 kg and exactly on the aft limit are within limits" classname="hc2/variant.spec.ts" time="0.56"><properties><property name="reqseq:element" value="1669da39-c0ed-4309-ae48-a60cc03a4905"/><property name="reqseq:version" value="n1:8860bb47ea335df2"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-3a4905-HC-2-ex-f7c14-aft-limit-are-within-limits-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-588924] HC-2: results update within 100 ms without a button" classname="hc2/variant.spec.ts" time="0.506"><properties><property name="reqseq:element" value="d98bcae8-ee2e-4c9e-b4ac-9fedb8588924"/><property name="reqseq:version" value="n1:8926619dff6676d6"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-588924-HC-2-re-a8ed4-hin-100-ms-without-a-button-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-0b76d9] HC-2: table rows including fuel" classname="hc2/variant.spec.ts" time="0.487"><properties><property name="reqseq:element" value="ee6bdaf4-f622-4bf4-b9ad-1273af0b76d9"/><property name="reqseq:version" value="n1:1bdd6727e14ceec5"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-0b76d9-HC-2-table-rows-including-fuel-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-5e3579] HC-2: top view marks front to back" classname="hc2/variant.spec.ts" time="0.44"><properties><property name="reqseq:element" value="bb9524a6-e140-4287-9b91-b61ebe5e3579"/><property name="reqseq:version" value="n1:010aeae8f12b3f2e"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-5e3579-HC-2-top-view-marks-front-to-back-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-3f6229] HC-2: chart with envelope, take-off and landing points" classname="hc2/variant.spec.ts" time="0.581"><properties><property name="reqseq:element" value="31d0e124-d78f-4db1-930e-d6ea013f6229"/><property name="reqseq:version" value="n1:5c5dacc502feb54d"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-3f6229-HC-2-ch-fe51e-take-off-and-landing-points-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-028748/AK2] envelope corners of the HC-2 as numbers" classname="hc2/variant.spec.ts" time="0.389"><properties><property name="reqseq:element" value="a48923c8-dac7-4902-9747-0ef79e028748"/><property name="reqseq:version" value="n1:22d1ef648ed9ebbb"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-028748-AK2-env-e2112-ners-of-the-HC-2-as-numbers-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-663a61] HC-2: empty mass, lever arm and weighing date from the fleet data file" classname="hc2/variant.spec.ts" time="0.386"><properties><property name="reqseq:element" value="160ae277-8376-4c3f-b0d8-bd4b2e663a61"/><property name="reqseq:version" value="n1:b8208d84c4b75bf9"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-663a61-HC-2-em-a4c3b-te-from-the-fleet-data-file-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-1329af] HC-2: fixed notices above the first result" classname="hc2/variant.spec.ts" time="0.299"><properties><property name="reqseq:element" value="58b39af5-9221-4103-b703-10cba11329af"/><property name="reqseq:version" value="n1:83fb901af2d11f41"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-1329af-HC-2-fixed-notices-above-the-first-result-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-2dc652/AK3] HC-2: usable fuel prefilled with the reported 78 L" classname="hc2/variant.spec.ts" time="0.324"><properties><property name="reqseq:element" value="2307ded2-d362-44ad-8de7-24ab1c2dc652"/><property name="reqseq:version" value="n1:529e16f08ff4671b"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-2dc652-AK3-HC--84608-lled-with-the-reported-78-L-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-d26ffc/AK3] HC-2: reported fuel quantity of HC2-01 with its report time" classname="hc2/variant.spec.ts" time="0.401"><properties><property name="reqseq:element" value="a9d7b662-2032-4c4e-87d4-94974dd26ffc"/><property name="reqseq:version" value="n1:490a1dcee396eeaa"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-d26ffc-AK3-HC--f72cf-HC2-01-with-its-report-time-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-833e71] HC-2: pilot&apos;s figure is used and marked" classname="hc2/variant.spec.ts" time="0.444"><properties><property name="reqseq:element" value="8dbdf33f-60fd-4a00-a96b-d7f629833e71"/><property name="reqseq:version" value="n1:5d9c07052ebcf1ac"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-833e71-HC-2-pilot-s-figure-is-used-and-marked-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-79804b/AK2] HC-2: 50 L fuel at 0.72 kg/L and 2.100 m" classname="hc2/variant.spec.ts" time="0.446"><properties><property name="reqseq:element" value="42090d84-929f-4081-98be-9ef3b079804b"/><property name="reqseq:version" value="n1:7e656d5d1a122322"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-79804b-AK2-HC--47a84-el-at-0-72-kg-L-and-2-100-m-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-5689df] HC-2: fuel above 104 L and burn above the fuel show messages" classname="hc2/variant.spec.ts" time="0.461"><properties><property name="reqseq:element" value="4323b402-d04a-4c41-b75b-9f87645689df"/><property name="reqseq:version" value="n1:d63f87e1f7aa50e8"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-5689df-HC-2-fu-16554-bove-the-fuel-show-messages-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-90608c/AK3] HC-2: within limits at take-off, aft of the aft limit at landing" classname="hc2/variant.spec.ts" time="0.411"><properties><property name="reqseq:element" value="f2da60ee-8e39-48c4-b4b4-88203190608c"/><property name="reqseq:version" value="n1:abbd72709674572d"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-90608c-AK3-HC--20999-of-the-aft-limit-at-landing-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-90608c] HC-2: landing within limits with mass and centre of gravity" classname="hc2/variant.spec.ts" time="0.458"><properties><property name="reqseq:element" value="f2da60ee-8e39-48c4-b4b4-88203190608c"/><property name="reqseq:version" value="n1:abbd72709674572d"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-90608c-HC-2-la-1b698--mass-and-centre-of-gravity-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-c74a67/AK2] HC-2: no sign-in or installation step" classname="hc2/variant.spec.ts" time="0.278"><properties><property name="reqseq:element" value="67da2d98-c5ec-4b51-a9a8-e92d14c74a67"/><property name="reqseq:version" value="n1:373afe040240cc6a"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-c74a67-AK2-HC-2-no-sign-in-or-installation-step-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-87691b] HC-2: entering a loading sends no network request" classname="hc2/variant.spec.ts" time="0.508"><properties><property name="reqseq:element" value="fa7ca924-83a6-4cf6-970a-168b9587691b"/><property name="reqseq:version" value="n1:408f258c4acd049e"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-87691b-HC-2-en-0382d-ng-sends-no-network-request-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-384eab/AK2] HC-2 build opens without network after the first visit" classname="hc2/variant.spec.ts" time="0.611"><properties><property name="reqseq:element" value="e87f1b0c-7e66-448f-9153-164ce9384eab"/><property name="reqseq:version" value="n1:fab566c6eaa97c2e"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-384eab-AK2-HC--72acf-twork-after-the-first-visit-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-55a648] HC-2: offline notice with the date of the data" classname="hc2/variant.spec.ts" time="0.481"><properties><property name="reqseq:element" value="4683ae2d-6724-44c0-9fa0-f8554355a648"/><property name="reqseq:version" value="n1:93de4b601207a5b2"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-55a648-HC-2-of-22dc4-e-with-the-date-of-the-data-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="HC-2 on a phone › [SR-54e043] HC-2: no horizontal scrolling" classname="hc2/variant.spec.ts" time="0.473"><properties><property name="reqseq:element" value="995bc5f6-f6e0-4418-b6f8-c627e054e043"/><property name="reqseq:version" value="n1:23eaf3d5467106f4"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant-HC-2-on-a-phone-SR-fb177-C-2-no-horizontal-scrolling-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="HC-2 on a phone › [SR-c1fe36] HC-2: result in view after the last entry, edited entry not covered" classname="hc2/variant.spec.ts" time="0.487"><properties><property name="reqseq:element" value="8782d1ab-a0a4-4198-92b5-b5fe95c1fe36"/><property name="reqseq:version" value="n1:711572825ad6ef5f"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant-HC-2-on-a-phone-SR-686f2-ry-edited-entry-not-covered-hc2/test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="[SR-070ac3] HC-2: text 4.5:1 and graphics 3:1 in light and dark mode" classname="hc2/variant.spec.ts" time="0.977"><properties><property name="reqseq:element" value="3f61ba4d-c324-4724-9e28-c8cbad070ac3"/><property name="reqseq:version" value="n1:278599a5bb55c852"/><property name="reqseq:variant" value="05ae9286-bea0-45ad-9338-d1f959f23826"/><property name="reqseq:item" value="fb308e5-local"/><property name="reqseq:date" value="2026-11-02T06:55:25.587Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e/variant--SR-070ac3-HC-2-te-bf46c--3-1-in-light-and-dark-mode-hc2/test-finished-1.png]]
+
+[[ATTACHMENT|e2e/variant--SR-070ac3-HC-2-te-bf46c--3-1-in-light-and-dark-mode-hc2/test-finished-2.png]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
