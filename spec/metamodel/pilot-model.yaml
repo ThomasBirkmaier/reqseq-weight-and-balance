@@ -95,3 +95,10 @@ relations:
     inverse-name: Served by
     source-types: [use-case]
     target-types: [need]
+  - key: originates-from
+    name: Originates from
+    description: "A system requirement originates from a decision: the decision is its origin, not a need. A chain follows it from requirement to decision. For a decision a requirement only rests on, use based-on."
+    inverse-name: Origin of
+    source-types: [system-requirement]
+    target-types: [decision]
+    meaning: derivation

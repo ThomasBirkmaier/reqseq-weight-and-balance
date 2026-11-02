@@ -201,7 +201,6 @@ relations:
     description: "The source is based on a decision."
     inverse-name: Basis for
     target-types: [decision]
-    meaning: derivation # pilot: a decision is an origin of a requirement (brief section 8), so the chain follows it
   - key: supersedes # a successor supersedes the target, D-045 / SR-072
     name: Supersedes
     description: "The source says that it supersedes the target. Superseding an element (element.supersede) also sets the target to an invalid status; the relation alone does not."

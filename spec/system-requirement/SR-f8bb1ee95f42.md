@@ -14,9 +14,10 @@ verification-method: test
 criticality: high
 safety-related: "no"
 derives-from:
-  - { id: 26a81038-3f7b-4df9-bfcb-e94f646010df, version: n1:5d48e70e369ff203, title: Enter what is on board }
+  - { id: 26a81038-3f7b-4df9-bfcb-e94f646010df, version: n1:9267ec38b2832981, title: Enter what is on board }
 based-on:
   - { id: d9378504-282e-4688-918c-d6c354e582bf, version: n1:49bc78ee17b2010d, title: "Units, input resolution and rounding" }
+  - { id: 8af32ef6-642a-4c83-9c76-b554fd14600e, version: n1:9a75306b3ec6e5a1, title: Type data of the Halcyra HC-4 }
 ---
 
 If an aircraft is selected, the system shall provide one mass entry in kg for each seat row and baggage compartment of its aircraft type, labelled with the name of the loading station and its maximum mass.
