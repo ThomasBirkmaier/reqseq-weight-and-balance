@@ -1,7 +1,7 @@
 ---
 id: 3f61ba4d-c324-4724-9e28-c8cbad070ac3
 type: system-requirement
-status: draft
+status: approved
 title: Readable in light and dark mode
 rationale: The check is done in daylight and in a dim hangar; 4.5:1 is the common minimum for readable text, 3:1 for graphics (the envelope line, the loading points and the loading station marks).
 requirement-type: quality
