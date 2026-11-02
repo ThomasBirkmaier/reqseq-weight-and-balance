@@ -1,7 +1,7 @@
 ---
 id: 8afc50fd-8661-4635-bfba-38da5fc5b3b1
 type: decision
-status: draft
+status: approved
 title: Client confirmation of the needs of release 1
 rationale: "Records the confirmation by the client (audit A2, 15288 6.4.2.2 g). The client answered in three rounds on 2026-11-01: round 1 changed three needs and added three, round 2 confirmed seven needs and objected to deferring fuel, round 3 confirmed the set."
 based-on:
