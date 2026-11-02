@@ -1,0 +1,23 @@
+{
+  "description": "Fuel system module interface data for the Halcyra HC-4 and HC-2. Invented aircraft. Not for flight operations. Identifiers are invented, not registrations.",
+  "interfaceVersion": "1.0.0",
+  "supplierRepository": "fuel",
+  "fields": {
+    "interfaceVersion": "Version of this interface (semantic versioning: major.minor.patch). A change of major means a field changed meaning or was removed.",
+    "fuelType": "The fuel the module is set up for.",
+    "fuelDensityKgPerL": "Fuel density the module uses to turn litres into kilograms, in kg/L, stated to 0.01 kg/L.",
+    "types": "Per aircraft type: fuelLeverArmM is the lever arm of the fuel mass in m aft of the datum, rounded to 0.001 m, valid for every fuel quantity; usableCapacityL is the usable fuel capacity in whole litres.",
+    "aircraft": "Per aircraft of the fleet: type; usableFuelL is the usable fuel quantity on board as last reported by the module, in whole litres, rounded down; fuelMassKg is usableFuelL times fuelDensityKgPerL, rounded to 0.1 kg; reportedAtUtc is the date and time of that report in UTC (ISO 8601, to the second)."
+  },
+  "fuelType": "aviation gasoline",
+  "fuelDensityKgPerL": 0.72,
+  "types": {
+    "HC-4": { "fuelLeverArmM": 2.35, "usableCapacityL": 170 },
+    "HC-2": { "fuelLeverArmM": 2.1, "usableCapacityL": 104 }
+  },
+  "aircraft": {
+    "HC4-01": { "type": "HC-4", "usableFuelL": 142, "fuelMassKg": 102.2, "reportedAtUtc": "2026-11-02T05:40:00Z" },
+    "HC4-02": { "type": "HC-4", "usableFuelL": 96, "fuelMassKg": 69.1, "reportedAtUtc": "2026-11-02T05:15:00Z" },
+    "HC2-01": { "type": "HC-2", "usableFuelL": 78, "fuelMassKg": 56.2, "reportedAtUtc": "2026-11-02T05:50:00Z" }
+  }
+}
