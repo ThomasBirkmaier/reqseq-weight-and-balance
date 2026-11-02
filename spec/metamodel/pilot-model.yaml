@@ -22,11 +22,13 @@ types:
     required: [title, definition]
 
 properties:
+  # Every property that carries meaning counts to the version (content: true).
   # Added to standard types in standard-model.yaml: priority and validation-criteria on need,
   # criticality and safety-related on system-requirement.
   - key: priority
     name: Priority
     description: "How important the need is to its stakeholders."
+    content: true
     kind: choice
     choices:
       - { key: must, name: Must }
@@ -35,12 +37,14 @@ properties:
   - key: validation-criteria
     name: Validation Criteria
     description: "How the stakeholder judges in the context of use that the need is met, one per entry."
+    content: true
     kind: text
     many: true
     markdown: true
   - key: criticality
     name: Criticality
     description: "How severe the effect of a failure to meet the requirement is."
+    content: true
     kind: choice
     choices:
       - { key: high, name: High }
@@ -49,6 +53,7 @@ properties:
   - key: safety-related
     name: Safety-related
     description: "Whether the requirement mitigates a hazard."
+    content: true
     kind: choice
     choices:
       - { key: "yes", name: "Yes" }
@@ -56,6 +61,7 @@ properties:
   - key: severity
     name: Severity
     description: "The worst credible consequence of the hazard."
+    content: true
     kind: choice
     choices:
       - { key: catastrophic, name: Catastrophic }
@@ -65,6 +71,7 @@ properties:
   - key: definition
     name: Definition
     description: "The meaning of the term."
+    content: true
     kind: text
     markdown: true
 
@@ -81,4 +88,17 @@ relations:
     inverse-name: Mitigated by
     source-types: [system-requirement]
     target-types: [hazard]
+    meaning: derivation
+  - key: serves
+    name: Serves
+    description: "A use case serves a need: it shows the steps in which the stakeholder's need is met. No derivation: a use case is no origin of a requirement."
+    inverse-name: Served by
+    source-types: [use-case]
+    target-types: [need]
+  - key: originates-from
+    name: Originates from
+    description: "A system requirement originates from a decision: the decision is its origin, not a need. A chain follows it from requirement to decision. For a decision a requirement only rests on, use based-on."
+    inverse-name: Origin of
+    source-types: [system-requirement]
+    target-types: [decision]
     meaning: derivation
