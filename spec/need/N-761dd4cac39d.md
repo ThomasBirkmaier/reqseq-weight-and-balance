@@ -1,7 +1,7 @@
 ---
 id: c2719292-cf52-4e48-b4c9-761dd4cac39d
 type: need
-status: draft
+status: approved
 title: See and correct the reported fuel quantity
 rationale: "Condition of the client's confirmation of the needs of release 1: the pilot can see and correct the fuel quantity delivered by a fuel module. The pilot checks the fuel visually before every flight."
 priority: must
