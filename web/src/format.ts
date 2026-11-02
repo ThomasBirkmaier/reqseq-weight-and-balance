@@ -15,3 +15,6 @@ export const moment = (tenths: number): string => {
   const a = Math.abs(tenths);
   return `${s}${Math.floor(a / 10)}.${a % 10} kg·m`;
 };
+
+/** ISO 8601 UTC time (2026-11-02T05:40:00Z) as "2026-11-02 05:40 UTC". */
+export const utc = (iso: string): string => (iso.length >= 16 ? `${iso.slice(0, 10)} ${iso.slice(11, 16)} UTC` : iso);

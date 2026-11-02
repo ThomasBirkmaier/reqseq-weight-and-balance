@@ -22,7 +22,7 @@
       <select id="aircraft"><option value="">Select the aircraft</option></select>
       <p class="load-error" id="load-error" role="alert" hidden>The app could not load its data. Reload the page.</p>
       <p class="hint" id="select-hint">Select the aircraft</p>
-      <p class="offline" id="offline" hidden>Offline: aircraft data as of the last opening with network. Check the weighing date against the aircraft documents.</p>
+      <p class="offline" id="offline" hidden></p>
       <div id="aircraft-info" hidden>
         <p class="selected" id="selected"></p>
         <p class="data" id="empty-data"></p>
@@ -35,16 +35,26 @@
         <h2 id="loading-title">Loading</h2>
         <p class="hint">Enter whole kilograms. Enter 0 for a loading station with nothing on it.</p>
         <div id="entries"></div>
+        <h3 class="sub">Fuel</h3>
+        <p class="hint">Enter whole litres. Check the reported fuel against the tanks before every flight.</p>
+        <div id="fuel-entries"></div>
       </section>
 
       <section class="result" id="result" aria-live="polite">
         <p class="result-aircraft" id="result-aircraft"></p>
-        <p class="indication" id="indication"></p>
-        <p class="fuel" id="fuel">Fuel is not included in this version.</p>
-        <dl class="figures" id="figures">
-          <div><dt>Total mass</dt><dd id="total"></dd></div>
-          <div><dt>Centre of gravity</dt><dd id="cg"></dd></div>
-        </dl>
+        <div class="state" id="result-to">
+          <p class="state-name">Take-off</p>
+          <p class="indication" id="indication"></p>
+          <dl class="figures" id="figures">
+            <div><dt>Total mass</dt><dd id="total"></dd></div>
+            <div><dt>Centre of gravity</dt><dd id="cg"></dd></div>
+          </dl>
+        </div>
+        <div class="state" id="result-ldg">
+          <p class="state-name">Landing</p>
+          <p class="indication" id="landing-indication"></p>
+          <p class="data" id="landing-figures"></p>
+        </div>
       </section>
 
       <section class="card" aria-labelledby="view-title">
@@ -55,6 +65,7 @@
       <section class="card" aria-labelledby="chart-title">
         <h2 id="chart-title">Envelope</h2>
         <svg id="chart" viewBox="0 0 340 260" role="img" aria-label="Envelope chart"></svg>
+        <p class="hint" id="chart-legend">Circle: take-off. Square: landing. Cross: outside limits.</p>
         <table class="corners" id="corners">
           <caption>Envelope corners (boundary included)</caption>
           <thead><tr><th scope="col">Corner</th><th scope="col">Total mass</th><th scope="col">Centre of gravity</th></tr></thead>

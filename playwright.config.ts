@@ -5,7 +5,14 @@ export default defineConfig({
   outputDir: "test-results/e2e",
   fullyParallel: true,
   retries: 0,
-  reporter: [["list"], ["junit", { outputFile: "test-results/e2e-junit.xml" }]],
+  // One JUnit file per project run: CI runs the core and the HC-2 suites separately, so that the
+  // HC-2 run can be enriched for the variant (PLAYWRIGHT_JUNIT_OUTPUT_FILE names the file).
+  reporter: [["list"], ["junit", { outputFile: process.env.PLAYWRIGHT_JUNIT_OUTPUT_FILE ?? "test-results/e2e-junit.xml" }]],
+  projects: [
+    { name: "core", testDir: "e2e/core" },
+    { name: "hc2", testDir: "e2e/hc2" },
+    { name: "walkthrough", testDir: "e2e/walkthrough" },
+  ],
   use: {
     baseURL: "http://127.0.0.1:4173/",
     screenshot: "on",
