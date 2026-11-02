@@ -1,5 +1,5 @@
 // SVG drawings: top view of the aircraft with its loading stations, and the envelope chart.
-import type { AircraftType, Evaluation } from "./core.js";
+import type { AircraftType, Evaluation, State } from "./core.js";
 import { kg, m } from "./format.js";
 
 const NS = "http://www.w3.org/2000/svg";
@@ -12,9 +12,9 @@ function el<K extends keyof SVGElementTagNameMap>(name: K, attrs: Record<string,
 }
 
 /** Top view: fuselage along the vertical axis, nose at the top; stations placed by lever arm. */
-export function drawTopView(svg: SVGSVGElement, t: AircraftType, masses: (number | null)[]): void {
+export function drawTopView(svg: SVGSVGElement, t: AircraftType, labels: (string | null)[], fuel: string | null): void {
   svg.replaceChildren();
-  const arms = t.stations.map((s) => s.armMm);
+  const arms = [...t.stations.map((s) => s.armMm), t.fuelArmMm];
   const y = (arm: number) => 70 + ((arm - 1500) / (Math.max(...arms, 3000) - 1500 + 500)) * 300;
   // fuselage, wing, tail
   const frame = el("g", { transform: "translate(-40 0)" });
@@ -22,11 +22,17 @@ export function drawTopView(svg: SVGSVGElement, t: AircraftType, masses: (number
   frame.append(el("rect", { x: 50, y: y(2350) - 18, width: 220, height: 40, rx: 10, class: "airframe" }));
   frame.append(el("rect", { x: 100, y: 372, width: 120, height: 18, rx: 6, class: "airframe" }));
   svg.append(frame);
-  t.stations.forEach((s, i) => {
-    const cy = y(s.armMm);
+  // Loading stations and the fuel tanks, ordered from front to back by lever arm.
+  const marks = [
+    ...t.stations.map((s, i) => ({ key: s.key, name: s.name, arm: s.armMm, value: labels[i] })),
+    { key: "fuel", name: "Usable fuel", arm: t.fuelArmMm, value: fuel },
+  ].sort((a, b) => a.arm - b.arm);
+  marks.forEach((s, i) => {
+    const cy = y(s.arm);
     const g = el("g", { class: "station", "data-station": s.key, "data-order": i });
-    g.append(el("rect", { x: 92, y: cy - 14, width: 56, height: 28, rx: 6, class: masses[i] ? "mark loaded" : "mark" }));
-    const value = masses[i] === null ? "–" : kg(masses[i] as number);
+    const loaded = s.value !== null && !/^0 /.test(s.value);
+    g.append(el("rect", { x: 92, y: cy - 14, width: 56, height: 28, rx: 6, class: loaded ? "mark loaded" : "mark" }));
+    const value = s.value ?? "–";
     const t1 = el("text", { x: 158, y: cy - 2, class: "mark-label", "aria-label": `${s.name} ${value}` });
     t1.append(el("tspan", { x: 158, dy: 0 }, s.name), el("tspan", { x: 158, dy: 16, class: "mark-value" }, value));
     g.append(t1);
@@ -59,19 +65,28 @@ export function drawChart(svg: SVGSVGElement, t: AircraftType, e: Evaluation | n
   const pts = t.envelope.map(([mass, c]) => `${x(c).toFixed(1)},${y(mass).toFixed(1)}`).join(" ");
   svg.append(el("polygon", { points: pts, class: "envelope", "data-corners": t.envelope.map(([mass, c]) => `${mass}:${c}`).join(" ") }));
   if (!e || !e.complete) return;
-  const px = x(e.cgExactMm), py = y(e.totalKg);
-  const outside = !e.within;
-  const label = e.cgState === "aft" ? "Aft limit exceeded" : e.cgState === "forward" ? "Forward limit exceeded" : e.massExceeded ? "Mass limit exceeded" : "";
-  const g = el("g", { id: "point", "data-mass": e.totalKg, "data-cg": e.cgMm, "data-state": outside ? "outside" : "inside" });
-  if (outside) {
-    g.append(el("path", { d: `M${px - 7} ${py - 7} L${px + 7} ${py + 7} M${px + 7} ${py - 7} L${px - 7} ${py + 7}`, class: "point outside" }));
-  } else {
-    g.append(el("circle", { cx: px, cy: py, r: 6, class: "point" }));
-  }
-  g.append(el("title", {}, `${kg(e.totalKg)}, ${m(e.cgMm)}`));
-  svg.append(g);
+  const point = (st: State, id: string, name: string) => {
+    const px = x(st.cgExactMm), py = y(st.totalKg);
+    const outside = !st.within;
+    const g = el("g", { id, "data-mass": st.totalKg, "data-cg": st.cgMm, "data-state": outside ? "outside" : "inside" });
+    if (outside) {
+      g.append(el("path", { d: `M${px - 7} ${py - 7} L${px + 7} ${py + 7} M${px + 7} ${py - 7} L${px - 7} ${py + 7}`, class: "point outside" }));
+    } else if (id === "point") {
+      g.append(el("circle", { cx: px, cy: py, r: 6, class: "point" }));
+    } else {
+      g.append(el("rect", { x: px - 5, y: py - 5, width: 10, height: 10, class: "point landing" }));
+    }
+    g.append(el("title", {}, `${name} ${kg(st.totalKg)}, ${m(st.cgMm)}`));
+    svg.append(g);
+    return { px, py };
+  };
+  const ldg = point(e.landing, "point-landing", "Landing");
+  const to = point(e.takeOff, "point", "Take-off");
+  svg.append(el("line", { x1: to.px, y1: to.py, x2: ldg.px, y2: ldg.py, class: "burn-line" }));
+  const st = e.takeOff;
+  const label = st.cgState === "aft" ? "Aft limit exceeded" : st.cgState === "forward" ? "Forward limit exceeded" : st.massExceeded ? "Mass limit exceeded" : "";
   if (label) {
-    const anchor = px > W / 2 ? "end" : "start";
-    svg.append(el("text", { x: px + (anchor === "end" ? -10 : 10), y: py + 24, "text-anchor": anchor, class: "point-label", id: "point-label" }, label));
+    const anchor = to.px > W / 2 ? "end" : "start";
+    svg.append(el("text", { x: to.px + (anchor === "end" ? -10 : 10), y: to.py + 24, "text-anchor": anchor, class: "point-label", id: "point-label" }, label));
   }
 }

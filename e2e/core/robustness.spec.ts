@@ -1,14 +1,14 @@
 // Follow-ups from the IV&V review of the web app: which aircraft a result is for,
 // a message when the app cannot load its data, and quiet entry messages.
 import { test, expect } from "@playwright/test";
-import { load, indication } from "./helpers";
+import { load, indication } from "../helpers";
 
 test.use({ serviceWorkers: "block" });
 
 test("result card names the selected aircraft", async ({ page }) => {
   await load(page, "HC4-02", [160, 0, 20]);
   await expect(page.locator("#result-aircraft")).toHaveText("For HC4-02");
-  await expect(indication(page)).toHaveText("Within limits (without fuel)");
+  await expect(indication(page)).toHaveText("Within limits");
   await page.selectOption("#aircraft", "HC4-01");
   await expect(page.locator("#result-aircraft")).toHaveText("For HC4-01");
 });
@@ -32,8 +32,8 @@ test("entry messages are polite live regions, not alerts", async ({ page }) => {
 
 test.describe("phone screen", () => {
   test.use({ viewport: { width: 360, height: 740 }, isMobile: true, hasTouch: true });
-  test("[SR-54e043/AK4] the result card never hides the entry being edited or its message", async ({ page }) => {
-    await load(page, "HC4-01", [160, 75, 60]);
+  test("[SR-c1fe36/AK2] the result card never hides the entry being edited or its message", async ({ page }) => {
+    await load(page, "HC4-01", [160, 75, 60], null, null);
     for (const sel of ["#entry-baggage", "#entry-baggage-msg"]) {
       const hit = await page.locator(sel).evaluate((el) => {
         const r = el.getBoundingClientRect();
@@ -46,21 +46,18 @@ test.describe("phone screen", () => {
   });
 });
 
-test("[SR-3f6229/AK4] envelope corners are listed as numbers", async ({ page }) => {
-  await load(page, "HC4-01", [0, 0, 0]);
-  const rows = page.locator("#corners tbody tr");
-  await expect(rows).toHaveCount(5);
-  await expect(rows.nth(0)).toHaveText(/650 kg\s*2\.100 m/);
-  await expect(rows.nth(3)).toHaveText(/1150 kg\s*2\.470 m/);
-  await load(page, "HC2-01", [0, 0], "/hc2/");
-  await expect(page.locator("#corners tbody tr").nth(2)).toHaveText(/880 kg\s*2\.130 m/);
-});
-
-test("[SR-384eab/AK4] without network the app says its aircraft data may be older", async ({ page, context }) => {
+test("[SR-55a648/AK1] without network the app names the date of its aircraft data", async ({ page, context }) => {
   await load(page, "HC4-01", [0, 0, 0]);
   await expect(page.locator("#offline")).toBeHidden();
   await context.setOffline(true);
-  await expect(page.locator("#offline")).toHaveText("Offline: aircraft data as of the last opening with network. Check the weighing date against the aircraft documents.");
+  await expect(page.locator("#offline")).toHaveText("Offline: aircraft data as of 2026-11-02. Check the weighing date against the aircraft documents.");
+  await context.setOffline(false);
+});
+
+test("[SR-55a648/AK2] the offline notice disappears when the network is back", async ({ page, context }) => {
+  await load(page, "HC4-01", [0, 0, 0]);
+  await context.setOffline(true);
+  await expect(page.locator("#offline")).toBeVisible();
   await context.setOffline(false);
   await expect(page.locator("#offline")).toBeHidden();
 });

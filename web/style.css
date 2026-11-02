@@ -100,11 +100,17 @@ input.invalid, input.missing { border: 2px solid var(--bad); }
 .load-error { margin: 0; font-weight: 700; color: var(--bad); }
 .indication { margin: 0; font-weight: 700; font-size: 1.1rem; }
 .indication span { display: block; }
-.result[data-state="within"] .indication { color: var(--ok); }
-.result[data-state="outside"] .indication { color: var(--bad); }
-.result[data-state="incomplete"] .indication { color: var(--warn); }
-.fuel { margin: 2px 0 0; color: var(--text); font-size: 0.95rem; }
-.figures { display: flex; gap: 24px; margin: 6px 0 0; }
+.result { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; }
+.result-aircraft { grid-column: 1 / -1; }
+.state-name { margin: 0; font-size: 0.85rem; font-weight: 600; color: var(--text); text-transform: uppercase; letter-spacing: 0.04em; }
+.state[data-state="within"] .indication { color: var(--ok); }
+.state[data-state="outside"] .indication { color: var(--bad); }
+.state[data-state="incomplete"] .indication { color: var(--warn); }
+.state .indication { font-size: 1rem; }
+.state .data { margin: 6px 0 0; font-weight: 700; color: var(--text); }
+.sub { font-size: 1rem; margin: 1rem 0 0.25rem; }
+.note { margin: 4px 0 0; font-weight: 600; color: var(--warn); }
+.figures { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 6px 0 0; }
 .figures div { display: flex; flex-direction: column; }
 .figures dt { color: var(--text); font-size: 0.85rem; }
 .figures dd { margin: 0; font-weight: 700; font-size: 1.15rem; }
@@ -134,9 +140,11 @@ tr.total th, tr.total td { font-weight: 700; border-top: 2px solid var(--text); 
 }
 
 /* The sticky result card must never hide the entry being edited or marked. */
-#entries input { scroll-margin-bottom: 14rem; scroll-margin-top: 1rem; }
+#entries input, #fuel-entries input { scroll-margin-bottom: 14rem; scroll-margin-top: 1rem; }
 .offline { margin: 0.5rem 0 0; font-weight: 600; color: var(--warn); }
 .corners { width: 100%; border-collapse: collapse; margin-top: 0.5rem; font-size: 0.9rem; }
 .corners caption { text-align: left; font-weight: 600; padding-bottom: 0.25rem; }
 .corners th, .corners td { text-align: right; padding: 0.15rem 0.4rem; border-bottom: 1px solid var(--line, #ccc); }
 .corners th:first-child { text-align: left; }
+.point.landing { fill: var(--surface); stroke: var(--accent); stroke-width: 2.5; }
+.burn-line { stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 4 3; }

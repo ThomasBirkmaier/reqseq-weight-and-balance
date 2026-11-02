@@ -1,5 +1,9 @@
 name: CI
 
+# The supplier repository (fuel) is private and is not checked out here: this workspace names
+# its requirements by ID and version only, and ReqSeq reports them as not accessible. The
+# evidence gate counts the approved requirements of this repository.
+
 on:
   pull_request:
   push:
@@ -9,7 +13,7 @@ permissions:
   contents: read
 
 env:
-  REQSEQ_URL: https://github.com/ThomasBirkmaier/ReqSeq/releases/download/v0.7
+  REQSEQ_URL: https://github.com/ThomasBirkmaier/ReqSeq/releases/download/v0.7.1
 
 jobs:
   spec:
@@ -20,13 +24,13 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
-      - name: Install ReqSeq 0.7.0
+      - name: Install ReqSeq 0.7.1
         run: |
           mkdir -p "$RUNNER_TEMP/reqseq" && cd "$RUNNER_TEMP/reqseq"
-          curl -fsSLO "$REQSEQ_URL/reqseq-cli-0.7.0.tgz"
+          curl -fsSLO "$REQSEQ_URL/reqseq-cli-0.7.1.tgz"
           curl -fsSLO "$REQSEQ_URL/SHA256SUMS.txt"
           sha256sum -c --ignore-missing SHA256SUMS.txt
-          npm install -g --offline ./reqseq-cli-0.7.0.tgz
+          npm install -g --offline ./reqseq-cli-0.7.1.tgz
           reqseq --version
       - name: Check the ReqSeq workspace
         run: reqseq workspace check --workspace spec
@@ -45,13 +49,14 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
-      - name: Install ReqSeq 0.7.0
+      - name: Install ReqSeq 0.7.1
         run: |
           mkdir -p "$RUNNER_TEMP/reqseq" && cd "$RUNNER_TEMP/reqseq"
-          curl -fsSLO "$REQSEQ_URL/reqseq-cli-0.7.0.tgz"
+          curl -fsSLO "$REQSEQ_URL/reqseq-cli-0.7.1.tgz"
           curl -fsSLO "$REQSEQ_URL/SHA256SUMS.txt"
           sha256sum -c --ignore-missing SHA256SUMS.txt
-          npm install -g --offline ./reqseq-cli-0.7.0.tgz
+          npm install -g --offline ./reqseq-cli-0.7.1.tgz
+          reqseq --version
       - name: Unit and acceptance tests (JUnit)
         working-directory: core
         run: cargo nextest run --profile ci
@@ -60,14 +65,14 @@ jobs:
       - name: Map Rust test names and enrich JUnit with ReqSeq
         if: always()
         run: |
-          mkdir -p evidence-out
-          python3 scripts/junit-map.py core/target/nextest/ci/junit.xml evidence-out/core-junit.xml
-          reqseq evidence enrich-junit evidence-out/core-junit.xml "${GITHUB_SHA::7}" --workspace spec
+          mkdir -p spec/evidence/ci
+          python3 scripts/junit-map.py core/target/nextest/ci/junit.xml spec/evidence/ci/core-junit.xml
+          reqseq evidence enrich-junit spec/evidence/ci/core-junit.xml "${{ github.sha }}" --workspace spec
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
-          name: core-junit
-          path: evidence-out/
+          name: evidence-core
+          path: spec/evidence/ci/
 
   e2e:
     name: e2e
@@ -80,43 +85,90 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
-      - name: Install ReqSeq 0.7.0
+      - name: Install ReqSeq 0.7.1
         run: |
           mkdir -p "$RUNNER_TEMP/reqseq" && cd "$RUNNER_TEMP/reqseq"
-          curl -fsSLO "$REQSEQ_URL/reqseq-cli-0.7.0.tgz"
+          curl -fsSLO "$REQSEQ_URL/reqseq-cli-0.7.1.tgz"
           curl -fsSLO "$REQSEQ_URL/SHA256SUMS.txt"
           sha256sum -c --ignore-missing SHA256SUMS.txt
-          npm install -g --offline ./reqseq-cli-0.7.0.tgz
+          npm install -g --offline ./reqseq-cli-0.7.1.tgz
+          reqseq --version
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      - name: Build the web app
+      - name: Build the web app (core at the root, HC-2 below hc2/)
         run: sh scripts/build.sh
-      - name: End-to-end tests (JUnit and screenshots)
-        run: npx playwright test
+      - name: End-to-end tests of the core build (JUnit and screenshots)
+        run: npx playwright test --project core
         env:
           CI: "true"
-      - name: Enrich JUnit with ReqSeq
+          PLAYWRIGHT_JUNIT_OUTPUT_FILE: test-results/core-junit.xml
+      - name: End-to-end tests of the HC-2 build (JUnit and screenshots)
+        if: always()
+        run: npx playwright test --project hc2
+        env:
+          CI: "true"
+          PLAYWRIGHT_JUNIT_OUTPUT_FILE: test-results/hc2-junit.xml
+      - name: Walk-through screenshots for the client validation
+        if: always()
+        run: npx playwright test --project walkthrough
+        env:
+          CI: "true"
+          PLAYWRIGHT_JUNIT_OUTPUT_FILE: test-results/walkthrough-junit.xml
+      - name: Enrich JUnit with ReqSeq (HC-2 for the variant VAR-f23826)
         if: always()
         run: |
-          mkdir -p evidence-out
-          cp test-results/e2e-junit.xml evidence-out/e2e-junit.xml
-          reqseq evidence enrich-junit evidence-out/e2e-junit.xml "${GITHUB_SHA::7}" --workspace spec
+          mkdir -p spec/evidence/ci
+          cp test-results/core-junit.xml spec/evidence/ci/e2e-core-junit.xml
+          cp test-results/hc2-junit.xml spec/evidence/ci/e2e-hc2-junit.xml
+          reqseq evidence enrich-junit spec/evidence/ci/e2e-core-junit.xml "${{ github.sha }}" --workspace spec
+          reqseq evidence enrich-junit spec/evidence/ci/e2e-hc2-junit.xml "${{ github.sha }}" --variant VAR-f23826 --workspace spec
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: evidence-e2e
+          path: spec/evidence/ci/
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: e2e-results
-          path: |
-            evidence-out/
-            test-results/
+          path: test-results/
       - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         with:
           path: dist
 
+  evidence:
+    name: evidence
+    needs: [core, e2e]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+      - name: Install ReqSeq 0.7.1
+        run: |
+          mkdir -p "$RUNNER_TEMP/reqseq" && cd "$RUNNER_TEMP/reqseq"
+          curl -fsSLO "$REQSEQ_URL/reqseq-cli-0.7.1.tgz"
+          curl -fsSLO "$REQSEQ_URL/SHA256SUMS.txt"
+          sha256sum -c --ignore-missing SHA256SUMS.txt
+          npm install -g --offline ./reqseq-cli-0.7.1.tgz
+          reqseq --version
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          pattern: evidence-*
+          path: spec/evidence/ci
+          merge-multiple: true
+      - name: Evidence gate (approved requirements, core and HC-2 view)
+        run: |
+          ls spec/evidence/ci
+          sh scripts/evidence-gate.sh core VAR-f23826
+
   deploy:
     name: deploy
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    needs: [spec, core, e2e]
+    needs: [spec, core, e2e, evidence]
     runs-on: ubuntu-latest
     permissions:
       pages: write

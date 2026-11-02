@@ -5,14 +5,19 @@ export async function open(page: Page, path = "/"): Promise<void> {
   await expect(page.locator("body")).toHaveAttribute("data-ready", "true");
 }
 
-export async function load(page: Page, aircraft: string, masses: (string | number)[], path = "/"): Promise<void> {
+/** Select the aircraft and enter the masses, then the usable fuel at take-off and the planned
+ * fuel burn (default 0 L and 0 L, as the acceptance criteria that keep their release 1 values say). */
+export async function load(page: Page, aircraft: string, masses: (string | number)[], fuel: string | number | null = 0, burn: string | number | null = 0, path = "/"): Promise<void> {
   await open(page, path);
   await page.selectOption("#aircraft", aircraft);
   const inputs = page.locator("#entries input");
+  if (fuel !== null) await page.fill("#entry-fuel", String(fuel));
+  if (burn !== null) await page.fill("#entry-burn", String(burn));
   for (let i = 0; i < masses.length; i++) await inputs.nth(i).fill(String(masses[i]));
 }
 
 export const indication = (page: Page) => page.locator("#indication");
+export const landing = (page: Page) => page.locator("#landing-indication");
 
 /** Contrast ratio (WCAG) of an element's text or stroke colour against its effective background. */
 export async function contrast(page: Page, selector: string, prop: "color" | "stroke" = "color"): Promise<number> {

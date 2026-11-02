@@ -1,14 +1,13 @@
 // Loader of the WebAssembly calculation core and its JSON interface.
 
 export interface Station { key: string; name: string; armMm: number; maxKg: number }
-export interface AircraftType { key: string; name: string; mtomKg: number; stations: Station[]; envelope: [number, number][] }
-export interface Aircraft { id: string; emptyKg: number; emptyArmMm: number; weighingDate: string }
-export interface Fleet { type: AircraftType; aircraft: Aircraft[] }
+export interface AircraftType { key: string; name: string; mtomKg: number; stations: Station[]; envelope: [number, number][]; fuelArmMm: number; fuelCapacityL: number }
+export interface Aircraft { id: string; emptyKg: number; emptyArmMm: number; weighingDate: string; reportedFuelL: number | null; reportedAt: string | null }
+export interface Fleet { type: AircraftType; aircraft: Aircraft[]; dataDate: string }
 export interface EntryResult { valid: boolean; empty: boolean; message: string | null }
-export interface Row { name: string; kg: number; armMm: number; momentTenths: number }
-export interface Evaluation {
-  complete: boolean;
-  entries: EntryResult[];
+export interface Row { name: string; litres: number | null; kg: number; armMm: number; momentTenths: number }
+/** Result of the limit check rule for one state of the flight. */
+export interface State {
   totalKg: number;
   momentTenths: number;
   cgMm: number;
@@ -19,7 +18,16 @@ export interface Evaluation {
   aftLimitMm: number;
   within: boolean;
   indications: string[];
+}
+export interface Evaluation {
+  complete: boolean;
+  entries: EntryResult[];
+  fuel: EntryResult;
+  burn: EntryResult;
+  takeOff: State;
+  landing: State;
   rows: Row[];
+  landingFuel: Row;
 }
 
 interface Exports {
@@ -54,7 +62,7 @@ export class Core {
     return f;
   }
 
-  evaluate(typeKey: string, aircraftId: string, entries: string[]): Evaluation {
-    return JSON.parse(this.call(this.x.evaluate, [typeKey, aircraftId, ...entries].join("\n")));
+  evaluate(typeKey: string, aircraftId: string, entries: string[], fuel: string, burn: string): Evaluation {
+    return JSON.parse(this.call(this.x.evaluate, [typeKey, aircraftId, ...entries, fuel, burn].join("\n")));
   }
 }

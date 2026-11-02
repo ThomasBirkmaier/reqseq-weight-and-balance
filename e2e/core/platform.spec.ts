@@ -1,8 +1,8 @@
 // End-to-end verification of the platform requirements: phone screen, contrast, offline.
 import { expect, test } from "@playwright/test";
-import { contrast, load, open } from "./helpers";
+import { contrast, load, open } from "../helpers";
 
-const A = [160, 0, 20];
+const A = [160, 0, 20]; // with 0 L fuel and 0 L burn unless named
 const AFT = [70, 200, 50];
 
 test.describe("phone", () => {
@@ -14,19 +14,20 @@ test.describe("phone", () => {
     expect(w).toBeLessThanOrEqual(360);
   });
 
-  test("[SR-54e043/AK2] total mass and limit indication without horizontal scrolling", async ({ page }) => {
-    await load(page, "HC4-01", [160, 0, 0]);
-    for (const id of ["#indication", "#total"]) {
+  test("[SR-54e043/AK2] total mass and both limit indications without horizontal scrolling", async ({ page }) => {
+    await load(page, "HC4-01", [160, 0, 0], 100, 60);
+    for (const id of ["#indication", "#landing-indication", "#total"]) {
       const b = await page.locator(id).boundingBox();
       expect(b!.x).toBeGreaterThanOrEqual(0);
       expect(b!.x + b!.width).toBeLessThanOrEqual(360);
     }
   });
 
-  test("[SR-54e043/AK3] limit indication in the viewport after the baggage entry", async ({ page }) => {
-    await load(page, "HC4-01", A);
-    await page.locator("#entry-baggage").focus();
+  test("[SR-c1fe36/AK1] take-off and landing limit indication in the viewport after the planned fuel burn entry", async ({ page }) => {
+    await load(page, "HC4-01", A, 100, null);
+    await page.locator("#entry-burn").fill("60");
     await expect(page.locator("#indication")).toBeInViewport({ ratio: 1 });
+    await expect(page.locator("#landing-indication")).toBeInViewport({ ratio: 1 });
     await page.screenshot({ path: test.info().outputPath("phone-result.png") });
   });
 });
@@ -38,7 +39,7 @@ for (const scheme of ["light", "dark"] as const) {
     test(`[SR-070ac3/${ak}] text contrast at least 4.5:1 in ${scheme} mode`, async ({ page }) => {
       for (const loading of [A, AFT, [160, 201, 0]]) {
         await load(page, "HC4-01", loading);
-        for (const sel of ["#indication span", "#fuel", "#total", "#aid", "#entries label", ".banner", "#table td", ".message"]) {
+        for (const sel of ["#indication span", "#landing-indication span", "#landing-figures", "#fuel-report", "#total", "#aid", "#entries label", ".banner", "#table td", ".message"]) {
           if (!(await page.locator(sel).first().isVisible())) continue;
           expect(await contrast(page, sel), `${sel} ${loading}`).toBeGreaterThanOrEqual(4.5);
         }
@@ -54,6 +55,7 @@ test("[SR-070ac3/AK3] graphics contrast at least 3:1 in light and dark mode", as
     await load(page, "HC4-01", A);
     expect(await contrast(page, "#chart .envelope", "stroke")).toBeGreaterThanOrEqual(3);
     expect(await contrast(page, "#chart .point", "stroke")).toBeGreaterThanOrEqual(3);
+    expect(await contrast(page, "#chart .point.landing", "stroke")).toBeGreaterThanOrEqual(3);
     expect(await contrast(page, "#topview .mark", "stroke")).toBeGreaterThanOrEqual(3);
     await page.close();
   }
@@ -71,21 +73,32 @@ test("[SR-384eab/AK1] opens and calculates without network after the first visit
   await page.fill("#entry-front", "160");
   await page.fill("#entry-rear", "0");
   await page.fill("#entry-baggage", "0");
+  await page.fill("#entry-fuel", "0");
+  await page.fill("#entry-burn", "0");
   await expect(page.locator("#total")).toHaveText("925 kg");
   await context.setOffline(false);
 });
 
-test("[SR-384eab/AK2] entering a loading sends no network request", async ({ page }) => {
+test("[SR-87691b/AK1] entering a loading sends no network request", async ({ page }) => {
   await open(page);
   const requests: string[] = [];
   page.on("request", (r) => requests.push(r.url()));
   await page.selectOption("#aircraft", "HC4-01");
-  for (const [id, v] of [["#entry-front", "160"], ["#entry-rear", "0"], ["#entry-baggage", "20"]]) await page.fill(id, v);
+  for (const [id, v] of [["#entry-fuel", "0"], ["#entry-burn", "0"], ["#entry-front", "160"], ["#entry-rear", "0"], ["#entry-baggage", "20"]]) await page.fill(id, v);
   await expect(page.locator("#total")).toHaveText("945 kg");
   expect(requests).toEqual([]);
 });
 
-test("[SR-384eab/AK3] no sign-in or installation step", async ({ browser }) => {
+test("[SR-87691b/AK2] changing the usable fuel sends no network request", async ({ page }) => {
+  await load(page, "HC4-01", A);
+  const requests: string[] = [];
+  page.on("request", (r) => requests.push(r.url()));
+  await page.fill("#entry-fuel", "80");
+  await expect(page.locator("#total")).toHaveText("1003 kg");
+  expect(requests).toEqual([]);
+});
+
+test("[SR-c74a67/AK1] no sign-in or installation step", async ({ browser }) => {
   const context = await browser.newContext();
   const page = await context.newPage();
   await open(page);
