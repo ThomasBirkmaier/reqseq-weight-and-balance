@@ -11,15 +11,19 @@
     "test:e2e": "playwright test",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.e2e.json && tsc -p tsconfig.tools.json && tsc -p tsconfig.sw.json",
     "lint": "eslint . --max-warnings 0",
-    "lint:core": "cd core && cargo clippy --locked --all-targets -- -D warnings && cargo clippy --locked --all-targets --target wasm32-unknown-unknown -- -D warnings && RUSTDOCFLAGS='-D warnings' cargo doc --locked --no-deps --document-private-items"
+    "lint:core": "cd core && cargo clippy --locked --all-targets -- -D warnings && cargo clippy --locked --all-targets --target wasm32-unknown-unknown -- -D warnings && RUSTDOCFLAGS='-D warnings' cargo doc --locked --no-deps --document-private-items",
+    "format": "prettier --write . && cd core && cargo fmt",
+    "format:check": "prettier --check . && cd core && cargo fmt --check"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
     "@playwright/test": "1.63.0",
     "@types/node": "22.20.7",
     "eslint": "10.15.0",
+    "eslint-plugin-jsdoc": "65.4.5",
     "eslint-plugin-playwright": "2.12.2",
     "globals": "17.14.0",
+    "prettier": "3.10.0",
     "typescript": "6.0.2",
     "typescript-eslint": "8.74.0"
   }

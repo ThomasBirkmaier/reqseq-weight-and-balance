@@ -4,6 +4,7 @@
 import js from "@eslint/js";
 import { defineConfig } from "eslint/config";
 import playwright from "eslint-plugin-playwright";
+import jsdoc from "eslint-plugin-jsdoc";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
@@ -37,11 +38,25 @@ export default defineConfig(
       "no-nested-ternary": "off",
       "require-unicode-regexp": "error",
       radix: "error",
+      // Size and shape: files are split before they get long, functions stay short.
+      "max-lines": ["error", { max: 300, skipBlankLines: true, skipComments: true }],
+      "max-lines-per-function": ["error", { max: 60, skipBlankLines: true, skipComments: true }],
+      "max-statements": ["error", 30],
+      complexity: ["error", 15],
+      "max-depth": ["error", 4],
+      "max-params": ["error", 6],
+      "max-nested-callbacks": ["error", 4],
       // typescript-eslint rules beyond strictTypeChecked.
       "@typescript-eslint/no-shadow": "error",
       "@typescript-eslint/explicit-module-boundary-types": "error",
-      "@typescript-eslint/explicit-function-return-type": ["error", { allowExpressions: true, allowTypedFunctionExpressions: true }],
-      "@typescript-eslint/strict-boolean-expressions": ["error", { allowString: false, allowNumber: false, allowNullableObject: false }],
+      "@typescript-eslint/explicit-function-return-type": [
+        "error",
+        { allowExpressions: true, allowTypedFunctionExpressions: true },
+      ],
+      "@typescript-eslint/strict-boolean-expressions": [
+        "error",
+        { allowString: false, allowNumber: false, allowNullableObject: false },
+      ],
       "@typescript-eslint/switch-exhaustiveness-check": "error",
       "@typescript-eslint/prefer-readonly": "error",
       "@typescript-eslint/consistent-type-imports": "error",
@@ -60,10 +75,45 @@ export default defineConfig(
     },
   },
   {
+    // Every exported function, class, interface and type has a doc comment with a description.
+    files: ["web/**/*.ts", "web/**/*.js", "e2e/helpers.ts", "scripts/**/*.mjs"],
+    plugins: { jsdoc },
+    rules: {
+      "jsdoc/require-jsdoc": [
+        "error",
+        {
+          publicOnly: true,
+          require: {
+            FunctionDeclaration: true,
+            ClassDeclaration: true,
+            MethodDefinition: true,
+            ArrowFunctionExpression: true,
+          },
+          contexts: [
+            "TSInterfaceDeclaration",
+            "TSTypeAliasDeclaration",
+            "ExportNamedDeclaration > VariableDeclaration",
+          ],
+        },
+      ],
+      "jsdoc/require-description": "error",
+      "jsdoc/check-alignment": "error",
+      "jsdoc/no-multi-asterisks": "error",
+    },
+  },
+  {
+    // Test files are lists of independent cases; they may be longer than source files.
+    files: ["e2e/**/*.spec.ts"],
+    rules: { "max-lines": ["error", { max: 400, skipBlankLines: true, skipComments: true }] },
+  },
+  {
     // JavaScript files declare their types in JSDoc, checked by tsc (checkJs); these two rules
     // only see TypeScript annotations.
     files: ["**/*.js", "**/*.mjs"],
-    rules: { "@typescript-eslint/explicit-function-return-type": "off", "@typescript-eslint/explicit-module-boundary-types": "off" },
+    rules: {
+      "@typescript-eslint/explicit-function-return-type": "off",
+      "@typescript-eslint/explicit-module-boundary-types": "off",
+    },
   },
   {
     files: ["web/src/**/*.ts"],

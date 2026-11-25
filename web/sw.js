@@ -5,15 +5,44 @@
 // can mix fresh and cached files.
 const CACHE = "wb-__VERSION__";
 const FILES = ["./", "./index.html", "./sw.js"];
-const SHARED = ["style.css", "manifest.webmanifest", "wb_core.wasm", "js/main.js", "js/app.js", "js/core.js", "js/draw.js", "js/format.js", "js/guard.js"];
+const SHARED = [
+  "style.css",
+  "manifest.webmanifest",
+  "wb_core.wasm",
+  "js/main.js",
+  "js/app.js",
+  "js/core.js",
+  "js/draw.js",
+  "js/format.js",
+  "js/guard.js",
+  "js/dom.js",
+  "js/entries.js",
+  "js/result.js",
+];
 /** The global scope: this script runs as a service worker (type check with tsconfig.sw.json). */
 const sw = /** @type {ServiceWorkerGlobalScope} */ (/** @type {unknown} */ (self));
 sw.addEventListener("install", (e) => {
   const base = sw.location.pathname.includes("/hc2/") ? "../" : "./";
-  e.waitUntil(caches.open(CACHE).then(async (c) => c.addAll([...FILES, ...SHARED.map((f) => base + f)])).then(async () => sw.skipWaiting()));
+  e.waitUntil(
+    caches
+      .open(CACHE)
+      .then(async (c) => c.addAll([...FILES, ...SHARED.map((f) => base + f)]))
+      .then(async () => sw.skipWaiting()),
+  );
 });
 sw.addEventListener("activate", (e) => {
-  e.waitUntil(caches.keys().then(async (ks) => Promise.all(ks.filter((k) => k !== CACHE && k.startsWith("wb-") && k.endsWith(CACHE.slice(-4))).map(async (k) => caches.delete(k)))).then(async () => sw.clients.claim()));
+  e.waitUntil(
+    caches
+      .keys()
+      .then(async (ks) =>
+        Promise.all(
+          ks
+            .filter((k) => k !== CACHE && k.startsWith("wb-") && k.endsWith(CACHE.slice(-4)))
+            .map(async (k) => caches.delete(k)),
+        ),
+      )
+      .then(async () => sw.clients.claim()),
+  );
 });
 let slowUntil = 0;
 sw.addEventListener("fetch", (e) => {
@@ -21,11 +50,24 @@ sw.addEventListener("fetch", (e) => {
   // Poor reception: if the network has not answered within 3 s, open from the cache;
   // the network answer still refreshes the cache when it arrives.
   let settled = false;
-  const network = fetch(e.request).finally(() => { settled = true; }).then((r) => {
-    if (r.ok) { const copy = r.clone(); void caches.open(CACHE).then(async (c) => c.put(e.request, copy)).catch(() => undefined); }
-    return r;
-  });
-  /** @returns {Promise<Response | undefined>} */
+  const network = fetch(e.request)
+    .finally(() => {
+      settled = true;
+    })
+    .then((r) => {
+      if (r.ok) {
+        const copy = r.clone();
+        void caches
+          .open(CACHE)
+          .then(async (c) => c.put(e.request, copy))
+          .catch(() => undefined);
+      }
+      return r;
+    });
+  /**
+   * The cached copy of the request, if there is one.
+   * @returns {Promise<Response | undefined>}
+   */
   async function cached() {
     return caches.match(e.request, { ignoreSearch: true });
   }
@@ -42,5 +84,10 @@ sw.addEventListener("fetch", (e) => {
       .then(async (r) => r ?? cached().then(async (c) => c ?? network))
       .catch(() => Response.error()),
   );
-  e.waitUntil(network.then(() => undefined, () => undefined));
+  e.waitUntil(
+    network.then(
+      () => undefined,
+      () => undefined,
+    ),
+  );
 });

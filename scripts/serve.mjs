@@ -31,7 +31,10 @@ async function serve(url, res) {
     let file = join(root, p);
     if ((await stat(file)).isDirectory()) file = join(file, "index.html");
     const body = await readFile(file);
-    res.writeHead(200, { "content-type": types[extname(file)] ?? "application/octet-stream", "cache-control": "no-cache" });
+    res.writeHead(200, {
+      "content-type": types[extname(file)] ?? "application/octet-stream",
+      "cache-control": "no-cache",
+    });
     res.end(body);
   } catch {
     res.writeHead(404);

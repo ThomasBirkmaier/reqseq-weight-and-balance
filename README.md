@@ -43,13 +43,14 @@ npx playwright test                      # end-to-end tests (serves dist/ itself
 Static checks (CI job `lint`; every finding is an error):
 
 ```sh
+npm run format:check # rustfmt and Prettier (npm run format applies them)
 npm run lint:core   # rustc, Clippy (all, pedantic, nursery, cargo, selected restriction lints) and rustdoc, host and WebAssembly
 npm run typecheck   # TypeScript with every strict flag: web app, e2e tests, service worker, scripts
 npm run lint        # ESLint, typescript-eslint strictTypeChecked + stylisticTypeChecked, Playwright rules, zero warnings
-shellcheck -o all scripts/*.sh
+shellcheck -o all scripts/*.sh && sh scripts/check-file-length.sh
 ```
 
-The settings are in `core/Cargo.toml` (`[lints]`), `core/clippy.toml`, `tsconfig.base.json` and `eslint.config.mjs`; `rust-toolchain.toml` fixes the Rust version, so that a new Clippy cannot fail a build without a change here. An exception is a local `#[expect(..., reason = "...")]` or `eslint-disable-next-line ... -- reason`.
+Size limits: source files at most 300 lines (tests 400), functions at most 60 lines, cognitive complexity 15; every exported item has a doc comment. The settings are in `rustfmt.toml`, `.prettierrc.json`, `core/Cargo.toml` (`[lints]`), `core/clippy.toml`, `tsconfig.base.json` and `eslint.config.mjs`; `rust-toolchain.toml` fixes the Rust version, so that a new Clippy cannot fail a build without a change here. An exception is a local `#[expect(..., reason = "...")]` or `eslint-disable-next-line ... -- reason`.
 
 Tests are named after the acceptance criterion they check, by its criterion key (never its number), for example `[SR-3a4905/AK-gt5z] exactly the maximum take-off mass is within limits`; `reqseq element get SR-3a4905` shows the key of each criterion. Rust tests carry the key in the function name (`sr_3a4905_ak_gt5z_...`), which `reqseq evidence enrich-junit --name-pattern '{prefix}_{id}_ak_{ak}'` reads. CI (ReqSeq 0.14.0) enriches the JUnit reports with `reqseq evidence enrich-junit`: the core unit tests for the core and the HC-2 view at once (`--skip-not-in-view`: each record counts only in the views its requirement applies in), the HC-2 end-to-end suite for the variant VAR-f23826. The job `evidence` fails when an approved requirement has no passed test at its current version in the core or the HC-2 view.
 

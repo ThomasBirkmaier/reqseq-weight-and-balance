@@ -7,7 +7,10 @@ export default defineConfig({
   retries: 0,
   // One JUnit file per project run: CI runs the core and the HC-2 suites separately, so that the
   // HC-2 run can be enriched for the variant (PLAYWRIGHT_JUNIT_OUTPUT_FILE names the file).
-  reporter: [["list"], ["junit", { outputFile: process.env["PLAYWRIGHT_JUNIT_OUTPUT_FILE"] ?? "test-results/e2e-junit.xml" }]],
+  reporter: [
+    ["list"],
+    ["junit", { outputFile: process.env["PLAYWRIGHT_JUNIT_OUTPUT_FILE"] ?? "test-results/e2e-junit.xml" }],
+  ],
   projects: [
     { name: "core", testDir: "e2e/core" },
     { name: "hc2", testDir: "e2e/hc2" },

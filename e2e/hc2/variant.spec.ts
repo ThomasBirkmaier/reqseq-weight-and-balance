@@ -7,8 +7,12 @@ import { contrast, indication, landing, load, open, box } from "../helpers";
 
 const H = "/hc2/";
 const B = [160, 20]; // with 50 L fuel and 30 L burn: take-off 856 kg at 2.137 m, landing 834 kg at 2.138 m
-const hc2 = async (page: Page, masses: (string | number)[], fuel: string | number | null = 0, burn: string | number | null = 0): Promise<void> =>
-  load(page, "HC2-01", masses, fuel, burn, H);
+const hc2 = async (
+  page: Page,
+  masses: (string | number)[],
+  fuel: string | number | null = 0,
+  burn: string | number | null = 0,
+): Promise<void> => load(page, "HC2-01", masses, fuel, burn, H);
 
 // Variant requirements
 test("[SR-d0fb6e/AK-j03d] HC2-01 empty: 640 kg at 2.150 m", async ({ page }) => {
@@ -20,7 +24,10 @@ test("[SR-d0fb6e/AK-j03d] HC2-01 empty: 640 kg at 2.150 m", async ({ page }) => 
 test("[SR-d0fb6e/AK-f0q1] HC2-01 entries without rear seats", async ({ page }) => {
   await open(page, H);
   await page.locator("#aircraft").selectOption("HC2-01");
-  await expect(page.locator("#entries label")).toHaveText(["Front seats (max 220 kg)", "Baggage compartment (max 40 kg)"]);
+  await expect(page.locator("#entries label")).toHaveText([
+    "Front seats (max 220 kg)",
+    "Baggage compartment (max 40 kg)",
+  ]);
 });
 
 test("[SR-d0fb6e/AK-mvk0] HC2-01 aft of the aft limit", async ({ page }) => {
@@ -109,8 +116,16 @@ test("[SR-588924] HC-2: results update within 100 ms without a button", async ({
     input.value = "170";
     input.dispatchEvent(new Event("input", { bubbles: true }));
     await new Promise<void>((resolve) => {
-      if (total.textContent === "830 kg") { resolve(); return; }
-      new MutationObserver((_, o) => { if (total.textContent === "830 kg") { o.disconnect(); resolve(); } }).observe(total, { childList: true, characterData: true, subtree: true });
+      if (total.textContent === "830 kg") {
+        resolve();
+        return;
+      }
+      new MutationObserver((_, o) => {
+        if (total.textContent === "830 kg") {
+          o.disconnect();
+          resolve();
+        }
+      }).observe(total, { childList: true, characterData: true, subtree: true });
     });
     return performance.now() - t0;
   });
@@ -128,17 +143,26 @@ test("[SR-0b76d9] HC-2: table rows including fuel", async ({ page }) => {
     /Usable fuel at landing 20 L\s*14 kg\s*2\.100 m\s*30\.2 kg·m/u,
     /Total at landing\s*834 kg\s*2\.138 m\s*1784\.2 kg·m/u,
   ]);
-  await expect(page.locator("#rounding")).toHaveText("Masses rounded to 1 kg, lever arms to 0.001 m, moments to 0.1 kg·m");
+  await expect(page.locator("#rounding")).toHaveText(
+    "Masses rounded to 1 kg, lever arms to 0.001 m, moments to 0.1 kg·m",
+  );
 });
 
 test("[SR-5e3579] HC-2: top view marks front to back", async ({ page }) => {
   await hc2(page, B, 50, null);
-  await expect(page.locator("#topview .mark-label")).toHaveText(["Front seats160 kg", "Usable fuel50 L", "Baggage compartment20 kg"]);
+  await expect(page.locator("#topview .mark-label")).toHaveText([
+    "Front seats160 kg",
+    "Usable fuel50 L",
+    "Baggage compartment20 kg",
+  ]);
 });
 
 test("[SR-3f6229] HC-2: chart with envelope, take-off and landing points", async ({ page }) => {
   await hc2(page, B, 50, 30);
-  await expect(page.locator("#chart .envelope")).toHaveAttribute("data-corners", "550:2050 750:2050 880:2130 880:2170 550:2170");
+  await expect(page.locator("#chart .envelope")).toHaveAttribute(
+    "data-corners",
+    "550:2050 750:2050 880:2130 880:2170 550:2170",
+  );
   await expect(page.locator("#chart #point")).toHaveAttribute("data-mass", "856");
   await expect(page.locator("#chart #point-landing")).toHaveAttribute("data-mass", "834");
   await page.locator("#entry-front").fill("60");
@@ -152,7 +176,11 @@ test("[SR-028748/AK-mjv8] envelope corners of the HC-2 as numbers", async ({ pag
   await open(page, H);
   await page.locator("#aircraft").selectOption("HC2-01");
   await expect(page.locator("#corners tbody tr")).toHaveText([
-    /1\s*550 kg\s*2\.050 m/u, /2\s*750 kg\s*2\.050 m/u, /3\s*880 kg\s*2\.130 m/u, /4\s*880 kg\s*2\.170 m/u, /5\s*550 kg\s*2\.170 m/u,
+    /1\s*550 kg\s*2\.050 m/u,
+    /2\s*750 kg\s*2\.050 m/u,
+    /3\s*880 kg\s*2\.130 m/u,
+    /4\s*880 kg\s*2\.170 m/u,
+    /5\s*550 kg\s*2\.170 m/u,
   ]);
 });
 
@@ -166,7 +194,9 @@ test("[SR-1329af] HC-2: fixed notices above the first result", async ({ page }) 
   await open(page, H);
   const first = await page.evaluate(() => document.body.innerText.trim().split("\n")[0]);
   expect(first).toBe("Invented aircraft. Not for flight operations.");
-  await expect(page.locator("#aid")).toHaveText("This app is an aid. The pilot in command remains responsible for mass and balance according to the flight manual.");
+  await expect(page.locator("#aid")).toHaveText(
+    "This app is an aid. The pilot in command remains responsible for mass and balance according to the flight manual.",
+  );
 });
 
 test("[SR-2dc652/AK-f5kp] HC-2: usable fuel prefilled with the reported 78 L", async ({ page }) => {
@@ -180,13 +210,21 @@ test("[SR-2dc652/AK-f5kp] HC-2: usable fuel prefilled with the reported 78 L", a
 test("[SR-d26ffc/AK-xbp2] HC-2: reported fuel quantity of HC2-01 with its report time", async ({ page }) => {
   await open(page, H);
   await page.locator("#aircraft").selectOption("HC2-01");
-  await expect(page.locator("#fuel-report")).toHaveText("Reported by the fuel system module: 78 L at 2026-11-02 05:50 UTC");
+  await expect(page.locator("#fuel-report")).toHaveText(
+    "Reported by the fuel system module: 78 L at 2026-11-02 05:50 UTC",
+  );
 });
 
 test("[SR-833e71] HC-2: pilot's figure is used and marked", async ({ page }) => {
   await open(page, H);
   await page.locator("#aircraft").selectOption("HC2-01");
-  for (const [id, v] of [["front", 0], ["baggage", 0], ["burn", 0]] as const) await page.locator(`#entry-${id}`).fill(String(v));
+  for (const [id, v] of [
+    ["front", 0],
+    ["baggage", 0],
+    ["burn", 0],
+  ] as const) {
+    await page.locator(`#entry-${id}`).fill(String(v));
+  }
   await page.locator("#entry-fuel").fill("50");
   await expect(page.locator("#fuel-note")).toHaveText("Pilot's figure (fuel system module reported 78 L)");
   await expect(page.locator("#total")).toHaveText("676 kg");
@@ -232,7 +270,14 @@ test("[SR-87691b] HC-2: entering a loading sends no network request", async ({ p
   const requests: string[] = [];
   page.on("request", (r) => requests.push(r.url()));
   await page.locator("#aircraft").selectOption("HC2-01");
-  for (const [id, v] of [["fuel", "0"], ["burn", "0"], ["front", "160"], ["baggage", "20"]] as const) await page.locator(`#entry-${id}`).fill(v);
+  for (const [id, v] of [
+    ["fuel", "0"],
+    ["burn", "0"],
+    ["front", "160"],
+    ["baggage", "20"],
+  ] as const) {
+    await page.locator(`#entry-${id}`).fill(v);
+  }
   await expect(page.locator("#total")).toHaveText("820 kg");
   expect(requests).toEqual([]);
 });
@@ -252,7 +297,9 @@ test("[SR-384eab/AK-xmmt] HC-2 build opens without network after the first visit
 test("[SR-55a648] HC-2: offline notice with the date of the data", async ({ page, context }) => {
   await hc2(page, [0, 0]);
   await context.setOffline(true);
-  await expect(page.locator("#offline")).toHaveText("Offline: aircraft data as of 2026-11-02. Check the weighing date against the aircraft documents.");
+  await expect(page.locator("#offline")).toHaveText(
+    "Offline: aircraft data as of 2026-11-02. Check the weighing date against the aircraft documents.",
+  );
   await context.setOffline(false);
   await expect(page.locator("#offline")).toBeHidden();
 });
@@ -287,7 +334,15 @@ test("[SR-070ac3] HC-2: text 4.5:1 and graphics 3:1 in light and dark mode", asy
   for (const colorScheme of ["light", "dark"] as const) {
     const page = await browser.newPage({ colorScheme });
     await hc2(page, B, 50, 30);
-    for (const sel of ["#indication span", "#landing-indication span", "#total", "#aid", "#entries label", ".banner", "#table td"]) {
+    for (const sel of [
+      "#indication span",
+      "#landing-indication span",
+      "#total",
+      "#aid",
+      "#entries label",
+      ".banner",
+      "#table td",
+    ]) {
       expect(await contrast(page, sel), `${colorScheme} ${sel}`).toBeGreaterThanOrEqual(4.5);
     }
     for (const sel of ["#chart .envelope", "#chart .point", "#topview .mark"]) {
