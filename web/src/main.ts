@@ -2,19 +2,21 @@
 import { Core } from "./core.js";
 import { startApp } from "./app.js";
 
-const base = document.body.dataset.base ?? "./";
-const typeKey = document.body.dataset.type ?? "hc4";
+const base = document.body.dataset["base"] ?? "./";
+const typeKey = document.body.dataset["type"] ?? "hc4";
 
 Core.load(`${base}wb_core.wasm`)
   .then((core) => {
     startApp(core, typeKey);
-    document.body.dataset.ready = "true";
+    document.body.dataset["ready"] = "true";
   })
   .catch(() => {
     // No result without data: say so instead of leaving an empty selection.
-    document.getElementById("load-error")!.hidden = false;
-    document.getElementById("select-hint")!.hidden = true;
-    document.body.dataset.ready = "error";
+    const loadError = document.getElementById("load-error");
+    const hint = document.getElementById("select-hint");
+    if (loadError !== null) loadError.hidden = false;
+    if (hint !== null) hint.hidden = true;
+    document.body.dataset["ready"] = "error";
   });
 
 if ("serviceWorker" in navigator && location.protocol !== "file:") {

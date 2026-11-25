@@ -2,14 +2,14 @@
 // Test names carry [SR-<id>/AK<n>] so that ReqSeq can attach the JUnit results.
 // load() enters 0 L usable fuel at take-off and 0 L planned fuel burn unless a test names others.
 import { expect, test } from "@playwright/test";
-import { indication, landing, load, open } from "../helpers";
+import { indication, landing, load, open, box } from "../helpers";
 
 const A = [160, 0, 20];
 const AFT = [70, 200, 50]; // 1085 kg, 2.475 m
 
 test("[SR-e95f42/AK-nk58] shows one labelled entry per seat row and baggage compartment", async ({ page }) => {
   await open(page);
-  await page.selectOption("#aircraft", "HC4-01");
+  await page.locator("#aircraft").selectOption("HC4-01");
   await expect(page.locator("#entries label")).toHaveText(["Front seats (max 230 kg)", "Rear seats (max 200 kg)", "Baggage compartment (max 50 kg)"]);
   for (const v of await page.locator("#entries input").all()) await expect(v).toHaveValue("");
 });
@@ -50,7 +50,7 @@ test("[SR-b59c9a/AK-k0w1] cleared usable fuel gives check not complete", async (
 
 test("[SR-b59c9a/AK-qp17] corrected entry gives a limit indication", async ({ page }) => {
   await load(page, "HC4-01", [160, 201, 0]);
-  await page.fill("#entry-rear", "200");
+  await page.locator("#entry-rear").fill("200");
   await expect(indication(page)).not.toContainText("Check not complete");
 });
 
@@ -142,13 +142,14 @@ test("[SR-588924/AK-rksb] results update within 100 ms without a button", async 
   await load(page, "HC4-01", A);
   await expect(page.locator("#total")).toHaveText("945 kg");
   const ms = await page.evaluate(async () => {
-    const input = document.getElementById("entry-front") as HTMLInputElement;
-    const total = document.getElementById("total")!;
+    const input = document.getElementById("entry-front");
+    const total = document.getElementById("total");
+    if (!(input instanceof HTMLInputElement) || total === null) throw new Error("missing entry or total");
     const t0 = performance.now();
     input.value = "170";
     input.dispatchEvent(new Event("input", { bubbles: true }));
     await new Promise<void>((resolve) => {
-      if (total.textContent === "955 kg") return resolve();
+      if (total.textContent === "955 kg") { resolve(); return; }
       new MutationObserver((_, o) => { if (total.textContent === "955 kg") { o.disconnect(); resolve(); } }).observe(total, { childList: true, characterData: true, subtree: true });
     });
     return performance.now() - t0;
@@ -159,20 +160,20 @@ test("[SR-588924/AK-rksb] results update within 100 ms without a button", async 
 test("[SR-0b76d9/AK-yf9k] table rows with mass, lever arm and moment including fuel", async ({ page }) => {
   await load(page, "HC4-01", A, 100, 60);
   await expect(page.locator("#table tbody tr").filter({ hasNotText: "at landing" })).toHaveText([
-    /Empty mass\s*765 kg\s*2\.220 m\s*1698\.3 kg·m/,
-    /Front seats\s*160 kg\s*2\.000 m\s*320\.0 kg·m/,
-    /Rear seats\s*0 kg\s*3\.250 m\s*0\.0 kg·m/,
-    /Baggage compartment\s*20 kg\s*3\.950 m\s*79\.0 kg·m/,
-    /Usable fuel 100 L\s*72 kg\s*2\.350 m\s*169\.2 kg·m/,
-    /Total at take-off\s*1017 kg\s*2\.229 m\s*2266\.5 kg·m/,
+    /Empty mass\s*765 kg\s*2\.220 m\s*1698\.3 kg·m/u,
+    /Front seats\s*160 kg\s*2\.000 m\s*320\.0 kg·m/u,
+    /Rear seats\s*0 kg\s*3\.250 m\s*0\.0 kg·m/u,
+    /Baggage compartment\s*20 kg\s*3\.950 m\s*79\.0 kg·m/u,
+    /Usable fuel 100 L\s*72 kg\s*2\.350 m\s*169\.2 kg·m/u,
+    /Total at take-off\s*1017 kg\s*2\.229 m\s*2266\.5 kg·m/u,
   ]);
 });
 
 test("[SR-0b76d9/AK-hnpk] table rows for the usable fuel and the total at landing", async ({ page }) => {
   await load(page, "HC4-01", A, 100, 60);
   await expect(page.locator("#table tbody tr").filter({ hasText: "at landing" })).toHaveText([
-    /Usable fuel at landing 40 L\s*29 kg\s*2\.350 m\s*67\.7 kg·m/,
-    /Total at landing\s*974 kg\s*2\.223 m\s*2165\.0 kg·m/,
+    /Usable fuel at landing 40 L\s*29 kg\s*2\.350 m\s*67\.7 kg·m/u,
+    /Total at landing\s*974 kg\s*2\.223 m\s*2165\.0 kg·m/u,
   ]);
 });
 
@@ -190,7 +191,7 @@ test("[SR-5e3579/AK-mttg] top view marks the loading stations front to back", as
 
 test("[SR-5e3579/AK-vcx5] changed baggage mass updates its mark", async ({ page }) => {
   await load(page, "HC4-01", A, 100, null);
-  await page.fill("#entry-baggage", "50");
+  await page.locator("#entry-baggage").fill("50");
   await expect(page.locator('#topview [data-station="baggage"] .mark-label')).toHaveText("Baggage compartment50 kg");
 });
 
@@ -223,19 +224,19 @@ test("[SR-3f6229/AK-t5dd] take-off point forward of the forward limit is labelle
 
 test("[SR-028748/AK-ffyn] envelope corners of the HC-4 as numbers", async ({ page }) => {
   await open(page);
-  await page.selectOption("#aircraft", "HC4-01");
+  await page.locator("#aircraft").selectOption("HC4-01");
   await expect(page.locator("#corners tbody tr")).toHaveText([
-    /1\s*650 kg\s*2\.100 m/, /2\s*850 kg\s*2\.100 m/, /3\s*1150 kg\s*2\.300 m/, /4\s*1150 kg\s*2\.470 m/, /5\s*650 kg\s*2\.470 m/,
+    /1\s*650 kg\s*2\.100 m/u, /2\s*850 kg\s*2\.100 m/u, /3\s*1150 kg\s*2\.300 m/u, /4\s*1150 kg\s*2\.470 m/u, /5\s*650 kg\s*2\.470 m/u,
   ]);
 });
 
 test("[SR-fc8953/AK-h476] selected aircraft is named above the results", async ({ page }) => {
   await open(page);
-  await page.selectOption("#aircraft", "HC4-02");
+  await page.locator("#aircraft").selectOption("HC4-02");
   await expect(page.locator("#selected")).toHaveText("HC4-02 · Halcyra HC-4");
-  const sel = await page.locator("#selected").boundingBox();
-  const res = await page.locator("#result").boundingBox();
-  expect(sel!.y).toBeLessThan(res!.y);
+  const sel = await box(page.locator("#selected"));
+  const res = await box(page.locator("#result"));
+  expect(sel.y).toBeLessThan(res.y);
 });
 
 test("[SR-fc8953/AK-cck7] aircraft selection lists the HC-4 fleet", async ({ page }) => {
@@ -265,13 +266,13 @@ test("[SR-bdab78/AK-d3h0] HC4-02 empty: 778 kg at 2.236 m", async ({ page }) => 
 
 test("[SR-bdab78/AK-nybx] maximum take-off mass 1150 kg", async ({ page }) => {
   await open(page);
-  await page.selectOption("#aircraft", "HC4-01");
+  await page.locator("#aircraft").selectOption("HC4-01");
   await expect(page.locator("#mtom")).toHaveText("Maximum take-off mass 1150 kg");
 });
 
 test("[SR-663a61/AK-q89m] empty mass, lever arm and weighing date from the fleet data file", async ({ page }) => {
   await open(page);
-  await page.selectOption("#aircraft", "HC4-02");
+  await page.locator("#aircraft").selectOption("HC4-02");
   await expect(page.locator("#empty-data")).toHaveText("Empty mass 778 kg at 2.236 m, weighed 2026-09-14");
 });
 
@@ -284,61 +285,61 @@ test("[SR-1329af/AK-y2jc] invented aircraft notice is the first text", async ({ 
 test("[SR-1329af/AK-jnpb] responsibility statement above the first result", async ({ page }) => {
   await load(page, "HC4-01", A);
   await expect(page.locator("#aid")).toHaveText("This app is an aid. The pilot in command remains responsible for mass and balance according to the flight manual.");
-  const aid = await page.locator("#aid").boundingBox();
-  const res = await page.locator("#result").evaluate((e) => e.offsetTop);
-  expect(aid!.y).toBeLessThan(res);
+  const aid = await box(page.locator("#aid"));
+  const res = await page.locator("#result").evaluate((e) => (e instanceof HTMLElement ? e.offsetTop : Number.NaN));
+  expect(aid.y).toBeLessThan(res);
 });
 
 // Fuel path
 test("[SR-2dc652/AK-fp7w] usable fuel prefilled with the reported 142 L", async ({ page }) => {
   await open(page);
-  await page.selectOption("#aircraft", "HC4-01");
+  await page.locator("#aircraft").selectOption("HC4-01");
   await expect(page.locator('label[for="entry-fuel"]')).toHaveText("Usable fuel at take-off (max 170 L)");
   await expect(page.locator("#entry-fuel")).toHaveValue("142");
 });
 
 test("[SR-d26ffc/AK-s4dy] reported fuel quantity of HC4-01 with its report time", async ({ page }) => {
   await open(page);
-  await page.selectOption("#aircraft", "HC4-01");
+  await page.locator("#aircraft").selectOption("HC4-01");
   await expect(page.locator("#fuel-report")).toHaveText("Reported by the fuel system module: 142 L at 2026-11-02 05:40 UTC");
 });
 
 test("[SR-d26ffc/AK-hfph] reported fuel quantity follows the selected aircraft", async ({ page }) => {
   await open(page);
-  await page.selectOption("#aircraft", "HC4-01");
+  await page.locator("#aircraft").selectOption("HC4-01");
   await expect(page.locator("#fuel-report")).toContainText("142 L");
-  await page.selectOption("#aircraft", "HC4-02");
+  await page.locator("#aircraft").selectOption("HC4-02");
   await expect(page.locator("#fuel-report")).toHaveText("Reported by the fuel system module: 96 L at 2026-11-02 05:15 UTC");
 });
 
 test("[SR-2dc652/AK-sj26] planned fuel burn is empty", async ({ page }) => {
   await open(page);
-  await page.selectOption("#aircraft", "HC4-01");
+  await page.locator("#aircraft").selectOption("HC4-01");
   await expect(page.locator('label[for="entry-burn"]')).toHaveText("Planned fuel burn");
   await expect(page.locator("#entry-burn")).toHaveValue("");
 });
 
 test("[SR-833e71/AK-xw0s] changed fuel shows the pilot's figure note", async ({ page }) => {
   await open(page);
-  await page.selectOption("#aircraft", "HC4-01");
-  await page.fill("#entry-fuel", "100");
+  await page.locator("#aircraft").selectOption("HC4-01");
+  await page.locator("#entry-fuel").fill("100");
   await expect(page.locator("#fuel-note")).toHaveText("Pilot's figure (fuel system module reported 142 L)");
 });
 
 test("[SR-833e71/AK-v9q7] the check uses the pilot's figure", async ({ page }) => {
   await open(page);
-  await page.selectOption("#aircraft", "HC4-01");
-  for (const [id, v] of [["front", 160], ["rear", 0], ["baggage", 20], ["burn", 0]] as const) await page.fill(`#entry-${id}`, String(v));
-  await page.fill("#entry-fuel", "100");
+  await page.locator("#aircraft").selectOption("HC4-01");
+  for (const [id, v] of [["front", 160], ["rear", 0], ["baggage", 20], ["burn", 0]] as const) await page.locator(`#entry-${id}`).fill(String(v));
+  await page.locator("#entry-fuel").fill("100");
   await expect(page.locator("#total")).toHaveText("1017 kg");
 });
 
 test("[SR-833e71/AK-s4mq] back to the reported figure hides the note", async ({ page }) => {
   await open(page);
-  await page.selectOption("#aircraft", "HC4-01");
-  await page.fill("#entry-fuel", "100");
+  await page.locator("#aircraft").selectOption("HC4-01");
+  await page.locator("#entry-fuel").fill("100");
   await expect(page.locator("#fuel-note")).toBeVisible();
-  await page.fill("#entry-fuel", "142");
+  await page.locator("#entry-fuel").fill("142");
   await expect(page.locator("#fuel-note")).toBeHidden();
 });
 

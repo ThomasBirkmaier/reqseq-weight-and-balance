@@ -1,6 +1,11 @@
 //! Acceptance tests of the calculation core. Test names follow `sr_<short id>_ak<n>_<what>`;
-//! CI maps them to `[SR-<short id>/AK<n>]` before ReqSeq enriches the JUnit report.
+//! CI maps them to `[SR-<short id>/AK<n>]` before `ReqSeq` enriches the JUnit report.
 //! Tests without a requirement in their name check the data files and the JSON interface.
+#![expect(
+    clippy::unwrap_used,
+    clippy::indexing_slicing,
+    reason = "test helpers fail the test loudly on broken data; the lints stay on for the core"
+)]
 
 use wb_core::calc::{evaluate, kg_rounded, moment_tenths, CgState, Evaluation, FUEL_ROW, INCOMPLETE, OUT_CG, OUT_MASS, WITHIN};
 use wb_core::fleet::{parse_fleet, Aircraft, FLEET_CSV, TYPES};

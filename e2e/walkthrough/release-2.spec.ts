@@ -14,25 +14,25 @@ async function shot(page: Page, need: string, step: string, full = false): Promi
 
 test("walk-through need 6010df enter what is on board", async ({ page }) => {
   await open(page);
-  await page.selectOption("#aircraft", "HC4-01");
+  await page.locator("#aircraft").selectOption("HC4-01");
   await shot(page, "N-6010df", "1-entries-with-fuel-in-litres", true);
   await load(page, "HC4-01", [160, 75, 60], 100, 30);
   await expect(page.locator("#entry-baggage-msg")).toHaveText("Enter 0 to 50 kg");
-  await page.fill("#entry-fuel", "171");
+  await page.locator("#entry-fuel").fill("171");
   await expect(page.locator("#entry-fuel-msg")).toHaveText("Enter 0 to 170 L");
   await shot(page, "N-6010df", "2-too-much", true);
   await open(page, "/hc2/");
-  await page.selectOption("#aircraft", "HC2-01");
+  await page.locator("#aircraft").selectOption("HC2-01");
   await shot(page, "N-6010df", "3-hc2-entries", true);
 });
 
 test("walk-through need cac39d see and correct the reported fuel", async ({ page }) => {
   await open(page);
-  await page.selectOption("#aircraft", "HC4-01");
+  await page.locator("#aircraft").selectOption("HC4-01");
   await expect(page.locator("#fuel-report")).toHaveText("Reported by the fuel system module: 142 L at 2026-11-02 05:40 UTC");
   await page.locator("#fuel-entries").scrollIntoViewIfNeeded();
   await shot(page, "N-cac39d", "1-reported-fuel-and-time");
-  await page.fill("#entry-fuel", "100");
+  await page.locator("#entry-fuel").fill("100");
   await expect(page.locator("#fuel-note")).toHaveText("Pilot's figure (fuel system module reported 142 L)");
   await page.locator("#fuel-entries").scrollIntoViewIfNeeded();
   await shot(page, "N-cac39d", "2-pilots-own-figure");
@@ -91,14 +91,17 @@ test("walk-through need 2c5472 cross-check the calculation", async ({ page }) =>
 test("walk-through need 98a54d see where the load acts", async ({ page }) => {
   await load(page, "HC4-01", [160, 0, 20], 100, 60);
   await page.locator("#topview").scrollIntoViewIfNeeded();
+  await expect(page.locator("#topview .station")).toHaveCount(4);
   await shot(page, "N-98a54d", "1-top-view");
   await page.locator("#chart").scrollIntoViewIfNeeded();
+  await expect(page.locator("#chart #point")).toBeVisible();
   await shot(page, "N-98a54d", "2-chart-take-off-and-landing");
 });
 
 test("walk-through need e67c17 right data for the individual aircraft", async ({ page }) => {
   for (const id of ["HC4-01", "HC4-02"]) {
     await load(page, id, [0, 0, 0]);
+    await expect(page.locator("#selected")).toHaveText(`${id} · Halcyra HC-4`);
     await shot(page, "N-e67c17", id);
   }
 });
@@ -115,14 +118,15 @@ test("walk-through need e01992 use at the aircraft on a phone", async ({ page })
 
 test.describe("offline", () => {
   test.use({ serviceWorkers: "allow" });
+
   test("walk-through need 6d2299 use without network", async ({ page, context }) => {
     await page.goto("/");
     await expect(page.locator("body")).toHaveAttribute("data-ready", "true");
-    await page.evaluate(() => navigator.serviceWorker.ready);
+    await page.evaluate(async () => navigator.serviceWorker.ready);
     await context.setOffline(true);
     await page.reload();
-    await page.selectOption("#aircraft", "HC4-01");
-    for (const [id, v] of [["front", 160], ["rear", 0], ["baggage", 20], ["fuel", 100], ["burn", 60]] as const) await page.fill(`#entry-${id}`, String(v));
+    await page.locator("#aircraft").selectOption("HC4-01");
+    for (const [id, v] of [["front", 160], ["rear", 0], ["baggage", 20], ["fuel", 100], ["burn", 60]] as const) await page.locator(`#entry-${id}`).fill(String(v));
     await expect(page.locator("#offline")).toHaveText("Offline: aircraft data as of 2026-11-02. Check the weighing date against the aircraft documents.");
     await expect(indication(page)).toHaveText("Within limits");
     await shot(page, "N-6d2299", "1-offline-pilots-figure", true);

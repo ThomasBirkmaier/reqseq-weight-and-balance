@@ -15,7 +15,7 @@ function el<K extends keyof SVGElementTagNameMap>(name: K, attrs: Record<string,
 export function drawTopView(svg: SVGSVGElement, t: AircraftType, labels: (string | null)[], fuel: string | null): void {
   svg.replaceChildren();
   const arms = [...t.stations.map((s) => s.armMm), t.fuelArmMm];
-  const y = (arm: number) => 70 + ((arm - 1500) / (Math.max(...arms, 3000) - 1500 + 500)) * 300;
+  const y = (arm: number): number => 70 + ((arm - 1500) / (Math.max(...arms, 3000) - 1500 + 500)) * 300;
   // fuselage, wing, tail
   const frame = el("g", { transform: "translate(-40 0)" });
   frame.append(el("path", { d: "M160 18 C178 18 188 40 190 70 L196 330 C196 360 176 400 160 404 C144 400 124 360 124 330 L130 70 C132 40 142 18 160 18 Z", class: "airframe" }));
@@ -24,13 +24,13 @@ export function drawTopView(svg: SVGSVGElement, t: AircraftType, labels: (string
   svg.append(frame);
   // Loading stations and the fuel tanks, ordered from front to back by lever arm.
   const marks = [
-    ...t.stations.map((s, i) => ({ key: s.key, name: s.name, arm: s.armMm, value: labels[i] })),
+    ...t.stations.map((s, i) => ({ key: s.key, name: s.name, arm: s.armMm, value: labels[i] ?? null })),
     { key: "fuel", name: "Usable fuel", arm: t.fuelArmMm, value: fuel },
   ].sort((a, b) => a.arm - b.arm);
   marks.forEach((s, i) => {
     const cy = y(s.arm);
     const g = el("g", { class: "station", "data-station": s.key, "data-order": i });
-    const loaded = s.value !== null && !/^0 /.test(s.value);
+    const loaded = s.value !== null && !s.value.startsWith("0 ");
     g.append(el("rect", { x: 92, y: cy - 14, width: 56, height: 28, rx: 6, class: loaded ? "mark loaded" : "mark" }));
     const value = s.value ?? "–";
     const t1 = el("text", { x: 158, y: cy - 2, class: "mark-label", "aria-label": `${s.name} ${value}` });
@@ -49,8 +49,8 @@ export function drawChart(svg: SVGSVGElement, t: AircraftType, e: Evaluation | n
   const ms = t.envelope.map((p) => p[0]);
   const cMin = Math.min(...cgs) - 60, cMax = Math.max(...cgs) + 60;
   const mMin = Math.min(...ms) - 50, mMax = Math.max(...ms) + 80;
-  const x = (c: number) => L + ((c - cMin) / (cMax - cMin)) * (W - L - R);
-  const y = (mass: number) => H - B - ((mass - mMin) / (mMax - mMin)) * (H - T - B);
+  const x = (c: number): number => L + ((c - cMin) / (cMax - cMin)) * (W - L - R);
+  const y = (mass: number): number => H - B - ((mass - mMin) / (mMax - mMin)) * (H - T - B);
   // axes
   svg.append(el("line", { x1: L, y1: H - B, x2: W - R, y2: H - B, class: "axis-line" }));
   svg.append(el("line", { x1: L, y1: T, x2: L, y2: H - B, class: "axis-line" }));
@@ -64,8 +64,8 @@ export function drawChart(svg: SVGSVGElement, t: AircraftType, e: Evaluation | n
   svg.append(el("text", { x: 12, y: (T + H - B) / 2, "text-anchor": "middle", class: "axis", transform: `rotate(-90 12 ${(T + H - B) / 2})` }, "Total mass (kg)"));
   const pts = t.envelope.map(([mass, c]) => `${x(c).toFixed(1)},${y(mass).toFixed(1)}`).join(" ");
   svg.append(el("polygon", { points: pts, class: "envelope", "data-corners": t.envelope.map(([mass, c]) => `${mass}:${c}`).join(" ") }));
-  if (!e || !e.complete) return;
-  const point = (st: State, id: string, name: string) => {
+  if (e?.complete !== true) return;
+  const point = (st: State, id: string, name: string): { px: number; py: number } => {
     const px = x(st.cgExactMm), py = y(st.totalKg);
     const outside = !st.within;
     const g = el("g", { id, "data-mass": st.totalKg, "data-cg": st.cgMm, "data-state": outside ? "outside" : "inside" });
@@ -85,7 +85,7 @@ export function drawChart(svg: SVGSVGElement, t: AircraftType, e: Evaluation | n
   svg.append(el("line", { x1: to.px, y1: to.py, x2: ldg.px, y2: ldg.py, class: "burn-line" }));
   const st = e.takeOff;
   const label = st.cgState === "aft" ? "Aft limit exceeded" : st.cgState === "forward" ? "Forward limit exceeded" : st.massExceeded ? "Mass limit exceeded" : "";
-  if (label) {
+  if (label !== "") {
     const anchor = to.px > W / 2 ? "end" : "start";
     svg.append(el("text", { x: to.px + (anchor === "end" ? -10 : 10), y: to.py + 24, "text-anchor": anchor, class: "point-label", id: "point-label" }, label));
   }

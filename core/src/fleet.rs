@@ -1,24 +1,38 @@
 //! Type data of the invented aircraft and the fleet data file.
-//! Source: the type data decisions of the ReqSeq workspace (spec/decision) and data/fleet.csv.
+//!
+//! Source: the type data decisions of the ReqSeq workspace (`spec/decision`) and `data/fleet.csv`.
 //! Invented aircraft. Not for flight operations.
 //! Masses in kg, lever arms in mm aft of the datum (1.300 m forward of the firewall).
 
+/// A loading station of an aircraft type.
+#[derive(Debug)]
 pub struct Station {
+    /// Key of the station in the web app.
     pub key: &'static str,
+    /// Name shown to the pilot.
     pub name: &'static str,
+    /// Lever arm in mm aft of the datum.
     pub arm_mm: i64,
+    /// Maximum mass of the station in kg.
     pub max_kg: i64,
 }
 
+/// The type data of an aircraft type.
+#[derive(Debug)]
 pub struct AircraftType {
+    /// Type key of the build (hc4, hc2).
     pub key: &'static str,
+    /// Type name shown to the pilot.
     pub name: &'static str,
+    /// Maximum take-off mass in kg.
     pub mtom_kg: i64,
+    /// The loading stations, in the order of the entries.
     pub stations: &'static [Station],
     /// Envelope corners (total mass kg, centre of gravity mm), in order, convex.
     pub envelope: &'static [(i64, i64)],
 }
 
+/// The aircraft types of the type data decisions.
 pub const TYPES: &[AircraftType] = &[
     AircraftType {
         key: "hc4",
@@ -46,46 +60,59 @@ pub const TYPES: &[AircraftType] = &[
 /// The fleet data file compiled into the build.
 pub const FLEET_CSV: &str = include_str!("../../data/fleet.csv");
 
-#[derive(Clone, Debug, PartialEq)]
+/// One aircraft of the fleet data file.
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Aircraft {
+    /// Invented identifier of the aircraft (not a registration).
     pub id: String,
+    /// Index of its type in [`TYPES`].
     pub type_index: usize,
+    /// Empty mass in kg.
     pub empty_kg: i64,
+    /// Lever arm of the empty mass in mm aft of the datum.
     pub empty_arm_mm: i64,
+    /// Date of the last weighing (YYYY-MM-DD).
     pub weighing_date: String,
 }
 
+/// Index in [`TYPES`] of the type with the given key.
+#[must_use]
 pub fn type_index(key: &str) -> Option<usize> {
     TYPES.iter().position(|t| t.key == key)
 }
 
 /// Parse a fleet data file: `id,type,empty_mass_kg,empty_arm_mm,weighing_date`, `#` comments.
+///
+/// # Errors
+/// The line number and the field of the first line that does not have five fields, names an
+/// unknown type or has an empty mass or lever arm that is not a whole number.
 pub fn parse_fleet(csv: &str) -> Result<Vec<Aircraft>, String> {
     let mut out = Vec::new();
-    for (n, line) in csv.lines().enumerate() {
-        let line = line.trim();
+    for (n, raw) in (1_usize..).zip(csv.lines()) {
+        let line = raw.trim();
         if line.is_empty() || line.starts_with('#') {
             continue;
         }
         let f: Vec<&str> = line.split(',').map(str::trim).collect();
-        if f.len() != 5 {
-            return Err(format!("line {}: expected 5 fields", n + 1));
-        }
-        let type_index = type_index(f[1]).ok_or(format!("line {}: unknown type {}", n + 1, f[1]))?;
-        let empty_kg = f[2].parse().map_err(|_| format!("line {}: empty mass", n + 1))?;
-        let empty_arm_mm = f[3].parse().map_err(|_| format!("line {}: lever arm", n + 1))?;
+        let [id, type_key, empty_kg, empty_arm_mm, weighing_date] = f.as_slice() else {
+            return Err(format!("line {n}: expected 5 fields"));
+        };
+        let type_index = type_index(type_key).ok_or_else(|| format!("line {n}: unknown type {type_key}"))?;
+        let empty_kg = empty_kg.parse().map_err(|_| format!("line {n}: empty mass"))?;
+        let empty_arm_mm = empty_arm_mm.parse().map_err(|_| format!("line {n}: lever arm"))?;
         out.push(Aircraft {
-            id: f[0].to_string(),
+            id: (*id).to_owned(),
             type_index,
             empty_kg,
             empty_arm_mm,
-            weighing_date: f[4].to_string(),
+            weighing_date: (*weighing_date).to_owned(),
         });
     }
     Ok(out)
 }
 
 /// The aircraft of one build: all aircraft of the given type.
+#[must_use]
 pub fn fleet_of_type(csv: &str, type_key: &str) -> Vec<Aircraft> {
     let t = type_index(type_key);
     parse_fleet(csv)

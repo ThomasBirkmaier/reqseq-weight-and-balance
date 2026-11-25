@@ -7,7 +7,7 @@ export default defineConfig({
   retries: 0,
   // One JUnit file per project run: CI runs the core and the HC-2 suites separately, so that the
   // HC-2 run can be enriched for the variant (PLAYWRIGHT_JUNIT_OUTPUT_FILE names the file).
-  reporter: [["list"], ["junit", { outputFile: process.env.PLAYWRIGHT_JUNIT_OUTPUT_FILE ?? "test-results/e2e-junit.xml" }]],
+  reporter: [["list"], ["junit", { outputFile: process.env["PLAYWRIGHT_JUNIT_OUTPUT_FILE"] ?? "test-results/e2e-junit.xml" }]],
   projects: [
     { name: "core", testDir: "e2e/core" },
     { name: "hc2", testDir: "e2e/hc2" },
@@ -17,11 +17,11 @@ export default defineConfig({
     baseURL: "http://127.0.0.1:4173/",
     screenshot: "on",
     ...devices["Desktop Chrome"],
-    launchOptions: process.env.PW_CHROMIUM ? { executablePath: process.env.PW_CHROMIUM } : {},
+    launchOptions: process.env["PW_CHROMIUM"] === undefined ? {} : { executablePath: process.env["PW_CHROMIUM"] },
   },
   webServer: {
     command: "node scripts/serve.mjs dist 4173",
     url: "http://127.0.0.1:4173/",
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: process.env["CI"] === undefined,
   },
 });

@@ -1,0 +1,14 @@
+{
+  "$comment": "Type check of the Node scripts and the ESLint configuration (JavaScript with checkJs, no output).",
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2022"],
+    "types": ["node"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true
+  },
+  "include": ["scripts/*.mjs", "eslint.config.mjs"]
+}

@@ -1,0 +1,12 @@
+{
+  "$comment": "Type check of the service worker (JavaScript with checkJs, no output).",
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "WebWorker"],
+    "types": [],
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true
+  },
+  "include": ["web/sw.js"]
+}

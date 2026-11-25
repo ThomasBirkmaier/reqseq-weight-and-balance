@@ -35,6 +35,30 @@ jobs:
       - name: Check the ReqSeq workspace
         run: reqseq workspace check --workspace spec
 
+  lint:
+    name: lint
+    # Strictest static checks; every finding fails the job (see eslint.config.mjs,
+    # tsconfig.base.json, core/Cargo.toml [lints]).
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable; rust-toolchain.toml fixes the version
+        with:
+          targets: wasm32-unknown-unknown
+          components: clippy
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - name: Rust (rustc, Clippy and rustdoc lints, host and WebAssembly target)
+        run: npm run lint:core
+      - name: TypeScript type check (web app, e2e tests, service worker, scripts)
+        run: npm run typecheck
+      - name: ESLint (type-aware, zero warnings)
+        run: npm run lint
+      - name: ShellCheck (all optional checks)
+        run: shellcheck --version && shellcheck -o all scripts/*.sh
+
   core:
     name: core
     runs-on: ubuntu-latest
@@ -170,7 +194,7 @@ jobs:
   deploy:
     name: deploy
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    needs: [spec, core, e2e, evidence]
+    needs: [spec, lint, core, e2e, evidence]
     runs-on: ubuntu-latest
     permissions:
       pages: write

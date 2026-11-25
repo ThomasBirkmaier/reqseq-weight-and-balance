@@ -1,7 +1,12 @@
 [package]
 name = "wb-core"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
+rust-version = "1.85"
+repository = "https://github.com/ThomasBirkmaier/reqseq-weight-and-balance"
+readme = "../README.md"
+keywords = ["weight-and-balance", "aviation", "demo", "webassembly"]
+categories = ["science"]
 license = "MIT"
 description = "Mass and balance calculation core of the Weight and Balance demo (invented aircraft, not for flight operations)."
 publish = false
@@ -13,3 +18,60 @@ crate-type = ["cdylib", "rlib"]
 opt-level = "s"
 lto = true
 panic = "abort"
+overflow-checks = true
+
+# Strictest static checks (rustc and Clippy). Every finding is an error in CI
+# (`cargo clippy --all-targets -- -D warnings`); exceptions are local `#[expect]` with a reason.
+[lints.rust]
+unsafe_code = "deny"
+unsafe_op_in_unsafe_fn = "deny"
+missing_docs = "deny"
+missing_debug_implementations = "deny"
+unreachable_pub = "deny"
+unused_qualifications = "deny"
+unused_results = "deny"
+trivial_casts = "deny"
+trivial_numeric_casts = "deny"
+let_underscore_drop = "deny"
+rust_2018_idioms = { level = "deny", priority = -1 }
+unused = { level = "deny", priority = -1 }
+nonstandard_style = { level = "deny", priority = -1 }
+future_incompatible = { level = "deny", priority = -1 }
+
+[lints.clippy]
+all = { level = "deny", priority = -1 }
+pedantic = { level = "deny", priority = -1 }
+nursery = { level = "deny", priority = -1 }
+cargo = { level = "deny", priority = -1 }
+# Selected restriction lints: no panics, no unchecked indexing, no silent lossy casts.
+unwrap_used = "deny"
+expect_used = "deny"
+panic = "deny"
+indexing_slicing = "deny"
+string_slice = "deny"
+as_conversions = "deny"
+cast_lossless = "deny"
+float_cmp = "deny"
+lossy_float_literal = "deny"
+todo = "deny"
+unimplemented = "deny"
+unreachable = "deny"
+dbg_macro = "deny"
+print_stdout = "deny"
+print_stderr = "deny"
+exit = "deny"
+mem_forget = "deny"
+undocumented_unsafe_blocks = "deny"
+multiple_unsafe_ops_per_block = "deny"
+allow_attributes = "deny"
+allow_attributes_without_reason = "deny"
+shadow_unrelated = "deny"
+str_to_string = "deny"
+unneeded_field_pattern = "deny"
+rest_pat_in_fully_bound_structs = "deny"
+wildcard_enum_match_arm = "deny"
+missing_docs_in_private_items = "deny"
+
+[lints.rustdoc]
+all = { level = "deny", priority = -1 }
+missing_crate_level_docs = "deny"
