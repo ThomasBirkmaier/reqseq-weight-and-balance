@@ -29,7 +29,9 @@ test("walk-through need 6010df enter what is on board", async ({ page }) => {
 test("walk-through need cac39d see and correct the reported fuel", async ({ page }) => {
   await open(page);
   await page.locator("#aircraft").selectOption("HC4-01");
-  await expect(page.locator("#fuel-report")).toHaveText("Reported by the fuel system module: 142 L at 2026-11-02 05:40 UTC");
+  await expect(page.locator("#fuel-report")).toHaveText(
+    "Reported by the fuel system module: 142 L at 2026-11-02 05:40 UTC",
+  );
   await page.locator("#fuel-entries").scrollIntoViewIfNeeded();
   await shot(page, "N-cac39d", "1-reported-fuel-and-time");
   await page.locator("#entry-fuel").fill("100");
@@ -126,8 +128,18 @@ test.describe("offline", () => {
     await context.setOffline(true);
     await page.reload();
     await page.locator("#aircraft").selectOption("HC4-01");
-    for (const [id, v] of [["front", 160], ["rear", 0], ["baggage", 20], ["fuel", 100], ["burn", 60]] as const) await page.locator(`#entry-${id}`).fill(String(v));
-    await expect(page.locator("#offline")).toHaveText("Offline: aircraft data as of 2026-11-02. Check the weighing date against the aircraft documents.");
+    for (const [id, v] of [
+      ["front", 160],
+      ["rear", 0],
+      ["baggage", 20],
+      ["fuel", 100],
+      ["burn", 60],
+    ] as const) {
+      await page.locator(`#entry-${id}`).fill(String(v));
+    }
+    await expect(page.locator("#offline")).toHaveText(
+      "Offline: aircraft data as of 2026-11-02. Check the weighing date against the aircraft documents.",
+    );
     await expect(indication(page)).toHaveText("Within limits");
     await shot(page, "N-6d2299", "1-offline-pilots-figure", true);
     await context.setOffline(false);

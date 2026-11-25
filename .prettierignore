@@ -1,0 +1,11 @@
+# Prettier formats the code, configuration and workflow files; CI checks `prettier --check .`.
+# The ReqSeq workspace, generated output and Markdown documents are left as they are.
+spec/
+core/
+dist/
+docs/
+node_modules/
+test-results/
+playwright-report/
+package-lock.json
+*.md

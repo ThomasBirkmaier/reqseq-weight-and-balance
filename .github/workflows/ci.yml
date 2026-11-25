@@ -45,11 +45,15 @@ jobs:
       - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable; rust-toolchain.toml fixes the version
         with:
           targets: wasm32-unknown-unknown
-          components: clippy
+          components: clippy, rustfmt
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
       - run: npm ci
+      - name: Formatting (rustfmt and Prettier, no differences allowed)
+        run: npm run format:check
+      - name: File length (Rust; ESLint checks TypeScript and JavaScript)
+        run: sh scripts/check-file-length.sh
       - name: Rust (rustc, Clippy and rustdoc lints, host and WebAssembly target)
         run: npm run lint:core
       - name: TypeScript type check (web app, e2e tests, service worker, scripts)
