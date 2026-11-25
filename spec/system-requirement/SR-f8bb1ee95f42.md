@@ -1,7 +1,7 @@
 ---
 id: 06510c41-64db-41cf-a63a-f8bb1ee95f42
 type: system-requirement
-status: draft
+status: approved
 title: Mass entry per loading station
 rationale: "The pilot enters what is on board per place where it is loaded; showing the maximum helps to enter a valid mass. Safety-related: it is the only requirement that every loading station of the aircraft type has a mass entry. A loading station without an entry would leave its mass out of the total mass and the centre of gravity, and the limit indication could show \"Within limits\" for a loading in which an entry is missing."
 requirement-type: functional

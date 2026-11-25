@@ -1,7 +1,7 @@
 ---
 id: f9ba2c1d-005d-41a5-bb18-ad8665bdab78
 type: system-requirement
-status: draft
+status: approved
 title: Data of the Halcyra HC-4
 rationale: The result is only correct with the released data of the aircraft actually flown. Wrong type data gives a wrong limit indication, so the requirement is safety-related.
 requirement-type: functional

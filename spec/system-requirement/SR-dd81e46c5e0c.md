@@ -1,7 +1,7 @@
 ---
 id: b5c6cedb-dcab-4fbb-affa-dd81e46c5e0c
 type: system-requirement
-status: draft
+status: approved
 title: Maximum take-off mass shown with the selected aircraft
 rationale: "The pilot sees at once whether the total mass is permitted when the limit stands next to it, the maintenance organisation compares the type limits with its released data, and the instructor compares the figure with the paper loading sheet (client decision Q-R3-01 of release 3). Not safety-related: a wrong figure here cannot by itself make a loading above the maximum take-off mass appear within limits, because the limit indications, which are safety-related, use the type data directly."
 requirement-type: functional

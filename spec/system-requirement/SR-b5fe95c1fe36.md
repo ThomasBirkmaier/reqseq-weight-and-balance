@@ -1,7 +1,7 @@
 ---
 id: 8782d1ab-a0a4-4198-92b5-b5fe95c1fe36
 type: system-requirement
-status: draft
+status: approved
 title: Limit indications in view on a phone
 rationale: The pilot sees the result at once after the last entry without scrolling (split from the requirement on use on a phone screen). Split in release 3 from the edited entry that the result must not cover.
 requirement-type: quality

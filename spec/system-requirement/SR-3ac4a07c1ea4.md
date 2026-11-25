@@ -1,7 +1,7 @@
 ---
 id: 995be90c-c46e-4cc6-bfce-3ac4a07c1ea4
 type: system-requirement
-status: draft
+status: approved
 title: Indication within limits in the HC-2 build
 rationale: "The pilot needs a clear positive result; it is shown only when neither limit is exceeded, so that a loading outside limits is never shown as within limits. HC-2 replacement of SR-3a4905: the statement of SR-3a4905 with acceptance criteria from the type data of the Halcyra HC-2, because ReqSeq has no validity per acceptance criterion (scope of release 3)."
 requirement-type: functional

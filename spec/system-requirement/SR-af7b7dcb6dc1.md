@@ -1,7 +1,7 @@
 ---
 id: cb28ff25-e06f-40bb-8ae4-af7b7dcb6dc1
 type: system-requirement
-status: draft
+status: approved
 title: Label of a loading point outside the limits
 rationale: "The pilot sees which limit (forward, aft or mass) is exceeded. Split in release 3 from the envelope chart, whose criteria named the labels. Not safety-related: the limit indication states the exceeded limit; the label repeats it in the chart."
 requirement-type: functional

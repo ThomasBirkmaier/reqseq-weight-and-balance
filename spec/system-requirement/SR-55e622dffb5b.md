@@ -1,7 +1,7 @@
 ---
 id: 478b57b5-2100-4051-9d7f-55e622dffb5b
 type: system-requirement
-status: draft
+status: approved
 title: Responsibility statement
 rationale: The pilot in command stays responsible for mass and balance (client remark M-3). Split in release 3 from the requirement on the fixed notices.
 requirement-type: functional

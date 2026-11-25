@@ -1,7 +1,7 @@
 ---
 id: 329aa8b7-a057-45ea-9d76-f1aa765ca0ef
 type: system-requirement
-status: draft
+status: approved
 title: Mass entry per loading station in the HC-2 build
 rationale: "The pilot enters what is on board per place where it is loaded; showing the maximum helps to enter a valid mass. Safety-related: it is the only requirement that every loading station of the aircraft type has a mass entry. A loading station without an entry would leave its mass out of the total mass and the centre of gravity, and the limit indication could show \"Within limits\" for a loading in which an entry is missing. HC-2 replacement of SR-e95f42: the statement of SR-e95f42 with acceptance criteria from the type data of the Halcyra HC-2, because ReqSeq has no validity per acceptance criterion (scope of release 3)."
 requirement-type: functional

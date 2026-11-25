@@ -1,7 +1,7 @@
 ---
 id: 08c5d8ec-9fae-4ffd-83e0-cddbb6a93b59
 type: system-requirement
-status: draft
+status: approved
 title: Indication of a centre of gravity outside the envelope in the HC-2 build
 rationale: "A centre of gravity outside the envelope must never be shown as permitted; the boundary counts as inside. The limits are taken at the total mass, so that a mass above the maximum take-off mass alone does not give this indication. A total mass below the lowest mass of the envelope has a requirement of its own (release 3). HC-2 replacement of SR-687e88: the statement of SR-687e88 with acceptance criteria from the type data of the Halcyra HC-2, because ReqSeq has no validity per acceptance criterion (scope of release 3)."
 requirement-type: functional

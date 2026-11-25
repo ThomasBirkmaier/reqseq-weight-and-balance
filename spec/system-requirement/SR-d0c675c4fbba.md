@@ -1,7 +1,7 @@
 ---
 id: f93945c8-3fc5-4e81-8f9a-d0c675c4fbba
 type: system-requirement
-status: draft
+status: approved
 title: Note on the pilot's fuel figure
 rationale: The pilot must see at once whether the check uses the reported or the own figure. Split in release 3 from the calculation with the pilot's figure.
 requirement-type: functional
