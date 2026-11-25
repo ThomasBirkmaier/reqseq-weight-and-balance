@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 env:
-  REQSEQ_URL: https://github.com/ThomasBirkmaier/ReqSeq/releases/download/v0.7.1
+  REQSEQ_URL: https://github.com/ThomasBirkmaier/ReqSeq/releases/download/v0.14.0
 
 jobs:
   spec:
@@ -24,13 +24,13 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
-      - name: Install ReqSeq 0.7.1
+      - name: Install ReqSeq 0.14.0
         run: |
           mkdir -p "$RUNNER_TEMP/reqseq" && cd "$RUNNER_TEMP/reqseq"
-          curl -fsSLO "$REQSEQ_URL/reqseq-cli-0.7.1.tgz"
+          curl -fsSLO "$REQSEQ_URL/reqseq-cli-0.14.0.tgz"
           curl -fsSLO "$REQSEQ_URL/SHA256SUMS.txt"
           sha256sum -c --ignore-missing SHA256SUMS.txt
-          npm install -g --offline ./reqseq-cli-0.7.1.tgz
+          npm install -g --offline ./reqseq-cli-0.14.0.tgz
           reqseq --version
       - name: Check the ReqSeq workspace
         run: reqseq workspace check --workspace spec
@@ -49,25 +49,27 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
-      - name: Install ReqSeq 0.7.1
+      - name: Install ReqSeq 0.14.0
         run: |
           mkdir -p "$RUNNER_TEMP/reqseq" && cd "$RUNNER_TEMP/reqseq"
-          curl -fsSLO "$REQSEQ_URL/reqseq-cli-0.7.1.tgz"
+          curl -fsSLO "$REQSEQ_URL/reqseq-cli-0.14.0.tgz"
           curl -fsSLO "$REQSEQ_URL/SHA256SUMS.txt"
           sha256sum -c --ignore-missing SHA256SUMS.txt
-          npm install -g --offline ./reqseq-cli-0.7.1.tgz
+          npm install -g --offline ./reqseq-cli-0.14.0.tgz
           reqseq --version
       - name: Unit and acceptance tests (JUnit)
         working-directory: core
         run: cargo nextest run --profile ci
       - name: Build WebAssembly
         run: cargo build --release --target wasm32-unknown-unknown --manifest-path core/Cargo.toml
-      - name: Map Rust test names and enrich JUnit with ReqSeq
+      - name: Map Rust test names and enrich JUnit with ReqSeq (core and HC-2 view)
         if: always()
         run: |
           mkdir -p spec/evidence/ci
-          python3 scripts/junit-map.py core/target/nextest/ci/junit.xml spec/evidence/ci/core-junit.xml
+          python3 scripts/junit-map.py core/target/nextest/ci/junit.xml "$RUNNER_TEMP/core-mapped.xml"
+          python3 scripts/junit-split-views.py "$RUNNER_TEMP/core-mapped.xml" VAR-f23826 spec/evidence/ci/core-junit.xml spec/evidence/ci/core-hc2-junit.xml
           reqseq evidence enrich-junit spec/evidence/ci/core-junit.xml "${{ github.sha }}" --workspace spec
+          reqseq evidence enrich-junit spec/evidence/ci/core-hc2-junit.xml "${{ github.sha }}" --variant VAR-f23826 --workspace spec
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
@@ -85,13 +87,13 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
-      - name: Install ReqSeq 0.7.1
+      - name: Install ReqSeq 0.14.0
         run: |
           mkdir -p "$RUNNER_TEMP/reqseq" && cd "$RUNNER_TEMP/reqseq"
-          curl -fsSLO "$REQSEQ_URL/reqseq-cli-0.7.1.tgz"
+          curl -fsSLO "$REQSEQ_URL/reqseq-cli-0.14.0.tgz"
           curl -fsSLO "$REQSEQ_URL/SHA256SUMS.txt"
           sha256sum -c --ignore-missing SHA256SUMS.txt
-          npm install -g --offline ./reqseq-cli-0.7.1.tgz
+          npm install -g --offline ./reqseq-cli-0.14.0.tgz
           reqseq --version
       - run: npm ci
       - run: npx playwright install --with-deps chromium
@@ -147,13 +149,13 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
-      - name: Install ReqSeq 0.7.1
+      - name: Install ReqSeq 0.14.0
         run: |
           mkdir -p "$RUNNER_TEMP/reqseq" && cd "$RUNNER_TEMP/reqseq"
-          curl -fsSLO "$REQSEQ_URL/reqseq-cli-0.7.1.tgz"
+          curl -fsSLO "$REQSEQ_URL/reqseq-cli-0.14.0.tgz"
           curl -fsSLO "$REQSEQ_URL/SHA256SUMS.txt"
           sha256sum -c --ignore-missing SHA256SUMS.txt
-          npm install -g --offline ./reqseq-cli-0.7.1.tgz
+          npm install -g --offline ./reqseq-cli-0.14.0.tgz
           reqseq --version
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:

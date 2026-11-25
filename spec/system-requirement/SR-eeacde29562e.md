@@ -6,9 +6,12 @@ title: Centre of gravity
 rationale: The pilot and the instructor read the centre of gravity to compare it with the envelope and the paper loading sheet.
 requirement-type: functional
 acceptance-criteria:
-  - Given the aircraft HC4-01 is selected, when the pilot enters 160 kg front seats, 0 kg rear seats, 20 kg baggage compartment, 100 L usable fuel at take-off and 60 L planned fuel burn, then the centre of gravity at take-off shows 2.229 m.
-  - Given the aircraft HC4-01 is selected with 0 L usable fuel at take-off and 0 L planned fuel burn, when the pilot enters 70 kg front seats, 200 kg rear seats and 50 kg baggage compartment, then the centre of gravity at take-off shows 2.475 m.
-  - Given the aircraft HC4-01 is selected, when the pilot enters 160 kg front seats, 0 kg rear seats, 20 kg baggage compartment, 100 L usable fuel at take-off and 60 L planned fuel burn, then the landing result shows the centre of gravity at landing 2.223 m ("Landing 974 kg at 2.223 m").
+  - key: vbf5
+    text: Given the aircraft HC4-01 is selected, when the pilot enters 160 kg front seats, 0 kg rear seats, 20 kg baggage compartment, 100 L usable fuel at take-off and 60 L planned fuel burn, then the centre of gravity at take-off shows 2.229 m.
+  - key: ts69
+    text: Given the aircraft HC4-01 is selected with 0 L usable fuel at take-off and 0 L planned fuel burn, when the pilot enters 70 kg front seats, 200 kg rear seats and 50 kg baggage compartment, then the centre of gravity at take-off shows 2.475 m.
+  - key: ssg7
+    text: Given the aircraft HC4-01 is selected, when the pilot enters 160 kg front seats, 0 kg rear seats, 20 kg baggage compartment, 100 L usable fuel at take-off and 60 L planned fuel burn, then the landing result shows the centre of gravity at landing 2.223 m ("Landing 974 kg at 2.223 m").
 packages:
   - { id: 0ad97c1b-beb1-48a1-b1f8-30914e45a7c4, version: n1:67ebd0624004c969, title: Calculation core }
 verification-method: test

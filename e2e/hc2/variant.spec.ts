@@ -11,32 +11,32 @@ const hc2 = (page: import("@playwright/test").Page, masses: (string | number)[],
   load(page, "HC2-01", masses, fuel, burn, H);
 
 // Variant requirements
-test("[SR-d0fb6e/AK1] HC2-01 empty: 640 kg at 2.150 m", async ({ page }) => {
+test("[SR-d0fb6e/AK-j03d] HC2-01 empty: 640 kg at 2.150 m", async ({ page }) => {
   await hc2(page, [0, 0]);
   await expect(page.locator("#total")).toHaveText("640 kg");
   await expect(page.locator("#cg")).toHaveText("2.150 m");
 });
-test("[SR-d0fb6e/AK2] HC2-01 entries without rear seats", async ({ page }) => {
+test("[SR-d0fb6e/AK-f0q1] HC2-01 entries without rear seats", async ({ page }) => {
   await open(page, H);
   await page.selectOption("#aircraft", "HC2-01");
   await expect(page.locator("#entries label")).toHaveText(["Front seats (max 220 kg)", "Baggage compartment (max 40 kg)"]);
 });
-test("[SR-d0fb6e/AK3] HC2-01 aft of the aft limit", async ({ page }) => {
+test("[SR-d0fb6e/AK-mvk0] HC2-01 aft of the aft limit", async ({ page }) => {
   await hc2(page, [60, 40]);
   await expect(page.locator("#total")).toHaveText("740 kg");
   await expect(page.locator("#cg")).toHaveText("2.178 m");
   await expect(indication(page)).toHaveText("Outside limits: centre of gravity outside envelope");
 });
-test("[SR-b73090/AK1] HC-2 build names the selected aircraft", async ({ page }) => {
+test("[SR-b73090/AK-g5b4] HC-2 build names the selected aircraft", async ({ page }) => {
   await open(page, H);
   await page.selectOption("#aircraft", "HC2-01");
   await expect(page.locator("#selected")).toHaveText("HC2-01 · Halcyra HC-2");
 });
-test("[SR-b73090/AK2] HC-2 build lists HC2-01 only", async ({ page }) => {
+test("[SR-b73090/AK-bqyf] HC-2 build lists HC2-01 only", async ({ page }) => {
   await open(page, H);
   await expect(page.locator("#aircraft option:not([value=''])")).toHaveText(["HC2-01"]);
 });
-test("[SR-b73090/AK3] HC-2 build has no aircraft preselected", async ({ page }) => {
+test("[SR-b73090/AK-w2c3] HC-2 build has no aircraft preselected", async ({ page }) => {
   await open(page, H);
   await expect(page.locator("#aircraft")).toHaveValue("");
   await expect(page.locator("#select-hint")).toHaveText("Select the aircraft");
@@ -130,7 +130,7 @@ test("[SR-3f6229] HC-2: chart with envelope, take-off and landing points", async
   await page.fill("#entry-fuel", "0");
   await expect(page.locator("#point-label")).toHaveText("Aft limit exceeded");
 });
-test("[SR-028748/AK2] envelope corners of the HC-2 as numbers", async ({ page }) => {
+test("[SR-028748/AK-mjv8] envelope corners of the HC-2 as numbers", async ({ page }) => {
   await open(page, H);
   await page.selectOption("#aircraft", "HC2-01");
   await expect(page.locator("#corners tbody tr")).toHaveText([
@@ -148,14 +148,14 @@ test("[SR-1329af] HC-2: fixed notices above the first result", async ({ page }) 
   expect(first).toBe("Invented aircraft. Not for flight operations.");
   await expect(page.locator("#aid")).toHaveText("This app is an aid. The pilot in command remains responsible for mass and balance according to the flight manual.");
 });
-test("[SR-2dc652/AK3] HC-2: usable fuel prefilled with the reported 78 L", async ({ page }) => {
+test("[SR-2dc652/AK-f5kp] HC-2: usable fuel prefilled with the reported 78 L", async ({ page }) => {
   await open(page, H);
   await page.selectOption("#aircraft", "HC2-01");
   await expect(page.locator('label[for="entry-fuel"]')).toHaveText("Usable fuel at take-off (max 104 L)");
   await expect(page.locator("#entry-fuel")).toHaveValue("78");
   await expect(page.locator("#entry-burn")).toHaveValue("");
 });
-test("[SR-d26ffc/AK3] HC-2: reported fuel quantity of HC2-01 with its report time", async ({ page }) => {
+test("[SR-d26ffc/AK-xbp2] HC-2: reported fuel quantity of HC2-01 with its report time", async ({ page }) => {
   await open(page, H);
   await page.selectOption("#aircraft", "HC2-01");
   await expect(page.locator("#fuel-report")).toHaveText("Reported by the fuel system module: 78 L at 2026-11-02 05:50 UTC");
@@ -168,7 +168,7 @@ test("[SR-833e71] HC-2: pilot's figure is used and marked", async ({ page }) => 
   await expect(page.locator("#fuel-note")).toHaveText("Pilot's figure (fuel system module reported 78 L)");
   await expect(page.locator("#total")).toHaveText("676 kg");
 });
-test("[SR-79804b/AK2] HC-2: 50 L fuel at 0.72 kg/L and 2.100 m", async ({ page }) => {
+test("[SR-79804b/AK-rnpf] HC-2: 50 L fuel at 0.72 kg/L and 2.100 m", async ({ page }) => {
   await hc2(page, [0, 0], 50, 0);
   await expect(page.locator("#total")).toHaveText("676 kg");
   await expect(page.locator("#cg")).toHaveText("2.147 m");
@@ -180,7 +180,7 @@ test("[SR-5689df] HC-2: fuel above 104 L and burn above the fuel show messages",
   await page.fill("#entry-burn", "51");
   await expect(page.locator("#entry-burn-msg")).toHaveText("Enter 0 to 50 L");
 });
-test("[SR-90608c/AK3] HC-2: within limits at take-off, aft of the aft limit at landing", async ({ page }) => {
+test("[SR-90608c/AK-mgyn] HC-2: within limits at take-off, aft of the aft limit at landing", async ({ page }) => {
   await hc2(page, [60, 35], 52, 10);
   await expect(indication(page)).toHaveText("Within limits");
   await expect(landing(page)).toHaveText("Outside limits: centre of gravity outside envelope");
@@ -190,7 +190,7 @@ test("[SR-90608c] HC-2: landing within limits with mass and centre of gravity", 
   await expect(landing(page)).toHaveText("Within limits");
   await expect(page.locator("#landing-figures")).toHaveText("Landing 834 kg at 2.138 m");
 });
-test("[SR-c74a67/AK2] HC-2: no sign-in or installation step", async ({ browser }) => {
+test("[SR-c74a67/AK-ycpt] HC-2: no sign-in or installation step", async ({ browser }) => {
   const context = await browser.newContext();
   const page = await context.newPage();
   await open(page, H);
@@ -207,7 +207,7 @@ test("[SR-87691b] HC-2: entering a loading sends no network request", async ({ p
   await expect(page.locator("#total")).toHaveText("820 kg");
   expect(requests).toEqual([]);
 });
-test("[SR-384eab/AK2] HC-2 build opens without network after the first visit", async ({ page, context }) => {
+test("[SR-384eab/AK-xmmt] HC-2 build opens without network after the first visit", async ({ page, context }) => {
   await open(page, H);
   await page.evaluate(() => navigator.serviceWorker.ready);
   await page.reload();

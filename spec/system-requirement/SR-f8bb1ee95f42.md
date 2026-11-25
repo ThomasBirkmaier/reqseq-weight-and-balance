@@ -6,8 +6,10 @@ title: Mass entry per loading station
 rationale: The pilot enters what is on board per place where it is loaded; showing the maximum helps to enter a valid mass.
 requirement-type: functional
 acceptance-criteria:
-  - Given the aircraft HC4-01 is selected, when the app is shown, then it shows the empty entries "Front seats (max 230 kg)", "Rear seats (max 200 kg)" and "Baggage compartment (max 50 kg)".
-  - Given the aircraft HC4-01 is selected, when the pilot enters 160 kg front seats, 0 kg rear seats and 0 kg baggage compartment, then the entry "Front seats" shows 160 and the total mass shows 925 kg.
+  - key: nk58
+    text: Given the aircraft HC4-01 is selected, when the app is shown, then it shows the empty entries "Front seats (max 230 kg)", "Rear seats (max 200 kg)" and "Baggage compartment (max 50 kg)".
+  - key: tw0z
+    text: Given the aircraft HC4-01 is selected, when the pilot enters 160 kg front seats, 0 kg rear seats and 0 kg baggage compartment, then the entry "Front seats" shows 160 and the total mass shows 925 kg.
 packages:
   - { id: 7ca2dae5-b8a7-44de-a6c7-9542ff2e84f3, version: n1:67ebd0624004c969, title: Loading and display }
 verification-method: test

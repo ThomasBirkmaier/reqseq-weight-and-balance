@@ -32,7 +32,7 @@ test("entry messages are polite live regions, not alerts", async ({ page }) => {
 
 test.describe("phone screen", () => {
   test.use({ viewport: { width: 360, height: 740 }, isMobile: true, hasTouch: true });
-  test("[SR-c1fe36/AK2] the result card never hides the entry being edited or its message", async ({ page }) => {
+  test("[SR-c1fe36/AK-kpp7] the result card never hides the entry being edited or its message", async ({ page }) => {
     await load(page, "HC4-01", [160, 75, 60], null, null);
     for (const sel of ["#entry-baggage", "#entry-baggage-msg"]) {
       const hit = await page.locator(sel).evaluate((el) => {
@@ -46,7 +46,7 @@ test.describe("phone screen", () => {
   });
 });
 
-test("[SR-55a648/AK1] without network the app names the date of its aircraft data", async ({ page, context }) => {
+test("[SR-55a648/AK-h7gp] without network the app names the date of its aircraft data", async ({ page, context }) => {
   await load(page, "HC4-01", [0, 0, 0]);
   await expect(page.locator("#offline")).toBeHidden();
   await context.setOffline(true);
@@ -54,7 +54,7 @@ test("[SR-55a648/AK1] without network the app names the date of its aircraft dat
   await context.setOffline(false);
 });
 
-test("[SR-55a648/AK2] the offline notice disappears when the network is back", async ({ page, context }) => {
+test("[SR-55a648/AK-xh16] the offline notice disappears when the network is back", async ({ page, context }) => {
   await load(page, "HC4-01", [0, 0, 0]);
   await context.setOffline(true);
   await expect(page.locator("#offline")).toBeVisible();

@@ -6,9 +6,12 @@ title: Readable in light and dark mode
 rationale: The check is done in daylight and in a dim hangar; 4.5:1 is the common minimum for readable text, 3:1 for graphics (the envelope line, the loading points and the loading station marks).
 requirement-type: quality
 acceptance-criteria:
-  - Given the device is set to light mode, when the app is open with a valid loading, then the contrast ratio of both limit indications and of the body text against their background is at least 4.5:1.
-  - Given the device is set to dark mode, when the app is open with a valid loading, then the contrast ratio of both limit indications and of the body text against their background is at least 4.5:1.
-  - Given the device is set to light mode or to dark mode, when the chart and the top view are shown, then the envelope line, the loading points and the loading station marks have a contrast ratio of at least 3:1 against their background.
+  - key: qcdw
+    text: Given the device is set to light mode, when the app is open with a valid loading, then the contrast ratio of both limit indications and of the body text against their background is at least 4.5:1.
+  - key: fcf4
+    text: Given the device is set to dark mode, when the app is open with a valid loading, then the contrast ratio of both limit indications and of the body text against their background is at least 4.5:1.
+  - key: rrs5
+    text: Given the device is set to light mode or to dark mode, when the chart and the top view are shown, then the envelope line, the loading points and the loading station marks have a contrast ratio of at least 3:1 against their background.
 packages:
   - { id: b15a20a7-4f64-4872-9b9d-0d6c8d7e7b67, version: n1:67ebd0624004c969, title: Platform and quality }
 verification-method: test
