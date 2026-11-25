@@ -5,15 +5,16 @@ import { load, indication } from "../helpers";
 
 test.use({ serviceWorkers: "block" });
 
-test("result card names the selected aircraft", async ({ page }) => {
+test("[SR-fc8953/AK-c962] the selected aircraft is named when the pilot changes it", async ({ page }) => {
   await load(page, "HC4-02", [160, 0, 20]);
   await expect(page.locator("#result-aircraft")).toHaveText("For HC4-02");
   await expect(indication(page)).toHaveText("Within limits");
   await page.locator("#aircraft").selectOption("HC4-01");
+  await expect(page.locator("#selected")).toHaveText("HC4-01 · Halcyra HC-4");
   await expect(page.locator("#result-aircraft")).toHaveText("For HC4-01");
 });
 
-test("a load failure shows a message and no selection", async ({ page }) => {
+test("[SR-ecf597/AK-n6bb] a calculation core that cannot be loaded gives a message and no selection", async ({ page }) => {
   await page.route("**/wb_core.wasm", async (r) => r.fulfill({ status: 404, body: "" }));
   await page.goto("/");
   await expect(page.locator("body")).toHaveAttribute("data-ready", "error");
@@ -33,7 +34,7 @@ test("entry messages are polite live regions, not alerts", async ({ page }) => {
 test.describe("phone screen", () => {
   test.use({ viewport: { width: 360, height: 740 }, isMobile: true, hasTouch: true });
 
-  test("[SR-c1fe36/AK-kpp7] the result card never hides the entry being edited or its message", async ({ page }) => {
+  test("[SR-44e1ef/AK-s24t] the result card never hides the entry being edited or its message", async ({ page }) => {
     await load(page, "HC4-01", [160, 75, 60], null, null);
     for (const sel of ["#entry-baggage", "#entry-baggage-msg"]) {
       const hit = await page.locator(sel).evaluate((el) => {
@@ -51,7 +52,7 @@ test("[SR-55a648/AK-h7gp] without network the app names the date of its aircraft
   await load(page, "HC4-01", [0, 0, 0]);
   await expect(page.locator("#offline")).toBeHidden();
   await context.setOffline(true);
-  await expect(page.locator("#offline")).toHaveText("Offline: aircraft data as of 2026-11-02. Check the weighing date against the aircraft documents.");
+  await expect(page.locator("#offline")).toHaveText("Offline: aircraft data as of 2026-03-02. Check the weighing date against the aircraft documents.");
   await context.setOffline(false);
 });
 
@@ -66,7 +67,7 @@ test("[SR-55a648/AK-xh16] the offline notice disappears when the network is back
 test.describe("poor reception", () => {
   test.use({ serviceWorkers: "allow" });
 
-  test("opens from the cache within 5 s when the network hangs", async ({ page, context }) => {
+  test("[SR-384eab/AK-pw8y] opens from the cache within 5 s when the network hangs", async ({ page, context }) => {
     await page.goto("/");
     await expect(page.locator("body")).toHaveAttribute("data-ready", "true");
     await page.evaluate(async () => navigator.serviceWorker.ready);

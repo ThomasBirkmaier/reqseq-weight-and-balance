@@ -138,7 +138,7 @@ test.describe("offline", () => {
       await page.locator(`#entry-${id}`).fill(String(v));
     }
     await expect(page.locator("#offline")).toHaveText(
-      "Offline: aircraft data as of 2026-11-02. Check the weighing date against the aircraft documents.",
+      "Offline: aircraft data as of 2026-03-02. Check the weighing date against the aircraft documents.",
     );
     await expect(indication(page)).toHaveText("Within limits");
     await shot(page, "N-6d2299", "1-offline-pilots-figure", true);

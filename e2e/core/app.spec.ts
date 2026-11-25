@@ -7,7 +7,7 @@ import { indication, landing, load, open, box } from "../helpers";
 const A = [160, 0, 20];
 const AFT = [70, 200, 50]; // 1085 kg, 2.475 m
 
-test("[SR-e95f42/AK-nk58] shows one labelled entry per seat row and baggage compartment", async ({ page }) => {
+test("[SR-e95f42/AK-nk58] shows one labelled mass entry per loading station", async ({ page }) => {
   await open(page);
   await page.locator("#aircraft").selectOption("HC4-01");
   await expect(page.locator("#entries label")).toHaveText(["Front seats (max 230 kg)", "Rear seats (max 200 kg)", "Baggage compartment (max 50 kg)"]);
@@ -36,21 +36,21 @@ test("[SR-181ae8/AK-w4j4] decimal baggage mass shows a message", async ({ page }
 });
 
 test("[SR-b59c9a/AK-jgk2] invalid entry gives check not complete at take-off and landing", async ({ page }) => {
-  await load(page, "HC4-01", [160, 201, 0]);
+  await load(page, "HC4-01", [231, 0, 0]);
   await expect(indication(page)).toHaveText("Check not complete: fill in or correct the marked entries");
   await expect(landing(page)).toHaveText("Check not complete: fill in or correct the marked entries");
   await expect(page.getByText("Within limits")).toHaveCount(0);
 });
 
 test("[SR-b59c9a/AK-k0w1] cleared usable fuel gives check not complete", async ({ page }) => {
-  await load(page, "HC4-01", [160, 0, 0], "", 0);
+  await load(page, "HC4-01", [0, 0, 0], "", 0);
   await expect(indication(page)).toHaveText("Check not complete: fill in or correct the marked entries");
   await expect(indication(page)).not.toContainText("Within limits");
 });
 
 test("[SR-b59c9a/AK-qp17] corrected entry gives a limit indication", async ({ page }) => {
-  await load(page, "HC4-01", [160, 201, 0]);
-  await page.locator("#entry-rear").fill("200");
+  await load(page, "HC4-01", [231, 0, 0]);
+  await page.locator("#entry-front").fill("0");
   await expect(indication(page)).not.toContainText("Check not complete");
 });
 
@@ -208,14 +208,14 @@ test("[SR-3f6229/AK-gc90] chart shows the envelope with take-off and landing poi
   await expect(l).toHaveAttribute("data-state", "inside");
 });
 
-test("[SR-3f6229/AK-q17h] take-off point aft of the aft limit is labelled", async ({ page }) => {
+test("[SR-cb6dc1/AK-jvj0] take-off point aft of the aft limit is labelled", async ({ page }) => {
   await load(page, "HC4-01", AFT);
   await expect(page.locator("#chart #point")).toHaveAttribute("data-state", "outside");
   await expect(page.locator("#chart #point")).toHaveAttribute("data-cg", "2475");
   await expect(page.locator("#point-label")).toHaveText("Aft limit exceeded");
 });
 
-test("[SR-3f6229/AK-t5dd] take-off point forward of the forward limit is labelled", async ({ page }) => {
+test("[SR-cb6dc1/AK-wv1w] take-off point forward of the forward limit is labelled", async ({ page }) => {
   await load(page, "HC4-01", [200, 0, 0]);
   await expect(page.locator("#chart #point")).toHaveAttribute("data-mass", "965");
   await expect(page.locator("#chart #point")).toHaveAttribute("data-cg", "2174");
@@ -239,12 +239,12 @@ test("[SR-fc8953/AK-h476] selected aircraft is named above the results", async (
   expect(sel.y).toBeLessThan(res.y);
 });
 
-test("[SR-fc8953/AK-cck7] aircraft selection lists the HC-4 fleet", async ({ page }) => {
+test("[SR-1e4aee/AK-ft7p] aircraft selection lists the HC-4 fleet", async ({ page }) => {
   await open(page);
   await expect(page.locator("#aircraft option:not([value=''])")).toHaveText(["HC4-01", "HC4-02"]);
 });
 
-test("[SR-fc8953/AK-wbgb] no aircraft is preselected", async ({ page }) => {
+test("[SR-1e4aee/AK-wkjv] no aircraft is preselected", async ({ page }) => {
   await open(page);
   await expect(page.locator("#aircraft")).toHaveValue("");
   await expect(page.locator("#select-hint")).toHaveText("Select the aircraft");
@@ -282,7 +282,7 @@ test("[SR-1329af/AK-y2jc] invented aircraft notice is the first text", async ({ 
   expect(first).toBe("Invented aircraft. Not for flight operations.");
 });
 
-test("[SR-1329af/AK-jnpb] responsibility statement above the first result", async ({ page }) => {
+test("[SR-dffb5b/AK-pdxp] responsibility statement above the first result", async ({ page }) => {
   await load(page, "HC4-01", A);
   await expect(page.locator("#aid")).toHaveText("This app is an aid. The pilot in command remains responsible for mass and balance according to the flight manual.");
   const aid = await box(page.locator("#aid"));
@@ -312,14 +312,14 @@ test("[SR-d26ffc/AK-hfph] reported fuel quantity follows the selected aircraft",
   await expect(page.locator("#fuel-report")).toHaveText("Reported by the fuel system module: 96 L at 2026-11-02 05:15 UTC");
 });
 
-test("[SR-2dc652/AK-sj26] planned fuel burn is empty", async ({ page }) => {
+test("[SR-40bf74/AK-rcdy] planned fuel burn is empty", async ({ page }) => {
   await open(page);
   await page.locator("#aircraft").selectOption("HC4-01");
   await expect(page.locator('label[for="entry-burn"]')).toHaveText("Planned fuel burn");
   await expect(page.locator("#entry-burn")).toHaveValue("");
 });
 
-test("[SR-833e71/AK-xw0s] changed fuel shows the pilot's figure note", async ({ page }) => {
+test("[SR-c4fbba/AK-qvvn] changed fuel shows the pilot's figure note", async ({ page }) => {
   await open(page);
   await page.locator("#aircraft").selectOption("HC4-01");
   await page.locator("#entry-fuel").fill("100");
@@ -334,7 +334,7 @@ test("[SR-833e71/AK-v9q7] the check uses the pilot's figure", async ({ page }) =
   await expect(page.locator("#total")).toHaveText("1017 kg");
 });
 
-test("[SR-833e71/AK-s4mq] back to the reported figure hides the note", async ({ page }) => {
+test("[SR-c4fbba/AK-t2x6] back to the reported figure hides the note", async ({ page }) => {
   await open(page);
   await page.locator("#aircraft").selectOption("HC4-01");
   await page.locator("#entry-fuel").fill("100");
