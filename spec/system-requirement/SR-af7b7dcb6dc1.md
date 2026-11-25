@@ -23,7 +23,7 @@ derives-from:
   - { id: 1e298834-92c8-438a-8296-9786b6e9c5c6, version: n2:0cc7ab4f62981fdc, title: Know at once whether the mass is permitted }
 based-on:
   - { id: 8af32ef6-642a-4c83-9c76-b554fd14600e, version: n2:5d6477e724aa36ba, title: Type data of the Halcyra HC-4 }
-  - { id: a016275b-69c9-4bbe-bf70-4ee6afa30083, version: n2:3861ed084c228da4, title: Limit check rule }
+  - { id: a016275b-69c9-4bbe-bf70-4ee6afa30083, version: n2:f2651947f0abaedb, title: Limit check rule }
 ---
 
 If the take-off point of a valid loading lies outside the limits, the system shall show next to that point in the envelope chart the label of the exceeded limit, the label of a centre of gravity limit taking precedence over "Mass limit exceeded".

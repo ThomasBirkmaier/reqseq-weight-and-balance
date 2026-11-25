@@ -22,9 +22,9 @@ mitigates:
   - { id: 940f506c-3351-448c-ae22-55695995b4e0, version: n2:b4bf55b55c25f99d, title: Total mass above the maximum take-off mass shown as within limits }
   - { id: c01c78a7-7920-43cc-aadb-45a5f709ad87, version: n2:844bb1e844cd58b2, title: Wrong fuel quantity or fuel data used for a limit indication }
 derives-from:
-  - { id: 031a08ff-81c7-41c9-b740-156684a02a77, version: n2:d668769640ca006b, title: Know before take-off whether the landing is within limits }
+  - { id: 031a08ff-81c7-41c9-b740-156684a02a77, version: n2:02af7ab74c3a1a1d, title: Know before take-off whether the landing is within limits }
 based-on:
-  - { id: a016275b-69c9-4bbe-bf70-4ee6afa30083, version: n2:3861ed084c228da4, title: Limit check rule }
+  - { id: a016275b-69c9-4bbe-bf70-4ee6afa30083, version: n2:f2651947f0abaedb, title: Limit check rule }
   - { id: 2f23eb42-057f-44ec-88cd-10a960b70292, version: n2:3b5d2ed04bb7dd58, title: Scope of release 2 }
   - { id: 153a5bdf-6759-4d0e-80d9-20b0c691084e, version: n2:365059b56a0b1a75, title: Type data of the Halcyra HC-2 }
 replaces:

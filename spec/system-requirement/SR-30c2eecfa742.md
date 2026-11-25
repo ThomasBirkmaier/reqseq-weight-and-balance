@@ -22,7 +22,7 @@ safety-related: "no"
 derives-from:
   - { id: 78a8cd99-84e8-41f7-9239-2ed99f790a55, version: n2:c9600efe15d7249e, title: Know at once whether the centre of gravity is permitted }
   - { id: 100e9969-73c0-423b-b96f-708da92c5472, version: n2:e25d611e8c9554c7, title: Cross-check the calculation }
-  - { id: 031a08ff-81c7-41c9-b740-156684a02a77, version: n2:d668769640ca006b, title: Know before take-off whether the landing is within limits }
+  - { id: 031a08ff-81c7-41c9-b740-156684a02a77, version: n2:02af7ab74c3a1a1d, title: Know before take-off whether the landing is within limits }
 based-on:
   - { id: d9378504-282e-4688-918c-d6c354e582bf, version: n2:f623091fdc76332a, title: "Units, input resolution and rounding" }
   - { id: 153a5bdf-6759-4d0e-80d9-20b0c691084e, version: n2:365059b56a0b1a75, title: Type data of the Halcyra HC-2 }

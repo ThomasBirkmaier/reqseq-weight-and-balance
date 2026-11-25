@@ -24,7 +24,7 @@ mitigates:
 derives-from:
   - { id: 78a8cd99-84e8-41f7-9239-2ed99f790a55, version: n2:c9600efe15d7249e, title: Know at once whether the centre of gravity is permitted }
 based-on:
-  - { id: a016275b-69c9-4bbe-bf70-4ee6afa30083, version: n2:3861ed084c228da4, title: Limit check rule }
+  - { id: a016275b-69c9-4bbe-bf70-4ee6afa30083, version: n2:f2651947f0abaedb, title: Limit check rule }
   - { id: 153a5bdf-6759-4d0e-80d9-20b0c691084e, version: n2:365059b56a0b1a75, title: Type data of the Halcyra HC-2 }
 replaces:
   - { id: 3d7f9eda-d927-4a0f-9efe-917d8c687e88, version: n2:4b617bb739f68a98, title: Indication of a centre of gravity outside the envelope }

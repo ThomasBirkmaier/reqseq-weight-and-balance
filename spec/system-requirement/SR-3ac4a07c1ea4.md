@@ -27,7 +27,7 @@ derives-from:
   - { id: 78a8cd99-84e8-41f7-9239-2ed99f790a55, version: n2:c9600efe15d7249e, title: Know at once whether the centre of gravity is permitted }
   - { id: 6348e5a1-fa96-41b1-b9ab-07dd281e786e, version: n2:09b223444b88c7a9, title: Never a wrong "within limits" }
 based-on:
-  - { id: a016275b-69c9-4bbe-bf70-4ee6afa30083, version: n2:3861ed084c228da4, title: Limit check rule }
+  - { id: a016275b-69c9-4bbe-bf70-4ee6afa30083, version: n2:f2651947f0abaedb, title: Limit check rule }
   - { id: 153a5bdf-6759-4d0e-80d9-20b0c691084e, version: n2:365059b56a0b1a75, title: Type data of the Halcyra HC-2 }
 replaces:
   - { id: 1669da39-c0ed-4309-ae48-a60cc03a4905, version: n2:f05f2a2f7a9546f7, title: Indication within limits }
