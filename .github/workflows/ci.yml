@@ -62,14 +62,14 @@ jobs:
         run: cargo nextest run --profile ci
       - name: Build WebAssembly
         run: cargo build --release --target wasm32-unknown-unknown --manifest-path core/Cargo.toml
-      - name: Map Rust test names and enrich JUnit with ReqSeq (core and HC-2 view)
+      - name: Enrich JUnit with ReqSeq (Rust names, core and HC-2 view)
         if: always()
         run: |
           mkdir -p spec/evidence/ci
-          python3 scripts/junit-map.py core/target/nextest/ci/junit.xml "$RUNNER_TEMP/core-mapped.xml"
-          python3 scripts/junit-split-views.py "$RUNNER_TEMP/core-mapped.xml" VAR-f23826 spec/evidence/ci/core-junit.xml spec/evidence/ci/core-hc2-junit.xml
-          reqseq evidence enrich-junit spec/evidence/ci/core-junit.xml "${{ github.sha }}" --workspace spec
-          reqseq evidence enrich-junit spec/evidence/ci/core-hc2-junit.xml "${{ github.sha }}" --variant VAR-f23826 --workspace spec
+          reqseq evidence enrich-junit core/target/nextest/ci/junit.xml "${{ github.sha }}" \
+            --output spec/evidence/ci/core-junit.xml \
+            --name-pattern '{prefix}_{id}_ak_{ak}' \
+            --variant core --variant VAR-f23826 --skip-not-in-view --workspace spec
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
