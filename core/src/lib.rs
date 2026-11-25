@@ -19,4 +19,4 @@ pub mod output;
 )]
 pub mod wasm;
 
-pub use output::{evaluate_json, fleet_json};
+pub use output::{evaluate_json, fleet_json, fleet_json_from};

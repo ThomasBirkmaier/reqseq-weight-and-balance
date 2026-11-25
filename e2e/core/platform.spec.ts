@@ -81,6 +81,18 @@ test("[SR-384eab/AK-g07h] opens and calculates without network after the first v
   await context.setOffline(false);
 });
 
+test("[SR-384eab/AK-xmmt] lists every aircraft of the build without network", async ({ page, context }) => {
+  await open(page);
+  await page.evaluate(async () => navigator.serviceWorker.ready);
+  await page.reload();
+  await expect(page.locator("body")).toHaveAttribute("data-ready", "true");
+  await context.setOffline(true);
+  await page.reload();
+  await expect(page.locator("body")).toHaveAttribute("data-ready", "true");
+  await expect(page.locator("#aircraft option:not([value=''])")).toHaveText(["HC4-01", "HC4-02"]);
+  await context.setOffline(false);
+});
+
 test("[SR-87691b/AK-dbn0] entering a loading sends no network request", async ({ page }) => {
   await open(page);
   const requests: string[] = [];

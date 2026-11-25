@@ -17,8 +17,9 @@ function showState(indicationId: string, cardId: string, s: State, complete: boo
   $(cardId).dataset["state"] = resultState(complete, s.within);
 }
 
-/** Shows the result card: both indications and, for a complete check, the total mass and centre of gravity. */
-export function showResult(e: Evaluation): void {
+/** Shows the result card: both indications and, for a complete check, the total mass and centre of
+ * gravity, and with the landing result the planned fuel burn `burn` (the text of its entry). */
+export function showResult(e: Evaluation, burn: string): void {
   showState("indication", "result-to", e.takeOff, e.complete);
   showState("landing-indication", "result-ldg", e.landing, e.complete);
   $("result").dataset["state"] = resultState(e.complete, e.takeOff.within && e.landing.within);
@@ -26,6 +27,7 @@ export function showResult(e: Evaluation): void {
   $("total").textContent = e.complete ? kg(e.takeOff.totalKg) : "";
   $("cg").textContent = e.complete ? m(e.takeOff.cgMm) : "";
   $("landing-figures").textContent = e.complete ? `Landing ${kg(e.landing.totalKg)} at ${m(e.landing.cgMm)}` : "";
+  $("landing-burn").textContent = e.complete ? `after ${String(Number(burn.trim()))} L planned fuel burn` : "";
 }
 
 /** The total row of one state of the flight. */

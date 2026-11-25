@@ -40,19 +40,6 @@ fn error_json(message: &str) -> String {
     format!("{{\"error\":{}}}", esc(message))
 }
 
-/// Date of the aircraft data: the newest date of the fleet data file and the fuel interface data file.
-fn data_date(all: &[Aircraft], fd: &FuelData) -> String {
-    all.iter()
-        .map(|a| a.weighing_date.clone())
-        .chain(
-            fd.aircraft
-                .values()
-                .map(|r| r.reported_at.chars().take(10).collect::<String>()),
-        )
-        .max()
-        .unwrap_or_default()
-}
-
 /// JSON of the type data with the fuel data of the type.
 fn type_json(t: &AircraftType, ft: &fuel::FuelType) -> String {
     let stations: Vec<String> = t
@@ -101,30 +88,34 @@ fn aircraft_json(a: &Aircraft, fd: &FuelData) -> String {
 /// JSON of the build's fleet with the data of its aircraft type.
 #[must_use]
 pub fn fleet_json(type_key: &str) -> String {
-    let all = match fleet::parse_fleet(FLEET_CSV) {
+    fleet_json_from(FLEET_CSV, fuel::FUEL_JSON, type_key)
+}
+
+/// JSON of the fleet of the aircraft type `type_key` from the given fleet data file and fuel
+/// interface data file; an error JSON when either file is not readable in its documented form.
+#[must_use]
+pub fn fleet_json_from(fleet_csv: &str, fuel_json: &str, type_key: &str) -> String {
+    let all = match fleet::parse_fleet(fleet_csv) {
         Ok(all) => all,
         Err(e) => return error_json(&format!("fleet data file: {e}")),
     };
     let Some(t) = fleet::type_index(type_key).and_then(|ti| TYPES.get(ti)) else {
         return error_json("unknown aircraft type");
     };
-    let fd = match fuel::fuel_data() {
+    let fd = match fuel::parse_fuel(fuel_json) {
         Ok(f) => f,
         Err(e) => return error_json(&format!("fuel interface data file: {e}")),
     };
     let Some(ft) = fd.types.get(type_key) else {
         return error_json("no fuel data for the aircraft type");
     };
-    let ac: Vec<String> = fleet_of_type(FLEET_CSV, type_key)
+    let ti = fleet::type_index(type_key);
+    let ac: Vec<String> = all
         .iter()
+        .filter(|a| Some(a.type_index) == ti)
         .map(|a| aircraft_json(a, &fd))
         .collect();
-    format!(
-        "{{\"type\":{},\"aircraft\":[{}],\"dataDate\":{}}}",
-        type_json(t, ft),
-        ac.join(","),
-        esc(&data_date(&all, &fd))
-    )
+    format!("{{\"type\":{},\"aircraft\":[{}]}}", type_json(t, ft), ac.join(","))
 }
 
 /// JSON of one entry: valid, empty and its message.
@@ -146,12 +137,13 @@ fn state_json(e: &State) -> String {
     };
     let ind: Vec<String> = e.indications.iter().map(|s| esc(s)).collect();
     format!(
-        "{{\"totalKg\":{},\"momentTenths\":{},\"cgMm\":{},\"cgExactMm\":{},\"massExceeded\":{},\"cgState\":\"{}\",\"fwdLimitMm\":{},\"aftLimitMm\":{},\"within\":{},\"indications\":[{}]}}",
+        "{{\"totalKg\":{},\"momentTenths\":{},\"cgMm\":{},\"cgExactMm\":{},\"massExceeded\":{},\"massBelow\":{},\"cgState\":\"{}\",\"fwdLimitMm\":{},\"aftLimitMm\":{},\"within\":{},\"indications\":[{}]}}",
         e.total_kg(),
         moment_tenths(e.moment_gmm),
         e.cg_mm_rounded(),
         e.cg_exact_mm(),
         e.mass_exceeded,
+        e.mass_below,
         cg,
         frac(e.fwd_limit),
         frac(e.aft_limit),

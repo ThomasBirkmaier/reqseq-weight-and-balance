@@ -62,7 +62,6 @@ export interface Fleet {
   /** The aircraft of that type. */
   aircraft: Aircraft[];
   /** Date of the aircraft data: the newest date of the fleet and fuel data files. */
-  dataDate: string;
 }
 /** The check of one entry. */
 export interface EntryResult {
@@ -93,6 +92,7 @@ export interface State {
   cgMm: number;
   cgExactMm: number;
   massExceeded: boolean;
+  massBelow: boolean;
   cgState: "within" | "forward" | "aft";
   fwdLimitMm: number;
   aftLimitMm: number;
@@ -129,7 +129,7 @@ const isAircraft: Guard<Aircraft> = objectOf({
   reportedFuelL: nullable(isNumber),
   reportedAt: nullable(isString),
 });
-const isFleet: Guard<Fleet> = objectOf({ type: isAircraftType, aircraft: arrayOf(isAircraft), dataDate: isString });
+const isFleet: Guard<Fleet> = objectOf({ type: isAircraftType, aircraft: arrayOf(isAircraft) });
 const isEntry: Guard<EntryResult> = objectOf({ valid: isBoolean, empty: isBoolean, message: nullable(isString) });
 const isRow: Guard<Row> = objectOf({
   name: isString,
@@ -144,6 +144,7 @@ const isState: Guard<State> = objectOf({
   cgMm: isNumber,
   cgExactMm: isNumber,
   massExceeded: isBoolean,
+  massBelow: isBoolean,
   cgState: oneOf("within", "forward", "aft"),
   fwdLimitMm: isNumber,
   aftLimitMm: isNumber,

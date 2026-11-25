@@ -10,8 +10,6 @@ acceptance-criteria:
     text: Given the aircraft HC4-01 is selected with 0 L usable fuel at take-off and 0 L planned fuel burn, when the pilot enters 0 kg front seats, 0 kg rear seats and 0 kg baggage compartment, then the total mass shows 765 kg and the centre of gravity 2.220 m.
   - key: d3h0
     text: Given the aircraft HC4-02 is selected with 0 L usable fuel at take-off and 0 L planned fuel burn, when the pilot enters 0 kg front seats, 0 kg rear seats and 0 kg baggage compartment, then the total mass shows 778 kg and the centre of gravity 2.236 m.
-  - key: nybx
-    text: Given the aircraft HC4-01 is selected, when the app is shown, then the maximum take-off mass shows 1150 kg.
 packages:
   - { id: 0ad97c1b-beb1-48a1-b1f8-30914e45a7c4, version: n1:67ebd0624004c969, title: Calculation core }
 verification-method: test

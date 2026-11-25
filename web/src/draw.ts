@@ -128,7 +128,7 @@ function drawPoint(svg: SVGSVGElement, s: Scale, st: State, id: string, name: st
 function limitLabel(st: State): string {
   if (st.cgState === "aft") return "Aft limit exceeded";
   if (st.cgState === "forward") return "Forward limit exceeded";
-  return st.massExceeded ? "Mass limit exceeded" : "";
+  return st.massExceeded || st.massBelow ? "Mass limit exceeded" : "";
 }
 
 /** Envelope chart: centre of gravity (m) horizontal, total mass (kg) vertical. */

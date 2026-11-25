@@ -3,7 +3,7 @@ id: 06510c41-64db-41cf-a63a-f8bb1ee95f42
 type: system-requirement
 status: approved
 title: Mass entry per loading station
-rationale: The pilot enters what is on board per place where it is loaded; showing the maximum helps to enter a valid mass.
+rationale: "The pilot enters what is on board per place where it is loaded; showing the maximum helps to enter a valid mass. Safety-related: it is the only requirement that every loading station of the aircraft type has a mass entry. A loading station without an entry would leave its mass out of the total mass and the centre of gravity, and the limit indication could show \"Within limits\" for a loading in which an entry is missing."
 requirement-type: functional
 acceptance-criteria:
   - key: nk58
@@ -14,12 +14,14 @@ packages:
   - { id: 7ca2dae5-b8a7-44de-a6c7-9542ff2e84f3, version: n1:67ebd0624004c969, title: Loading and display }
 verification-method: test
 criticality: high
-safety-related: "no"
+safety-related: "yes"
 derives-from:
   - { id: 26a81038-3f7b-4df9-bfcb-e94f646010df, version: n1:9267ec38b2832981, title: Enter what is on board }
 based-on:
   - { id: d9378504-282e-4688-918c-d6c354e582bf, version: n1:49bc78ee17b2010d, title: "Units, input resolution and rounding" }
   - { id: 8af32ef6-642a-4c83-9c76-b554fd14600e, version: n1:9a75306b3ec6e5a1, title: Type data of the Halcyra HC-4 }
+mitigates:
+  - { id: 48d41b74-74f0-43aa-8b0e-0546f7447f9b, version: n2:989c64a11f8228b2, title: "Invalid, missing or wrong data used for a limit indication" }
 ---
 
-If an aircraft is selected, the system shall provide one mass entry in kg for each seat row and baggage compartment of its aircraft type, labelled with the name of the loading station and its maximum mass.
+If an aircraft is selected, the system shall provide one mass entry in kg for each loading station of its aircraft type other than the usable fuel, labelled with the name of the loading station and its maximum mass.

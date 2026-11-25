@@ -3,7 +3,7 @@ id: 109946de-c77a-44bf-81ff-eeacde29562e
 type: system-requirement
 status: approved
 title: Centre of gravity
-rationale: The pilot and the instructor read the centre of gravity to compare it with the envelope and the paper loading sheet.
+rationale: "The pilot and the instructor read the centre of gravity to compare it with the envelope and the paper loading sheet. Not safety-related: a wrong figure here cannot by itself make a loading outside the limits appear within limits, because the limit indications, which are safety-related, come from the unrounded values by the limit check rule; IV&V confirms this classification."
 requirement-type: functional
 acceptance-criteria:
   - key: vbf5
@@ -20,7 +20,7 @@ safety-related: "no"
 derives-from:
   - { id: 78a8cd99-84e8-41f7-9239-2ed99f790a55, version: n1:997da7ed8d9f3ec8, title: Know at once whether the centre of gravity is permitted }
   - { id: 100e9969-73c0-423b-b96f-708da92c5472, version: n1:2141600b57cc64b3, title: Cross-check the calculation }
-  - { id: 031a08ff-81c7-41c9-b740-156684a02a77, version: n1:119f7845779c91b3, title: Know before take-off whether the landing is within limits }
+  - { id: 031a08ff-81c7-41c9-b740-156684a02a77, version: n2:02af7ab74c3a1a1d, title: Know before take-off whether the landing is within limits }
 based-on:
   - { id: d9378504-282e-4688-918c-d6c354e582bf, version: n1:49bc78ee17b2010d, title: "Units, input resolution and rounding" }
 ---

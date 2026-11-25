@@ -8,7 +8,7 @@ use crate::fleet::{Aircraft, AircraftType, TYPES};
 use crate::fuel::FuelType;
 use crate::limits::check;
 pub use crate::limits::{
-    CgState, INCOMPLETE, OUT_CG, OUT_MASS, State, WITHIN, kg_rounded, limits_at, moment_tenths, round_div,
+    CgState, INCOMPLETE, OUT_BELOW, OUT_CG, OUT_MASS, State, WITHIN, kg_rounded, limits_at, moment_tenths, round_div,
 };
 
 /// Name of the row of the usable fuel at take-off.

@@ -8,7 +8,7 @@ use crate::json::{Json, parse_json};
 use std::collections::BTreeMap;
 
 /// The fuel interface data file compiled into the build.
-pub const FUEL_JSON: &str = include_str!("../../data/fuel-module.json");
+pub const FUEL_JSON: &str = include_str!(concat!(env!("WB_DATA_DIR"), "/fuel-module.json"));
 
 /// A decimal number text as an exact integer in units of 10^-scale ("2.35", 3 → 2350).
 ///
@@ -100,15 +100,27 @@ fn text(o: &Json, k: &str) -> Result<String, String> {
     }
 }
 
+/// Whether `v` is an interface version this build reads: `1.minor.patch` with whole numbers
+/// without leading zeros.
+#[must_use]
+pub fn is_supported_version(v: &str) -> bool {
+    let mut parts = v.split('.');
+    // A whole number without leading zeros, as the supplier's interface version form (SR-b74efd).
+    let whole = |p: Option<&str>| {
+        p.is_some_and(|t| !t.is_empty() && t.bytes().all(|b| b.is_ascii_digit()) && (t == "0" || !t.starts_with('0')))
+    };
+    parts.next() == Some("1") && whole(parts.next()) && whole(parts.next()) && parts.next().is_none()
+}
+
 /// Parse the fuel interface data file.
 ///
 /// # Errors
-/// When the file is not JSON, has an unsupported interface version (major other than 1), or a
+/// When the file is not JSON, has an unsupported interface version (not `1.minor.patch`), or a
 /// field is missing or not of its documented form.
 pub fn parse_fuel(json: &str) -> Result<FuelData, String> {
     let root = parse_json(json)?;
     let interface_version = text(&root, "interfaceVersion")?;
-    if !interface_version.starts_with("1.") {
+    if !is_supported_version(&interface_version) {
         return Err(format!("unsupported interface version {interface_version}"));
     }
     let density_g_per_l = decimal_scaled(&num(&root, "fuelDensityKgPerL")?, 3)?;

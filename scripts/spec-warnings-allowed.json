@@ -1,0 +1,10 @@
+{
+  "$comment": "Warnings of `reqseq workspace check` that CI accepts until the named role acts. Each entry is a problem code and the short IDs its message names. spec-warnings.mjs fails on every other warning and on an entry that no longer occurs; when the list is empty, CI runs the check with --fail-on warning alone.",
+  "allowed": [
+    {
+      "code": "relation.target-superseded",
+      "ids": ["D-b70292", "D-c5b3b1"],
+      "reason": "The scope of release 2 was based on the client's release 1 confirmation, which is history: D-c5b3b1 is obsolete since release 3, superseded by D-0588ba and that by D-c5c9ba (client answer r3, W-10). The relation records what release 2 rested on; re-pointing it would change the history. IV&V accepted it in release 3."
+    }
+  ]
+}

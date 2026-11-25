@@ -83,7 +83,7 @@ pub const TYPES: &[AircraftType] = &[
 ];
 
 /// The fleet data file compiled into the build.
-pub const FLEET_CSV: &str = include_str!("../../data/fleet.csv");
+pub const FLEET_CSV: &str = include_str!(concat!(env!("WB_DATA_DIR"), "/fleet.csv"));
 
 /// One aircraft of the fleet data file.
 #[derive(Clone, Debug, PartialEq, Eq)]

@@ -7,16 +7,20 @@ import { buildEntries, showEntryStates, showFuelReport, type Entries } from "./e
 import { kg, m } from "./format.js";
 import { showCorners, showResult, showTable } from "./result.js";
 
-/** Shows the offline notice with the date of the aircraft data while the device has no network. */
-function watchOffline(dataDate: string): void {
-  $("offline").textContent =
-    `Offline: aircraft data as of ${dataDate}. Check the weighing date against the aircraft documents.`;
+/** Shows the offline notice with the date of the aircraft data (the weighing date of the selected
+ * aircraft) while the device has no network; returns the function that refreshes it. */
+function watchOffline(selected: () => Aircraft | undefined): () => void {
   const offline = (): void => {
-    $("offline").hidden = navigator.onLine;
+    const a = selected();
+    $("offline").textContent =
+      a === undefined
+        ? ""
+        : `Offline: aircraft data as of ${a.weighingDate}. Check the weighing date against the aircraft documents.`;
+    $("offline").hidden = navigator.onLine || a === undefined;
   };
   addEventListener("online", offline);
   addEventListener("offline", offline);
-  offline();
+  return offline;
 }
 
 /** Shows the data of the selected aircraft above the entries. */
@@ -30,7 +34,7 @@ function showAircraft(fleet: Fleet, a: Aircraft): void {
 /** Shows one evaluation: entry states, result card, drawings and table. */
 function render(fleet: Fleet, entries: Entries, e: Evaluation): void {
   showEntryStates(entries, e);
-  showResult(e);
+  showResult(e, entries.burn.value);
   const marks = e.entries.map((x, i) => (x.valid ? kg(Number(entries.stations[i]?.value.trim())) : null));
   const fuel = e.fuel.valid ? `${Number(entries.fuel.value.trim())} L` : null;
   drawTopView(typed("topview", SVGSVGElement), fleet.type, marks, fuel);
@@ -44,12 +48,14 @@ export function startApp(core: Core, typeKey: string): void {
   const select = typed("aircraft", HTMLSelectElement);
   for (const a of fleet.aircraft) select.append(new Option(a.id, a.id));
   const selected = (): Aircraft | undefined => fleet.aircraft.find((x) => x.id === select.value);
+  const offline = watchOffline(selected);
 
   const update = (): void => {
     const a = selected();
     $("select-hint").hidden = a !== undefined;
     $("aircraft-info").hidden = a === undefined;
     $("work").hidden = a === undefined;
+    offline();
     if (a === undefined) return;
     showAircraft(fleet, a);
     showFuelReport(entries, a);
@@ -60,7 +66,6 @@ export function startApp(core: Core, typeKey: string): void {
   };
   const entries = buildEntries(fleet, update);
   showCorners(fleet.type);
-  watchOffline(fleet.dataDate);
 
   select.addEventListener("change", () => {
     for (const inp of entries.all) inp.value = "";

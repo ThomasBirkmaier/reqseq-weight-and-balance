@@ -74,3 +74,74 @@ export async function contrast(page: Page, selector: string, prop: "color" | "st
       return (a + 0.05) / (b + 0.05);
     }, prop);
 }
+
+/** How a test changes the fleet data that the calculation core answers with: drop the fuel report
+ * of one aircraft, or replace the whole answer (an error or data of an unexpected form). */
+export type FleetPatch = { kind: "no-report"; aircraft: string } | { kind: "answer"; json: string };
+
+/** Makes the calculation core of the page answer its fleet call changed by `patch`, as a build
+ * from other data files would: the WebAssembly instance is wrapped before the app loads it. */
+export async function patchCoreFleet(page: Page, patch: FleetPatch): Promise<void> {
+  await page.addInitScript((p: FleetPatch) => {
+    const original = WebAssembly.instantiate.bind(WebAssembly);
+    const change = (json: string): string =>
+      p.kind === "answer"
+        ? p.json
+        : json.replace(
+            new RegExp(`("id":"${p.aircraft}"[^}]*"reportedFuelL":)[^,]*,"reportedAt":("[^"]*"|null)`, "u"),
+            '$1null,"reportedAt":null',
+          );
+    const patched = async (
+      bytes: BufferSource,
+    ): Promise<{ module: WebAssembly.Module; instance: { exports: object } }> => {
+      const r = await original(bytes, {});
+      const { memory, alloc, fleet, evaluate } = r.instance.exports;
+      if (!(memory instanceof WebAssembly.Memory) || typeof alloc !== "function" || typeof fleet !== "function") {
+        return r;
+      }
+      const wrapped = (ptr: number, len: number): bigint => {
+        const out: unknown = Reflect.apply(fleet, undefined, [ptr, len]);
+        if (typeof out !== "bigint") return 0n;
+        const view = new Uint8Array(memory.buffer, Number(out >> 32n), Number(out & 0xffffffffn));
+        const answer = new TextEncoder().encode(change(new TextDecoder().decode(view)));
+        const at: unknown = Reflect.apply(alloc, undefined, [answer.length]);
+        if (typeof at !== "number") return 0n;
+        new Uint8Array(memory.buffer, at, answer.length).set(answer);
+        return (BigInt(at) << 32n) | BigInt(answer.length);
+      };
+      return { module: r.module, instance: { exports: { memory, alloc, fleet: wrapped, evaluate } } };
+    };
+    Object.defineProperty(WebAssembly, "instantiate", { value: patched });
+  }, patch);
+}
+
+/** Path of the Halcyra HC-2 build. */
+export const HC2 = "/hc2/";
+
+/** Opens the HC-2 build, selects HC2-01 and enters the masses (front seats, baggage compartment), the
+ * usable fuel at take-off and the planned fuel burn (default 0 L and 0 L), as load() does. */
+export async function hc2(
+  page: Page,
+  masses: (string | number)[],
+  fuel: string | number | null = 0,
+  burn: string | number | null = 0,
+): Promise<void> {
+  await load(page, "HC2-01", masses, fuel, burn, HC2);
+}
+
+/** Whether the centre of the element is the topmost element there, i.e. nothing covers it. */
+export async function uncovered(locator: Locator): Promise<boolean> {
+  return locator.evaluate((el) => {
+    const r = el.getBoundingClientRect();
+    const top = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+    return top === el || el.contains(top);
+  });
+}
+
+/** Makes the page load the calculation core built from changed data files (scripts/build-faults.mjs),
+ * as an app built from those files would: `name` is a case of that script. */
+export async function useFaultCore(page: Page, name: string): Promise<void> {
+  await page.route("**/wb_core.wasm", async (r) =>
+    r.fulfill({ path: `dist/faults/${name}.wasm`, contentType: "application/wasm" }),
+  );
+}

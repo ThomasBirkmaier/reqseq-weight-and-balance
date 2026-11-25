@@ -10,6 +10,8 @@ use crate::fleet::AircraftType;
 pub const WITHIN: &str = "Within limits";
 /// Indication: the total mass is above the maximum take-off mass.
 pub const OUT_MASS: &str = "Outside limits: total mass above maximum take-off mass";
+/// Indication: the total mass is below the lowest mass of the envelope.
+pub const OUT_BELOW: &str = "Outside limits: total mass below the envelope";
 /// Indication: the centre of gravity is outside the envelope.
 pub const OUT_CG: &str = "Outside limits: centre of gravity outside envelope";
 /// Indication: an entry is missing or invalid, so the check is not complete.
@@ -35,6 +37,8 @@ pub struct State {
     pub moment_gmm: i64,
     /// True when the total mass is above the maximum take-off mass.
     pub mass_exceeded: bool,
+    /// True when the total mass is below the lowest mass of the envelope.
+    pub mass_below: bool,
     /// Position of the centre of gravity relative to the envelope.
     pub cg_state: CgState,
     /// Forward and aft limit at the evaluated mass, as fractions (num, den) in mm.
@@ -111,10 +115,19 @@ pub(crate) fn check(t: &AircraftType, total_g: i64, moment_gmm: i64, complete: b
         CgState::Within
     };
     let mass_exceeded = total_g > t.mtom_kg * 1000;
+    let mass_below = t
+        .envelope
+        .iter()
+        .map(|p| p.0)
+        .min()
+        .is_some_and(|lo| i128::from(total_g) < i128::from(lo) * 1000);
     let mut indications = Vec::new();
     if complete {
         if mass_exceeded {
             indications.push(OUT_MASS);
+        }
+        if mass_below {
+            indications.push(OUT_BELOW);
         }
         if cg_state != CgState::Within {
             indications.push(OUT_CG);
@@ -129,6 +142,7 @@ pub(crate) fn check(t: &AircraftType, total_g: i64, moment_gmm: i64, complete: b
         total_g,
         moment_gmm,
         mass_exceeded,
+        mass_below,
         cg_state,
         fwd_limit: fwd,
         aft_limit: aft,

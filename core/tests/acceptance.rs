@@ -1,6 +1,6 @@
-//! Acceptance tests of the calculation core. Test names follow `sr_<short id>_ak<n>_<what>`;
-//! CI maps them to `[SR-<short id>/AK<n>]` before `ReqSeq` enriches the JUnit report.
-//! Tests without a requirement in their name check the data files and the JSON interface.
+//! Acceptance tests of the calculation core. Test names follow `sr_<short id>_ak_<criterion key>_<what>`;
+//! CI enriches the JUnit report with `--name-pattern '{prefix}_{id}_ak_{ak}'` for the core and the
+//! HC-2 view, so every test names exactly one acceptance criterion. More tests: `release3.rs`.
 #![expect(
     clippy::unwrap_used,
     clippy::indexing_slicing,
@@ -195,10 +195,6 @@ fn sr_bdab78_ak_d3h0_hc4_02_empty() {
     let e = ev("HC4-02", &["0", "0", "0"]).take_off;
     assert_eq!((e.total_kg(), e.cg_mm_rounded()), (778, 2236));
 }
-#[test]
-fn sr_bdab78_ak_nybx_hc4_mtom_1150_kg() {
-    assert_eq!(TYPES[0].mtom_kg, 1150);
-}
 
 // SR-d0fb6e Data of the Halcyra HC-2
 #[test]
@@ -207,12 +203,12 @@ fn sr_d0fb6e_ak_j03d_hc2_01_empty() {
     assert_eq!((e.total_kg(), e.cg_mm_rounded()), (640, 2150));
 }
 #[test]
-fn sr_d0fb6e_ak_f0q1_hc2_stations() {
+fn sr_5ca0ef_ak_y112_hc2_stations() {
     let names: Vec<_> = TYPES[1].stations.iter().map(|s| (s.name, s.max_kg)).collect();
     assert_eq!(names, vec![("Front seats", 220), ("Baggage compartment", 40)]);
 }
 #[test]
-fn sr_d0fb6e_ak_mvk0_hc2_aft_limit_exceeded() {
+fn sr_a93b59_ak_qq3j_hc2_aft_limit_exceeded() {
     let e = ev("HC2-01", &["60", "40"]).take_off;
     assert_eq!((e.total_kg(), e.cg_mm_rounded()), (740, 2178));
     assert_eq!(e.indications, vec![OUT_CG]);
@@ -283,7 +279,7 @@ fn sr_79804b_ak_cy7n_hc4_100_l_fuel() {
     assert_eq!((e.total_kg(), e.cg_mm_rounded()), (837, 2231));
 }
 #[test]
-fn sr_79804b_ak_rnpf_hc2_50_l_fuel() {
+fn sr_e47cbf_ak_k2b3_hc2_50_l_fuel() {
     let e = evf("HC2-01", &["0", "0"], "50", "0").take_off;
     assert_eq!((e.total_kg(), e.cg_mm_rounded()), (676, 2147));
 }
@@ -334,59 +330,8 @@ fn sr_90608c_ak_nqrm_landing_aft_of_aft_limit() {
     assert_eq!(e.landing.indications, vec![OUT_CG]);
 }
 #[test]
-fn sr_90608c_ak_mgyn_hc2_landing_aft_of_aft_limit() {
+fn sr_bd8e44_ak_dnhh_hc2_landing_aft_of_aft_limit() {
     let e = evf("HC2-01", &["60", "35"], "52", "10");
     assert_eq!(e.take_off.indications, vec![WITHIN]);
     assert_eq!(e.landing.indications, vec![OUT_CG]);
-}
-
-// Limit check rule (decision): both indications when mass and centre of gravity are exceeded.
-#[test]
-fn limit_rule_both_limits_mass_first() {
-    // Synthetic aircraft with a far aft empty mass: no real loading of the fleet exceeds both.
-    let a = Aircraft {
-        id: "T".into(),
-        type_index: 0,
-        empty_kg: 1100,
-        empty_arm_mm: 2600,
-        weighing_date: "-".into(),
-    };
-    let f = fd();
-    let e = evaluate(&a, &f.types["hc4"], f.density_g_per_l, &["100", "0", "0"], "0", "0");
-    assert_eq!(e.take_off.indications, vec![OUT_MASS, OUT_CG]);
-}
-
-#[test]
-fn fleet_and_fuel_files_errors_are_reported() {
-    assert!(parse_fleet("HC4-01,hc4,765").is_err());
-    assert!(parse_fleet("HC4-01,hc9,765,2220,2026-01-01").is_err());
-    assert!(parse_fuel("{}").is_err());
-    assert!(parse_fuel(&FUEL_JSON.replace("\"1.0.1\"", "\"2.0.0\"")).is_err());
-}
-
-#[test]
-fn fleet_and_fuel_files_parse() {
-    assert_eq!(parse_fleet(FLEET_CSV).unwrap().len(), 3);
-    let f = fd();
-    assert_eq!(f.density_g_per_l, 720);
-    assert_eq!((f.types["hc4"].arm_mm, f.types["hc4"].capacity_l), (2350, 170));
-    assert_eq!((f.types["hc2"].arm_mm, f.types["hc2"].capacity_l), (2100, 104));
-    assert_eq!(f.aircraft["HC4-01"].litres, 142);
-    for a in parse_fleet(FLEET_CSV).unwrap() {
-        assert!(f.aircraft.contains_key(&a.id), "no fuel report for {}", a.id);
-    }
-}
-
-#[test]
-fn json_interface_round_trip() {
-    let j = wb_core::evaluate_json("hc4\nHC4-01\n160\n0\n20\n100\n60");
-    assert!(wb_core::evaluate_json("hc2\nHC4-01\n0\n0\n0\n0").contains("unknown aircraft"));
-    assert!(j.contains("\"totalKg\":1017"), "{}", j);
-    assert!(j.contains("\"cgMm\":2229"));
-    assert!(j.contains("\"totalKg\":974"));
-    assert!(j.contains("\"Within limits\""));
-    let f = wb_core::fleet_json("hc2");
-    assert!(f.contains("HC2-01") && !f.contains("HC4-01"));
-    assert!(f.contains("\"reportedFuelL\":78") && f.contains("\"fuelCapacityL\":104"));
-    assert!(wb_core::fleet_json("hc4").contains("\"dataDate\":\"2026-11-02\""));
 }
