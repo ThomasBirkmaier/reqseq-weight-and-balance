@@ -2,7 +2,8 @@ name: CI
 
 # The supplier repository (fuel) is private and is not checked out here: this workspace names
 # its requirements by ID and version only, and ReqSeq reports them as not accessible. The
-# evidence gate counts the approved requirements of this repository.
+# evidence gate (D-cb5556) counts every system requirement of this repository that is not
+# obsolete, per acceptance criterion and per view, from the test results of this run only.
 
 on:
   pull_request:
@@ -32,8 +33,12 @@ jobs:
           sha256sum -c --ignore-missing SHA256SUMS.txt
           npm install -g --offline ./reqseq-cli-0.14.0.tgz
           reqseq --version
-      - name: Check the ReqSeq workspace
+      - name: Check the ReqSeq workspace (errors, with the evidence of earlier runs)
         run: reqseq workspace check --workspace spec
+      - name: Check the ReqSeq workspace (warnings; only those listed with a reason are accepted)
+        run: |
+          find spec/evidence -mindepth 1 -maxdepth 1 ! -name validation -exec rm -rf {} +
+          node scripts/spec-warnings.mjs
 
   lint:
     name: lint
@@ -144,14 +149,14 @@ jobs:
         env:
           CI: "true"
           PLAYWRIGHT_JUNIT_OUTPUT_FILE: test-results/walkthrough-junit.xml
-      - name: Enrich JUnit with ReqSeq (HC-2 for the variant VAR-f23826)
+      - name: Enrich JUnit with ReqSeq (core build for the core view, HC-2 build for VAR-f23826)
         if: always()
         run: |
           mkdir -p spec/evidence/ci
-          cp test-results/core-junit.xml spec/evidence/ci/e2e-core-junit.xml
-          cp test-results/hc2-junit.xml spec/evidence/ci/e2e-hc2-junit.xml
-          reqseq evidence enrich-junit spec/evidence/ci/e2e-core-junit.xml "${{ github.sha }}" --workspace spec
-          reqseq evidence enrich-junit spec/evidence/ci/e2e-hc2-junit.xml "${{ github.sha }}" --variant VAR-f23826 --workspace spec
+          reqseq evidence enrich-junit test-results/core-junit.xml "${{ github.sha }}" \
+            --output spec/evidence/ci/e2e-core-junit.xml --variant core --workspace spec
+          reqseq evidence enrich-junit test-results/hc2-junit.xml "${{ github.sha }}" \
+            --output spec/evidence/ci/e2e-hc2-junit.xml --variant VAR-f23826 --workspace spec
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
@@ -185,15 +190,17 @@ jobs:
           sha256sum -c --ignore-missing SHA256SUMS.txt
           npm install -g --offline ./reqseq-cli-0.14.0.tgz
           reqseq --version
+      - name: Remove the evidence of earlier runs from the checkout (only this run counts)
+        run: find spec/evidence -mindepth 1 -maxdepth 1 ! -name validation -exec rm -rf {} +
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           pattern: evidence-*
           path: spec/evidence/ci
           merge-multiple: true
-      - name: Evidence gate (approved requirements, core and HC-2 view)
+      - name: Evidence gate (every requirement not obsolete, per criterion, core and HC-2 view)
         run: |
           ls spec/evidence/ci
-          sh scripts/evidence-gate.sh core VAR-f23826
+          node scripts/evidence-gate.mjs core VAR-f23826
 
   deploy:
     name: deploy

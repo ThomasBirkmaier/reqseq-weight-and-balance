@@ -1,0 +1,30 @@
+{
+  "$comment": "Warnings of `reqseq workspace check` that CI accepts until the named role acts. Each entry is a problem code and the short IDs its message names. spec-warnings.mjs fails on every other warning and on an entry that no longer occurs; when the list is empty, CI runs the check with --fail-on warning alone.",
+  "allowed": [
+    {
+      "code": "relation.outdated",
+      "ids": ["D-0588ba", "N-a02a77"],
+      "reason": "The client's release 2 confirmation names the version before the release 3 change of the first validation criterion. Confirming the new version is the client's; IV&V records it (client answer r3)."
+    },
+    {
+      "code": "relation.outdated",
+      "ids": ["D-0588ba", "N-7bfc52"],
+      "reason": "The client's release 2 confirmation names the version before the client's release 3 text. Confirming the new version is the client's; IV&V records it (client answer r3)."
+    },
+    {
+      "code": "relation.outdated",
+      "ids": ["D-c5b3b1", "N-6010df"],
+      "reason": "D-c5b3b1 is the release 1 confirmation and stays as history; D-0588ba supersedes it, IV&V sets its status (client answer r3, W-10)."
+    },
+    {
+      "code": "relation.target-superseded",
+      "ids": ["D-c5b3b1", "D-d192b3"],
+      "reason": "D-c5b3b1 is the release 1 confirmation and stays as history; D-0588ba supersedes it, IV&V sets its status (client answer r3, W-10)."
+    },
+    {
+      "code": "evidence.outdated",
+      "ids": ["N-a02a77"],
+      "reason": "The release 2 validation record is for the version before the release 3 change of the first validation criterion; IV&V records the new validation."
+    }
+  ]
+}
