@@ -1,9 +1,9 @@
 ---
 id: 06510c41-64db-41cf-a63a-f8bb1ee95f42
 type: system-requirement
-status: approved
+status: draft
 title: Mass entry per loading station
-rationale: The pilot enters what is on board per place where it is loaded; showing the maximum helps to enter a valid mass.
+rationale: "The pilot enters what is on board per place where it is loaded; showing the maximum helps to enter a valid mass. Not safety-related: a wrong figure here cannot by itself make a loading outside the limits appear within limits, because the limit indications, which are safety-related, come from the unrounded values by the limit check rule; IV&V confirms this classification."
 requirement-type: functional
 acceptance-criteria:
   - key: nk58
@@ -22,4 +22,4 @@ based-on:
   - { id: 8af32ef6-642a-4c83-9c76-b554fd14600e, version: n1:9a75306b3ec6e5a1, title: Type data of the Halcyra HC-4 }
 ---
 
-If an aircraft is selected, the system shall provide one mass entry in kg for each seat row and baggage compartment of its aircraft type, labelled with the name of the loading station and its maximum mass.
+If an aircraft is selected, the system shall provide one mass entry in kg for each loading station of its aircraft type other than the usable fuel, labelled with the name of the loading station and its maximum mass.

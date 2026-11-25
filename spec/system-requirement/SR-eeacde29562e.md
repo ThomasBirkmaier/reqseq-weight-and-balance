@@ -3,7 +3,7 @@ id: 109946de-c77a-44bf-81ff-eeacde29562e
 type: system-requirement
 status: approved
 title: Centre of gravity
-rationale: The pilot and the instructor read the centre of gravity to compare it with the envelope and the paper loading sheet.
+rationale: "The pilot and the instructor read the centre of gravity to compare it with the envelope and the paper loading sheet. Not safety-related: a wrong figure here cannot by itself make a loading outside the limits appear within limits, because the limit indications, which are safety-related, come from the unrounded values by the limit check rule; IV&V confirms this classification."
 requirement-type: functional
 acceptance-criteria:
   - key: vbf5
