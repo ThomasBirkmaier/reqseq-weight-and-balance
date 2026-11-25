@@ -1,0 +1,7 @@
+# Fixed toolchain, so that a new Rust or Clippy release cannot turn a green build red without a
+# change in this repository. Raise it deliberately and fix the new findings in the same change.
+[toolchain]
+channel = "1.97.0"
+components = ["clippy", "rustfmt"]
+targets = ["wasm32-unknown-unknown"]
+profile = "minimal"

@@ -1,0 +1,18 @@
+# Ruff for the Python scripts: every rule (ALL), except the pairs that contradict each other
+# and the rules that do not fit small CI scripts. `ruff check` must report nothing.
+line-length = 140
+target-version = "py312"
+
+[lint]
+select = ["ALL"]
+ignore = [
+  "D203",    # contradicts D211 (no blank line before a class docstring)
+  "D213",    # contradicts D212 (summary on the first docstring line)
+  "COM812",  # conflicts with the formatter
+  "CPY001",  # no copyright header per file; the licence is in LICENSE
+  "T201",    # the scripts are command-line tools that report with print
+]
+
+[lint.per-file-ignores]
+# The scripts read JUnit files that this CI run wrote itself, not untrusted XML.
+"scripts/*.py" = ["S314", "INP001"]

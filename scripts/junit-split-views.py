@@ -14,20 +14,25 @@ Which requirements these are comes from `reqseq variant diff <variant> --json`, 
 follows the specification and has no list of its own. Dropped test cases are printed.
 Usage: junit-split-views.py <in.xml> <variant> <out-core.xml> <out-variant.xml>
 """
+
 import json
 import re
 import subprocess
 import sys
 import xml.etree.ElementTree as ET
+from typing import Any
 
+ARGS = 5  # the script name and its four arguments
 REF = re.compile(r"\[([A-Z]+-[0-9a-f]{6})(?:/AK-[0-9a-z]+)?\]")
 
 
-def short_ids(diff: dict, uuids: set) -> set:
+def short_ids(diff: dict[str, Any], uuids: set[str]) -> set[str]:
+    """Short ids of the elements of the variant diff whose UUID is in `uuids`."""
     return {n["shortId"] for n in diff["names"] if n["id"] in uuids}
 
 
-def write_without(src: str, dst: str, drop: set, label: str) -> None:
+def write_without(src: str, dst: str, drop: set[str], label: str) -> None:
+    """Write `src` to `dst` without the test cases of the requirements in `drop`."""
     tree = ET.parse(src)
     for suite in tree.iter("testsuite"):
         for case in list(suite.findall("testcase")):
@@ -48,11 +53,15 @@ def write_without(src: str, dst: str, drop: set, label: str) -> None:
 
 
 def main(src: str, variant: str, out_core: str, out_variant: str) -> None:
-    out = subprocess.run(
-        ["reqseq", "variant", "diff", variant, "--json", "--workspace", "spec"],
-        check=True, capture_output=True, text=True,
+    """Split `src` into the core and the variant JUnit file."""
+    # reqseq is the CLI that CI installs from its checksummed release; the arguments are fixed.
+    out = subprocess.run(  # noqa: S603
+        ["reqseq", "variant", "diff", variant, "--json", "--workspace", "spec"],  # noqa: S607
+        check=True,
+        capture_output=True,
+        text=True,
     ).stdout
-    diff = json.loads(out)
+    diff: dict[str, Any] = json.loads(out)
     if diff.get("incomplete"):
         # Without the private supplier repository the diff is incomplete; the variant and its
         # replacements live in this repository, so the split still holds for its requirements.
@@ -64,6 +73,6 @@ def main(src: str, variant: str, out_core: str, out_variant: str) -> None:
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 5:
+    if len(sys.argv) != ARGS:
         sys.exit(__doc__)
     main(*sys.argv[1:])

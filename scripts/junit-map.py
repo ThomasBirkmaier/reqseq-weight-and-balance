@@ -6,13 +6,16 @@ Rust function names cannot contain brackets, so tests are named
 to `[SR-<short id>/AK-<criterion key>] <words>`; other test cases stay unchanged.
 Usage: junit-map.py <in.xml> <out.xml>
 """
+
 import re
 import sys
 import xml.etree.ElementTree as ET
 
 PATTERN = re.compile(r"^(?:.*::)?sr_([0-9a-f]{6})_ak_([0-9a-z]{4})_(.+)$")
 
+
 def main(src: str, dst: str) -> None:
+    """Rewrite the matching test case names of `src` and write the result to `dst`."""
     tree = ET.parse(src)
     mapped = 0
     for case in tree.iter("testcase"):
@@ -22,6 +25,7 @@ def main(src: str, dst: str) -> None:
             mapped += 1
     tree.write(dst, encoding="utf-8", xml_declaration=True)
     print(f"mapped {mapped} test cases")
+
 
 if __name__ == "__main__":
     main(sys.argv[1], sys.argv[2])
