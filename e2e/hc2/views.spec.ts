@@ -85,7 +85,7 @@ test("[SR-0c6fc0/AK-t3p8] chart with the HC-2 envelope, take-off and landing poi
 
 for (const [ak, masses, mass, cg, label] of [
   ["mkx9", [60, 40], "740", "2178", "Aft limit exceeded"],
-  ["ss3k", [220, 0], "860", "2112", "Forward limit exceeded"],
+
   ["pmj5", [220, 40], "900", "2147", "Mass limit exceeded"],
 ] as const) {
   test(`[SR-867afc/AK-${ak}] take-off point at ${mass} kg labelled ${label}`, async ({ page }) => {
@@ -97,6 +97,17 @@ for (const [ak, masses, mass, cg, label] of [
     await expect(page.locator("#point-label")).toHaveText(label);
   });
 }
+
+test("[SR-867afc/AK-ss3k] forward of the forward limit and above the maximum take-off mass: the forward label", async ({
+  page,
+}) => {
+  await hc2(page, [220, 0], 30, 0);
+  const p = page.locator("#chart #point");
+  await expect(p).toHaveAttribute("data-mass", "882");
+  await expect(p).toHaveAttribute("data-cg", "2111");
+  await expect(p).toHaveAttribute("data-state", "outside");
+  await expect(page.locator("#point-label")).toHaveText("Forward limit exceeded");
+});
 
 test("[SR-03f2e6/AK-zz0d] envelope corners of the HC-2 as numbers", async ({ page }) => {
   await open(page, HC2);

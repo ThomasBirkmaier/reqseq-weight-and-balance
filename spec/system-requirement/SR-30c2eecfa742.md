@@ -3,7 +3,7 @@ id: f0c03471-5bc9-4c0c-9e2b-30c2eecfa742
 type: system-requirement
 status: draft
 title: Centre of gravity in the HC-2 build
-rationale: "Replaces SR-29562e in the HC-2 build with acceptance criteria from the type data of the Halcyra HC-2: ReqSeq has no validity per acceptance criterion, so the criteria of the variant need a requirement of the variant (scope of release 3)."
+rationale: "The pilot and the instructor read the centre of gravity to compare it with the envelope and the paper loading sheet. Not safety-related: a wrong figure here cannot by itself make a loading outside the limits appear within limits, because the limit indications, which are safety-related, come from the unrounded values by the limit check rule; IV&V confirms this classification. HC-2 replacement of SR-29562e: the statement of SR-29562e with acceptance criteria from the type data of the Halcyra HC-2, because ReqSeq has no validity per acceptance criterion (scope of release 3)."
 requirement-type: functional
 acceptance-criteria:
   - key: m0tc

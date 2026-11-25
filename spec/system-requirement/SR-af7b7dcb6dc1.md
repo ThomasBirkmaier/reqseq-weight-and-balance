@@ -9,7 +9,7 @@ acceptance-criteria:
   - key: jvj0
     text: Given the aircraft HC4-01 is selected with 0 L usable fuel at take-off and 0 L planned fuel burn, when the pilot enters 70 kg front seats, 200 kg rear seats and 50 kg baggage compartment, then the chart shows the take-off point at (1085 kg, 2.475 m) aft of the aft limit with the label "Aft limit exceeded".
   - key: wv1w
-    text: Given the aircraft HC4-01 is selected with 0 L usable fuel at take-off and 0 L planned fuel burn, when the pilot enters 200 kg front seats, 0 kg rear seats and 0 kg baggage compartment, then the chart shows the take-off point at (965 kg, 2.174 m) forward of the forward limit with the label "Forward limit exceeded".
+    text: Given the aircraft HC4-01 is selected with 0 L planned fuel burn, when the pilot enters 230 kg front seats, 100 kg rear seats, 0 kg baggage compartment and 100 L usable fuel at take-off, then the chart shows the take-off point at (1167 kg, 2.273 m) above the maximum take-off mass and forward of the forward limit with the label "Forward limit exceeded".
   - key: g90h
     text: Given the aircraft HC4-01 is selected with 0 L usable fuel at take-off and 0 L planned fuel burn, when the pilot enters 180 kg front seats, 160 kg rear seats and 50 kg baggage compartment, then the chart shows the take-off point at (1155 kg, 2.403 m) above the maximum take-off mass with the label "Mass limit exceeded".
 packages:

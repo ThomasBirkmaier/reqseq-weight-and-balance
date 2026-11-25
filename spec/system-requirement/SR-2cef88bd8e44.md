@@ -3,7 +3,7 @@ id: 6f66b38c-391f-4701-b23e-2cef88bd8e44
 type: system-requirement
 status: draft
 title: Limit indication at landing in the HC-2 build
-rationale: "Replaces SR-90608c in the HC-2 build with acceptance criteria from the type data of the Halcyra HC-2: ReqSeq has no validity per acceptance criterion, so the criteria of the variant need a requirement of the variant (scope of release 3)."
+rationale: "Burning fuel moves the centre of gravity: with the fuel lever arm forward of a loaded centre of gravity, the centre of gravity moves aft during the flight. The pilot must know before take-off whether the landing is within limits. HC-2 replacement of SR-90608c: the statement of SR-90608c with acceptance criteria from the type data of the Halcyra HC-2, because ReqSeq has no validity per acceptance criterion (scope of release 3)."
 requirement-type: functional
 acceptance-criteria:
   - key: yhsm

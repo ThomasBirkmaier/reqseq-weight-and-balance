@@ -137,3 +137,11 @@ export async function uncovered(locator: Locator): Promise<boolean> {
     return top === el || el.contains(top);
   });
 }
+
+/** Makes the page load the calculation core built from changed data files (scripts/build-faults.mjs),
+ * as an app built from those files would: `name` is a case of that script. */
+export async function useFaultCore(page: Page, name: string): Promise<void> {
+  await page.route("**/wb_core.wasm", async (r) =>
+    r.fulfill({ path: `dist/faults/${name}.wasm`, contentType: "application/wasm" }),
+  );
+}

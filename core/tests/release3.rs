@@ -103,7 +103,7 @@ fn sr_b53822_ak_dzj0_major_version_2_is_refused() {
 }
 #[test]
 fn sr_b53822_ak_fd7z_malformed_version_1_0_is_refused() {
-    for v in ["1.0", "1.0.1.2", "1..1", "1.a.0", "01.0.1"] {
+    for v in ["1.0", "1.01.0", "1.0.01", "1.0.1.2", "1..1", "1.a.0", "01.0.1"] {
         let j = fleet(FLEET_CSV, &FUEL_JSON.replace("\"1.0.1\"", &format!("\"{v}\"")), "hc2");
         assert!(refused(&j), "{v}: {j}");
     }
@@ -229,5 +229,24 @@ fn sr_bb9061_ak_cn28_total_mass_at_the_lowest_mass_is_within() {
         )
         .take_off;
         assert_eq!(e.indications, vec![WITHIN], "{key}");
+    }
+}
+#[test]
+fn sr_bb9061_ak_spj9_below_the_envelope_before_the_centre_of_gravity() {
+    let f = fd();
+    for (ti, key, lowest, aft_arm, empty) in [
+        (0, "hc4", 650, 2500, ["0", "0", "0"].as_slice()),
+        (1, "hc2", 550, 2200, ["0", "0"].as_slice()),
+    ] {
+        let e = evaluate(
+            &synthetic(ti, lowest - 10, aft_arm),
+            &f.types[key],
+            f.density_g_per_l,
+            empty,
+            "0",
+            "0",
+        )
+        .take_off;
+        assert_eq!(e.indications, vec![OUT_BELOW, OUT_CG], "{key}");
     }
 }

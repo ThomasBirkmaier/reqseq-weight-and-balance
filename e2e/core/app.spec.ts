@@ -215,10 +215,10 @@ test("[SR-cb6dc1/AK-jvj0] take-off point aft of the aft limit is labelled", asyn
   await expect(page.locator("#point-label")).toHaveText("Aft limit exceeded");
 });
 
-test("[SR-cb6dc1/AK-wv1w] take-off point forward of the forward limit is labelled", async ({ page }) => {
-  await load(page, "HC4-01", [200, 0, 0]);
-  await expect(page.locator("#chart #point")).toHaveAttribute("data-mass", "965");
-  await expect(page.locator("#chart #point")).toHaveAttribute("data-cg", "2174");
+test("[SR-cb6dc1/AK-wv1w] forward of the forward limit and above the maximum take-off mass: the forward label", async ({ page }) => {
+  await load(page, "HC4-01", [230, 100, 0], 100, 0);
+  await expect(page.locator("#chart #point")).toHaveAttribute("data-mass", "1167");
+  await expect(page.locator("#chart #point")).toHaveAttribute("data-cg", "2273");
   await expect(page.locator("#point-label")).toHaveText("Forward limit exceeded");
 });
 

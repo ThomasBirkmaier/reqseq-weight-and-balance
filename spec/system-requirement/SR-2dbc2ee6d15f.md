@@ -3,7 +3,7 @@ id: 85f5bb83-db62-48ef-a730-2dbc2ee6d15f
 type: system-requirement
 status: draft
 title: Aircraft selection without preselection in the HC-2 build
-rationale: "Replaces SR-1e4aee in the HC-2 build with acceptance criteria from the type data of the Halcyra HC-2: ReqSeq has no validity per acceptance criterion, so the criteria of the variant need a requirement of the variant (scope of release 3)."
+rationale: "A preselected aircraft could give a result for an aircraft the pilot did not choose. Split in release 3 from the requirement on the selected aircraft, whose criteria named the selection. HC-2 replacement of SR-1e4aee: the statement of SR-1e4aee with acceptance criteria from the type data of the Halcyra HC-2, because ReqSeq has no validity per acceptance criterion (scope of release 3)."
 requirement-type: functional
 acceptance-criteria:
   - key: q7ty

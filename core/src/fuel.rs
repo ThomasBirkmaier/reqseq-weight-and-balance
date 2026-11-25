@@ -8,7 +8,7 @@ use crate::json::{Json, parse_json};
 use std::collections::BTreeMap;
 
 /// The fuel interface data file compiled into the build.
-pub const FUEL_JSON: &str = include_str!("../../data/fuel-module.json");
+pub const FUEL_JSON: &str = include_str!(concat!(env!("WB_DATA_DIR"), "/fuel-module.json"));
 
 /// A decimal number text as an exact integer in units of 10^-scale ("2.35", 3 → 2350).
 ///
@@ -100,11 +100,15 @@ fn text(o: &Json, k: &str) -> Result<String, String> {
     }
 }
 
-/// Whether `v` is an interface version this build reads: `1.minor.patch` with whole numbers.
+/// Whether `v` is an interface version this build reads: `1.minor.patch` with whole numbers
+/// without leading zeros.
 #[must_use]
 pub fn is_supported_version(v: &str) -> bool {
     let mut parts = v.split('.');
-    let whole = |p: Option<&str>| p.is_some_and(|t| !t.is_empty() && t.bytes().all(|b| b.is_ascii_digit()));
+    // A whole number without leading zeros, as the supplier's interface version form (SR-b74efd).
+    let whole = |p: Option<&str>| {
+        p.is_some_and(|t| !t.is_empty() && t.bytes().all(|b| b.is_ascii_digit()) && (t == "0" || !t.starts_with('0')))
+    };
     parts.next() == Some("1") && whole(parts.next()) && whole(parts.next()) && parts.next().is_none()
 }
 

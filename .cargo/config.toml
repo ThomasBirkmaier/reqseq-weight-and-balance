@@ -1,0 +1,5 @@
+# The folder of the data files that the calculation core embeds (fleet.csv, fuel-module.json).
+# Default: data/ of this repository. scripts/build-faults.mjs sets WB_DATA_DIR to build cores
+# from changed data files for the end-to-end tests of SR-b53822, SR-ecf597 and SR-bb9061.
+[env]
+WB_DATA_DIR = { value = "data", relative = true }

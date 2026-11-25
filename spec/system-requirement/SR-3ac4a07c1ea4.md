@@ -3,7 +3,7 @@ id: 995be90c-c46e-4cc6-bfce-3ac4a07c1ea4
 type: system-requirement
 status: draft
 title: Indication within limits in the HC-2 build
-rationale: "Replaces SR-3a4905 in the HC-2 build with acceptance criteria from the type data of the Halcyra HC-2: ReqSeq has no validity per acceptance criterion, so the criteria of the variant need a requirement of the variant (scope of release 3)."
+rationale: "The pilot needs a clear positive result; it is shown only when neither limit is exceeded, so that a loading outside limits is never shown as within limits. HC-2 replacement of SR-3a4905: the statement of SR-3a4905 with acceptance criteria from the type data of the Halcyra HC-2, because ReqSeq has no validity per acceptance criterion (scope of release 3)."
 requirement-type: functional
 acceptance-criteria:
   - key: p8jn

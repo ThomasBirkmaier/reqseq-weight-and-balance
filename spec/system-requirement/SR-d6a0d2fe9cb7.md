@@ -3,7 +3,7 @@ id: ab159acd-eb3a-4d1b-8673-d6a0d2fe9cb7
 type: system-requirement
 status: draft
 title: Total mass in the HC-2 build
-rationale: "Replaces SR-348143 in the HC-2 build with acceptance criteria from the type data of the Halcyra HC-2: ReqSeq has no validity per acceptance criterion, so the criteria of the variant need a requirement of the variant (scope of release 3)."
+rationale: "The pilot compares the total mass with the maximum take-off mass; the instructor compares it with the paper loading sheet. Not safety-related: a wrong figure here cannot by itself make a loading outside the limits appear within limits, because the limit indications, which are safety-related, come from the unrounded values by the limit check rule; IV&V confirms this classification. HC-2 replacement of SR-348143: the statement of SR-348143 with acceptance criteria from the type data of the Halcyra HC-2, because ReqSeq has no validity per acceptance criterion (scope of release 3)."
 requirement-type: functional
 acceptance-criteria:
   - key: hx3d
