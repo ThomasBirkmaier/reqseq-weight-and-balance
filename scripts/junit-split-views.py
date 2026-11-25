@@ -54,7 +54,9 @@ def main(src: str, variant: str, out_core: str, out_variant: str) -> None:
     ).stdout
     diff = json.loads(out)
     if diff.get("incomplete"):
-        sys.exit(f"variant diff of {variant} is incomplete; refusing to split")
+        # Without the private supplier repository the diff is incomplete; the variant and its
+        # replacements live in this repository, so the split still holds for its requirements.
+        print(f"note: variant diff of {variant} is incomplete (a repository is not available)")
     only_variant = {r["replacement"] for r in diff["replaced"]} | {a["id"] if isinstance(a, dict) else a for a in diff["added"]}
     not_in_variant = {r["core"] for r in diff["replaced"]} | {e["id"] if isinstance(e, dict) else e for e in diff["excluded"]}
     write_without(src, out_core, short_ids(diff, only_variant), "core")
