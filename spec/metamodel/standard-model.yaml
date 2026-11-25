@@ -95,6 +95,7 @@ properties:
     many: true
     content: true
     markdown: true
+    meaning: acceptance-criteria
   - key: validity
     name: Validity
     description: "The variants the requirement applies to; without validity it belongs to the core and applies to every variant."

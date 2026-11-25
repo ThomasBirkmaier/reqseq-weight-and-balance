@@ -8,13 +8,13 @@ const AFT = [70, 200, 50];
 test.describe("phone", () => {
   test.use({ viewport: { width: 360, height: 740 }, isMobile: true, hasTouch: true });
 
-  test("[SR-54e043/AK1] page is at most 360 px wide", async ({ page }) => {
+  test("[SR-54e043/AK-s3r8] page is at most 360 px wide", async ({ page }) => {
     await load(page, "HC4-01", A);
     const w = await page.evaluate(() => document.documentElement.scrollWidth);
     expect(w).toBeLessThanOrEqual(360);
   });
 
-  test("[SR-54e043/AK2] total mass and both limit indications without horizontal scrolling", async ({ page }) => {
+  test("[SR-54e043/AK-qdnj] total mass and both limit indications without horizontal scrolling", async ({ page }) => {
     await load(page, "HC4-01", [160, 0, 0], 100, 60);
     for (const id of ["#indication", "#landing-indication", "#total"]) {
       const b = await page.locator(id).boundingBox();
@@ -23,7 +23,7 @@ test.describe("phone", () => {
     }
   });
 
-  test("[SR-c1fe36/AK1] take-off and landing limit indication in the viewport after the planned fuel burn entry", async ({ page }) => {
+  test("[SR-c1fe36/AK-pf8z] take-off and landing limit indication in the viewport after the planned fuel burn entry", async ({ page }) => {
     await load(page, "HC4-01", A, 100, null);
     await page.locator("#entry-burn").fill("60");
     await expect(page.locator("#indication")).toBeInViewport({ ratio: 1 });
@@ -35,7 +35,7 @@ test.describe("phone", () => {
 for (const scheme of ["light", "dark"] as const) {
   test.describe(`${scheme} mode`, () => {
     test.use({ colorScheme: scheme });
-    const ak = scheme === "light" ? "AK1" : "AK2";
+    const ak = scheme === "light" ? "AK-qcdw" : "AK-fcf4";
     test(`[SR-070ac3/${ak}] text contrast at least 4.5:1 in ${scheme} mode`, async ({ page }) => {
       for (const loading of [A, AFT, [160, 201, 0]]) {
         await load(page, "HC4-01", loading);
@@ -49,7 +49,7 @@ for (const scheme of ["light", "dark"] as const) {
   });
 }
 
-test("[SR-070ac3/AK3] graphics contrast at least 3:1 in light and dark mode", async ({ browser }) => {
+test("[SR-070ac3/AK-rrs5] graphics contrast at least 3:1 in light and dark mode", async ({ browser }) => {
   for (const colorScheme of ["light", "dark"] as const) {
     const page = await browser.newPage({ colorScheme });
     await load(page, "HC4-01", A);
@@ -61,7 +61,7 @@ test("[SR-070ac3/AK3] graphics contrast at least 3:1 in light and dark mode", as
   }
 });
 
-test("[SR-384eab/AK1] opens and calculates without network after the first visit", async ({ page, context }) => {
+test("[SR-384eab/AK-g07h] opens and calculates without network after the first visit", async ({ page, context }) => {
   await open(page);
   await page.evaluate(() => navigator.serviceWorker.ready);
   await page.reload();
@@ -79,7 +79,7 @@ test("[SR-384eab/AK1] opens and calculates without network after the first visit
   await context.setOffline(false);
 });
 
-test("[SR-87691b/AK1] entering a loading sends no network request", async ({ page }) => {
+test("[SR-87691b/AK-dbn0] entering a loading sends no network request", async ({ page }) => {
   await open(page);
   const requests: string[] = [];
   page.on("request", (r) => requests.push(r.url()));
@@ -89,7 +89,7 @@ test("[SR-87691b/AK1] entering a loading sends no network request", async ({ pag
   expect(requests).toEqual([]);
 });
 
-test("[SR-87691b/AK2] changing the usable fuel sends no network request", async ({ page }) => {
+test("[SR-87691b/AK-jdyw] changing the usable fuel sends no network request", async ({ page }) => {
   await load(page, "HC4-01", A);
   const requests: string[] = [];
   page.on("request", (r) => requests.push(r.url()));
@@ -98,7 +98,7 @@ test("[SR-87691b/AK2] changing the usable fuel sends no network request", async 
   expect(requests).toEqual([]);
 });
 
-test("[SR-c74a67/AK1] no sign-in or installation step", async ({ browser }) => {
+test("[SR-c74a67/AK-rkj2] no sign-in or installation step", async ({ browser }) => {
   const context = await browser.newContext();
   const page = await context.newPage();
   await open(page);

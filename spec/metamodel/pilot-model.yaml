@@ -82,6 +82,9 @@ relations:
     inverse-name: Stakeholder of
     source-types: [need]
     target-types: [stakeholder]
+    limits:
+      - target-type: stakeholder
+        min: 1
   - key: mitigates
     name: Mitigates
     description: "A safety-related system requirement mitigates a hazard. A chain follows it from hazard to requirement."
@@ -95,6 +98,9 @@ relations:
     inverse-name: Served by
     source-types: [use-case]
     target-types: [need]
+    limits:
+      - target-type: need
+        min: 1
   - key: originates-from
     name: Originates from
     description: "A system requirement originates from a decision: the decision is its origin, not a need. A chain follows it from requirement to decision. For a decision a requirement only rests on, use based-on."

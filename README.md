@@ -30,7 +30,7 @@ reqseq evidence status --workspace spec          # verification and validation s
 | `core/` | Calculation core in Rust, compiled to WebAssembly; acceptance tests per requirement |
 | `web/` | Web app in TypeScript with SVG graphics |
 | `e2e/` | Playwright end-to-end tests and validation walk-throughs |
-| `scripts/` | Build, local server, mapping of Rust test names for ReqSeq, evidence gate |
+| `scripts/` | Build, local server, evidence gate |
 
 ## Build and test
 
@@ -40,7 +40,15 @@ npm ci && npm run build                  # WebAssembly + web app into dist/
 npx playwright test                      # end-to-end tests (serves dist/ itself)
 ```
 
-Tests are named after the acceptance criterion they check, for example `[SR-3a4905/AK2] exactly the maximum take-off mass is within limits`; CI enriches the JUnit reports with `reqseq evidence enrich-junit` (the HC-2 suite for the variant VAR-f23826), and the job `evidence` fails when an approved requirement has no passed test at its current version in the core or the HC-2 view. The supplier's requirements live in a private repository and are named here only by ID and version; without it ReqSeq shows them as not accessible.
+Tests are named after the acceptance criterion they check, by its criterion key (never its number), for example `[SR-3a4905/AK-gt5z] exactly the maximum take-off mass is within limits`; `reqseq element get SR-3a4905` shows the key of each criterion. Rust tests carry the key in the function name (`sr_3a4905_ak_gt5z_...`), which `reqseq evidence enrich-junit --name-pattern '{prefix}_{id}_ak_{ak}'` reads. CI (ReqSeq 0.14.0) enriches the JUnit reports with `reqseq evidence enrich-junit`: the core unit tests for the core and the HC-2 view at once (`--skip-not-in-view`: each record counts only in the views its requirement applies in), the HC-2 end-to-end suite for the variant VAR-f23826. The job `evidence` fails when an approved requirement has no passed test at its current version in the core or the HC-2 view.
+
+The supplier's requirements live in a private repository and are named here only by ID and version; without it ReqSeq shows them as not accessible. ReqSeq looks for it at `fuel/` inside this repository by default. To use a checkout elsewhere, for example next to this repository, name it in the untracked file `spec/.reqseq/local.yaml`:
+
+```yaml
+reqseq-local: 1
+repositories:
+  fuel: { path: ../../reqseq-weight-and-balance-fuel }
+```
 
 ## Licence
 
