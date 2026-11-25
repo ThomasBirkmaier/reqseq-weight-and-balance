@@ -6,6 +6,7 @@ repositories:
     main: true
   - name: fuel
     url: "https://github.com/ThomasBirkmaier/reqseq-weight-and-balance-fuel"
+    variant-independent: true
 metamodel:
   repository: spec
   path: metamodel
