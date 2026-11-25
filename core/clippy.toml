@@ -1,0 +1,7 @@
+# Clippy configuration of the calculation core (lint levels are in Cargo.toml).
+doc-valid-idents = ["ReqSeq", "WebAssembly", "JavaScript", "JUnit", ".."]
+# Tests may fail loudly: unwrap, expect, panic and indexing are allowed in test code only.
+allow-unwrap-in-tests = true
+allow-expect-in-tests = true
+allow-panic-in-tests = true
+allow-indexing-slicing-in-tests = true

@@ -1,4 +1,5 @@
 //! Weight and Balance calculation core (invented aircraft, not for flight operations).
+//!
 //! Compiled to WebAssembly without external crates; the web app talks to it through a
 //! small byte-buffer interface: `alloc`, `fleet` and `evaluate`, each returning JSON.
 
@@ -6,17 +7,22 @@ pub mod calc;
 pub mod fleet;
 pub mod fuel;
 
-use calc::{evaluate as eval, kg_rounded, moment_tenths, CgState, State};
-use fleet::{fleet_of_type, Aircraft, FLEET_CSV, TYPES};
+use calc::{CgState, State, evaluate as eval, kg_rounded, moment_tenths};
+use fleet::{Aircraft, FLEET_CSV, TYPES, fleet_of_type};
+use std::fmt::Write as _;
 
+/// JSON string literal of `s`, with quotes, backslashes and control characters escaped.
 fn esc(s: &str) -> String {
-    let mut o = String::with_capacity(s.len() + 2);
+    let mut o = String::with_capacity(s.len().saturating_add(2));
     o.push('"');
     for c in s.chars() {
         match c {
             '"' => o.push_str("\\\""),
             '\\' => o.push_str("\\\\"),
-            c if (c as u32) < 0x20 => o.push_str(&format!("\\u{:04x}", c as u32)),
+            c if u32::from(c) < 0x20 => {
+                // Writing to a String cannot fail.
+                let _ = write!(o, "\\u{:04x}", u32::from(c));
+            }
             c => o.push(c),
         }
     }
@@ -24,37 +30,59 @@ fn esc(s: &str) -> String {
     o
 }
 
+/// Decimal text of the fraction `num / den` (a limit in mm), for display only.
+#[expect(
+    clippy::as_conversions,
+    clippy::cast_precision_loss,
+    reason = "display value only; limits are a few thousand mm times a mass in g, far below 2^52"
+)]
 fn frac(f: (i128, i128)) -> String {
     format!("{}", f.0 as f64 / f.1 as f64)
 }
 
+/// JSON of an error message.
+fn error_json(message: &str) -> String {
+    format!("{{\"error\":{}}}", esc(message))
+}
+
 /// JSON of the build's fleet with the data of its aircraft type.
+#[must_use]
 pub fn fleet_json(type_key: &str) -> String {
-    if let Err(e) = fleet::parse_fleet(FLEET_CSV) {
-        return format!("{{\"error\":{}}}", esc(&format!("fleet data file: {}", e)));
-    }
+    let all = match fleet::parse_fleet(FLEET_CSV) {
+        Ok(all) => all,
+        Err(e) => return error_json(&format!("fleet data file: {e}")),
+    };
     let list = fleet_of_type(FLEET_CSV, type_key);
-    let Some(ti) = fleet::type_index(type_key) else { return "{\"error\":\"unknown aircraft type\"}".into() };
+    let Some(t) = fleet::type_index(type_key).and_then(|ti| TYPES.get(ti)) else {
+        return error_json("unknown aircraft type");
+    };
     let fd = match fuel::fuel_data() {
         Ok(f) => f,
-        Err(e) => return format!("{{\"error\":{}}}", esc(&format!("fuel interface data file: {}", e))),
+        Err(e) => return error_json(&format!("fuel interface data file: {e}")),
     };
-    let Some(ft) = fd.types.get(type_key) else { return "{\"error\":\"no fuel data for the aircraft type\"}".into() };
+    let Some(ft) = fd.types.get(type_key) else {
+        return error_json("no fuel data for the aircraft type");
+    };
     // Date of the aircraft data: the newest date of the fleet data file and the fuel interface data file.
-    let mut dates: Vec<String> = fleet::parse_fleet(FLEET_CSV).unwrap_or_default().iter().map(|a| a.weighing_date.clone()).collect();
-    dates.extend(fd.aircraft.values().map(|r| r.reported_at.chars().take(10).collect::<String>()));
-    let data_date = dates.into_iter().max().unwrap_or_default();
-    let t = &TYPES[ti];
+    let data_date = all
+        .iter()
+        .map(|a| a.weighing_date.clone())
+        .chain(fd.aircraft.values().map(|r| r.reported_at.chars().take(10).collect::<String>()))
+        .max()
+        .unwrap_or_default();
     let stations: Vec<String> = t
         .stations
         .iter()
         .map(|s| format!("{{\"key\":{},\"name\":{},\"armMm\":{},\"maxKg\":{}}}", esc(s.key), esc(s.name), s.arm_mm, s.max_kg))
         .collect();
-    let env: Vec<String> = t.envelope.iter().map(|(m, c)| format!("[{},{}]", m, c)).collect();
+    let env: Vec<String> = t.envelope.iter().map(|(m, c)| format!("[{m},{c}]")).collect();
     let ac: Vec<String> = list
         .iter()
         .map(|a| {
-            let (fl, fat) = fd.aircraft.get(&a.id).map(|r| (r.litres.to_string(), esc(&r.reported_at))).unwrap_or(("null".into(), "null".into()));
+            let (fl, fat) = fd
+                .aircraft
+                .get(&a.id)
+                .map_or_else(|| ("null".into(), "null".into()), |r| (r.litres.to_string(), esc(&r.reported_at)));
             format!(
                 "{{\"id\":{},\"emptyKg\":{},\"emptyArmMm\":{},\"weighingDate\":{},\"reportedFuelL\":{},\"reportedAt\":{}}}",
                 esc(&a.id),
@@ -80,15 +108,17 @@ pub fn fleet_json(type_key: &str) -> String {
     )
 }
 
+/// JSON of one entry: valid, empty and its message.
 fn entry_json(x: &calc::Entry) -> String {
     format!(
         "{{\"valid\":{},\"empty\":{},\"message\":{}}}",
         x.value.is_some(),
         x.value.is_none() && x.message.is_none(),
-        x.message.as_deref().map(esc).unwrap_or("null".into())
+        x.message.as_deref().map_or_else(|| "null".into(), esc)
     )
 }
 
+/// JSON of the limit check result for one state of the flight.
 fn state_json(e: &State) -> String {
     let cg = match e.cg_state {
         CgState::Within => "within",
@@ -111,34 +141,40 @@ fn state_json(e: &State) -> String {
     )
 }
 
+/// JSON of one row of the loading table.
+fn row_json(r: &calc::Row) -> String {
+    format!(
+        "{{\"name\":{},\"litres\":{},\"kg\":{},\"armMm\":{},\"momentTenths\":{}}}",
+        esc(&r.name),
+        r.litres.map_or_else(|| "null".into(), |l| l.to_string()),
+        kg_rounded(r.g),
+        r.arm_mm,
+        moment_tenths(r.moment_gmm)
+    )
+}
+
 /// JSON of the evaluation of one loading. `input` is the type key of the build, the aircraft id,
 /// one line per station, then the usable fuel at take-off and the planned fuel burn.
+///
 /// Only an aircraft of the build's type is evaluated.
+#[must_use]
 pub fn evaluate_json(input: &str) -> String {
     let mut lines = input.split('\n');
     let type_key = lines.next().unwrap_or("").trim();
     let id = lines.next().unwrap_or("").trim();
     let all = fleet_of_type(FLEET_CSV, type_key);
     let Some(a): Option<&Aircraft> = all.iter().find(|a| a.id == id) else {
-        return "{\"error\":\"unknown aircraft\"}".into();
+        return error_json("unknown aircraft");
     };
-    let Ok(fd) = fuel::fuel_data() else { return "{\"error\":\"fuel interface data file\"}".into() };
-    let Some(ft) = fd.types.get(type_key) else { return "{\"error\":\"no fuel data\"}".into() };
-    let n = TYPES[a.type_index].stations.len();
+    let Ok(fd) = fuel::fuel_data() else { return error_json("fuel interface data file") };
+    let Some(ft) = fd.types.get(type_key) else { return error_json("no fuel data") };
+    let Some(t) = TYPES.get(a.type_index) else { return error_json("unknown aircraft type") };
+    let n = t.stations.len();
     let texts: Vec<&str> = lines.collect();
     let get = |i: usize| texts.get(i).copied().unwrap_or("");
-    let e = eval(a, ft, fd.density_g_per_l, &texts[..n.min(texts.len())], get(n), get(n + 1));
+    let stations = texts.get(..n).unwrap_or(&texts);
+    let e = eval(a, ft, fd.density_g_per_l, stations, get(n), get(n.saturating_add(1)));
     let entries: Vec<String> = e.entries.iter().map(entry_json).collect();
-    let row_json = |r: &calc::Row| {
-            format!(
-                "{{\"name\":{},\"litres\":{},\"kg\":{},\"armMm\":{},\"momentTenths\":{}}}",
-                esc(&r.name),
-                r.litres.map(|l| l.to_string()).unwrap_or("null".into()),
-                kg_rounded(r.g),
-                r.arm_mm,
-                moment_tenths(r.moment_gmm)
-            )
-        };
     let rows: Vec<String> = e.rows.iter().map(row_json).collect();
     format!(
         "{{\"complete\":{},\"entries\":[{}],\"fuel\":{},\"burn\":{},\"takeOff\":{},\"landing\":{},\"rows\":[{}],\"landingFuel\":{}}}",
@@ -153,45 +189,61 @@ pub fn evaluate_json(input: &str) -> String {
     )
 }
 
-// ---- WebAssembly interface -------------------------------------------------------------
+#[expect(unsafe_code, reason = "the WebAssembly interface hands raw buffers to and from JavaScript")]
+pub mod wasm {
+    //! WebAssembly interface: byte buffers in, JSON out (pointer << 32 | length).
 
-static mut OUT: Vec<u8> = Vec::new();
+    use std::sync::{Mutex, PoisonError};
 
-/// Reserve `len` bytes for an input string; the caller writes UTF-8 there.
-#[no_mangle]
-pub extern "C" fn alloc(len: usize) -> *mut u8 {
-    let mut v = Vec::<u8>::with_capacity(len.max(1));
-    let p = v.as_mut_ptr();
-    std::mem::forget(v);
-    p
-}
+    /// The result buffer of the last call; read by the caller before the next call.
+    static OUT: Mutex<Vec<u8>> = Mutex::new(Vec::new());
 
-/// # Safety
-/// `ptr` must come from `alloc(len)` and hold `len` bytes.
-unsafe fn take(ptr: *mut u8, len: usize) -> String {
-    let v = Vec::from_raw_parts(ptr, len, len.max(1));
-    String::from_utf8(v).unwrap_or_default()
-}
-
-fn put(s: String) -> u64 {
-    // SAFETY: single-threaded WebAssembly; the buffer is read by the caller before the next call.
-    unsafe {
-        let out = &mut *std::ptr::addr_of_mut!(OUT);
-        *out = s.into_bytes();
-        ((out.as_ptr() as u64) << 32) | out.len() as u64
+    /// Reserve `len` bytes for an input string; the caller writes UTF-8 there.
+    #[unsafe(no_mangle)]
+    pub extern "C" fn alloc(len: usize) -> *mut u8 {
+        Box::into_raw(vec![0_u8; len.max(1)].into_boxed_slice()).cast::<u8>()
     }
-}
 
-/// # Safety
-/// `ptr`/`len` from `alloc`. Returns pointer << 32 | length of the JSON result.
-#[no_mangle]
-pub unsafe extern "C" fn fleet(ptr: *mut u8, len: usize) -> u64 {
-    put(fleet_json(&take(ptr, len)))
-}
+    /// The input string written by the caller to a buffer from `alloc`; frees the buffer.
+    ///
+    /// # Safety
+    /// `ptr` must come from `alloc(len)` and hold `len` bytes, and must not be used again.
+    unsafe fn take(ptr: *mut u8, len: usize) -> String {
+        let slice = std::ptr::slice_from_raw_parts_mut(ptr, len.max(1));
+        // SAFETY: `slice` is exactly the boxed slice that `alloc(len)` leaked (same pointer and length).
+        let boxed = unsafe { Box::from_raw(slice) };
+        let mut v = boxed.into_vec();
+        v.truncate(len);
+        String::from_utf8(v).unwrap_or_default()
+    }
 
-/// # Safety
-/// `ptr`/`len` from `alloc`. Returns pointer << 32 | length of the JSON result.
-#[no_mangle]
-pub unsafe extern "C" fn evaluate(ptr: *mut u8, len: usize) -> u64 {
-    put(evaluate_json(&take(ptr, len)))
+    /// Store the result and return its pointer << 32 | length (0 if it does not fit in 32 bits).
+    fn put(s: String) -> u64 {
+        let mut out = OUT.lock().unwrap_or_else(PoisonError::into_inner);
+        *out = s.into_bytes();
+        match (u32::try_from(out.as_ptr().addr()), u32::try_from(out.len())) {
+            (Ok(p), Ok(l)) => (u64::from(p) << 32) | u64::from(l),
+            _ => 0,
+        }
+    }
+
+    /// JSON of the build's fleet for the type key in the input buffer.
+    ///
+    /// # Safety
+    /// `ptr`/`len` from `alloc`. Returns pointer << 32 | length of the JSON result.
+    #[unsafe(no_mangle)]
+    pub unsafe extern "C" fn fleet(ptr: *mut u8, len: usize) -> u64 {
+        // SAFETY: the caller passes a buffer from `alloc(len)`, as documented.
+        put(super::fleet_json(&unsafe { take(ptr, len) }))
+    }
+
+    /// JSON of the evaluation of the loading in the input buffer.
+    ///
+    /// # Safety
+    /// `ptr`/`len` from `alloc`. Returns pointer << 32 | length of the JSON result.
+    #[unsafe(no_mangle)]
+    pub unsafe extern "C" fn evaluate(ptr: *mut u8, len: usize) -> u64 {
+        // SAFETY: the caller passes a buffer from `alloc(len)`, as documented.
+        put(super::evaluate_json(&unsafe { take(ptr, len) }))
+    }
 }
