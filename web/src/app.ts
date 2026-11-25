@@ -4,7 +4,26 @@ import type { Core, Evaluation, Fleet, State } from "./core.js";
 import { drawChart, drawTopView } from "./draw.js";
 import { kg, m, moment, utc } from "./format.js";
 
-const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+/** The element with the given id; a missing element is a defect of index.html. */
+function $(id: string): HTMLElement {
+  const e = document.getElementById(id);
+  if (e === null) throw new Error(`missing element #${id}`);
+  return e;
+}
+
+/** The element with the given id, checked to be of the given class. */
+function typed<T extends Element>(id: string, kind: abstract new () => T): T {
+  const e = document.getElementById(id);
+  if (!(e instanceof kind)) throw new Error(`missing element #${id}`);
+  return e;
+}
+
+/** The first element in `parent` matching `selector`, checked to be of the given class. */
+function child<T extends Element>(parent: ParentNode, selector: string, kind: abstract new () => T): T {
+  const e = parent.querySelector(selector);
+  if (!(e instanceof kind)) throw new Error(`missing element ${selector}`);
+  return e;
+}
 
 function entryRow(id: string, name: string, label: string, unit: string): HTMLDivElement {
   const row = document.createElement("div");
@@ -17,18 +36,19 @@ function entryRow(id: string, name: string, label: string, unit: string): HTMLDi
 
 export function startApp(core: Core, typeKey: string): void {
   const fleet: Fleet = core.fleet(typeKey);
-  const select = $<HTMLSelectElement>("aircraft");
+  const select = typed("aircraft", HTMLSelectElement);
   for (const a of fleet.aircraft) select.append(new Option(a.id, a.id));
   const entriesBox = $("entries");
   const inputs: HTMLInputElement[] = [];
   const messages: HTMLElement[] = [];
-  fleet.type.stations.forEach((s, i) => {
+  for (const s of fleet.type.stations) {
     const row = entryRow(`entry-${s.key}`, s.key, `${s.name} (max ${s.maxKg} kg)`, "kg");
     entriesBox.append(row);
-    inputs[i] = row.querySelector("input")!;
-    messages[i] = row.querySelector(".message")!;
-    inputs[i].addEventListener("input", update);
-  });
+    const input = child(row, "input", HTMLInputElement);
+    inputs.push(input);
+    messages.push(child(row, ".message", HTMLElement));
+    input.addEventListener("input", update);
+  }
   const fuelBox = $("fuel-entries");
   const fuelRow = entryRow("entry-fuel", "fuel", `Usable fuel at take-off (max ${fleet.type.fuelCapacityL} L)`, "L");
   const burnRow = entryRow("entry-burn", "burn", "Planned fuel burn", "L");
@@ -40,13 +60,13 @@ export function startApp(core: Core, typeKey: string): void {
   fuelNote.id = "fuel-note";
   fuelRow.append(fuelReport, fuelNote);
   fuelBox.append(fuelRow, burnRow);
-  const fuelInput = fuelRow.querySelector("input")!;
-  const burnInput = burnRow.querySelector("input")!;
+  const fuelInput = child(fuelRow, "input", HTMLInputElement);
+  const burnInput = child(burnRow, "input", HTMLInputElement);
   const allInputs = [...inputs, fuelInput, burnInput];
   fuelInput.addEventListener("input", update);
   burnInput.addEventListener("input", update);
 
-  const corners = $("corners").querySelector("tbody")!;
+  const corners = child($("corners"), "tbody", HTMLTableSectionElement);
   fleet.type.envelope.forEach(([mass, cg], i) => {
     const tr = document.createElement("tr");
     for (const [j, v] of [String(i + 1), kg(mass), m(cg)].entries()) {
@@ -58,7 +78,9 @@ export function startApp(core: Core, typeKey: string): void {
     corners.append(tr);
   });
   $("offline").textContent = `Offline: aircraft data as of ${fleet.dataDate}. Check the weighing date against the aircraft documents.`;
-  const offline = () => { $("offline").hidden = navigator.onLine; };
+  const offline = (): void => {
+    $("offline").hidden = navigator.onLine;
+  };
   addEventListener("online", offline);
   addEventListener("offline", offline);
   offline();
@@ -66,23 +88,23 @@ export function startApp(core: Core, typeKey: string): void {
   select.addEventListener("change", () => {
     for (const inp of allInputs) inp.value = "";
     const a = fleet.aircraft.find((x) => x.id === select.value);
-    if (a && a.reportedFuelL !== null) fuelInput.value = String(a.reportedFuelL);
+    if (a !== undefined && a.reportedFuelL !== null) fuelInput.value = String(a.reportedFuelL);
     update();
   });
 
   function update(): void {
     const a = fleet.aircraft.find((x) => x.id === select.value);
-    $("select-hint").hidden = !!a;
-    $("aircraft-info").hidden = !a;
-    $("work").hidden = !a;
-    if (!a) return;
+    $("select-hint").hidden = a !== undefined;
+    $("aircraft-info").hidden = a === undefined;
+    $("work").hidden = a === undefined;
+    if (a === undefined) return;
     $("selected").textContent = `${a.id} · ${fleet.type.name}`;
     $("empty-data").textContent = `Empty mass ${kg(a.emptyKg)} at ${m(a.emptyArmMm)}, weighed ${a.weighingDate}`;
     $("mtom").textContent = `Maximum take-off mass ${kg(fleet.type.mtomKg)}`;
     $("result-aircraft").textContent = `For ${a.id}`;
     fuelReport.textContent = a.reportedFuelL === null ? "No report of the fuel system module" : `Reported by the fuel system module: ${a.reportedFuelL} L at ${utc(a.reportedAt ?? "")}`;
     const own = fuelInput.value.trim() !== "" && fuelInput.value.trim() !== String(a.reportedFuelL);
-    fuelNote.textContent = own ? `Pilot's figure (fuel system module reported ${a.reportedFuelL} L)` : "";
+    fuelNote.textContent = own ? `Pilot's figure (fuel system module reported ${String(a.reportedFuelL)} L)` : "";
     fuelNote.hidden = !own;
     const e = core.evaluate(typeKey, a.id, inputs.map((i) => i.value), fuelInput.value, burnInput.value);
     render(e);
@@ -93,7 +115,7 @@ export function startApp(core: Core, typeKey: string): void {
   function showState(prefix: string, s: State, complete: boolean): void {
     const ind = $(prefix === "to" ? "indication" : "landing-indication");
     ind.replaceChildren(...s.indications.map((t) => Object.assign(document.createElement("span"), { textContent: t })));
-    $(prefix === "to" ? "result-to" : "result-ldg").dataset.state = !complete ? "incomplete" : s.within ? "within" : "outside";
+    $(prefix === "to" ? "result-to" : "result-ldg").dataset["state"] = !complete ? "incomplete" : s.within ? "within" : "outside";
   }
 
   function render(e: Evaluation): void {
@@ -101,23 +123,27 @@ export function startApp(core: Core, typeKey: string): void {
     const msgs = [...messages, $("entry-fuel-msg"), $("entry-burn-msg")];
     const anyFilled = allInputs.some((j) => j.value !== "");
     all.forEach((x, i) => {
+      const msg = msgs[i];
+      const input = allInputs[i];
+      if (msg === undefined || input === undefined) return;
       const text = x.message ?? "";
-      if (msgs[i].textContent !== text) msgs[i].textContent = text;
-      allInputs[i].setAttribute("aria-invalid", String(!!x.message || (!e.complete && x.empty)));
-      allInputs[i].classList.toggle("invalid", !!x.message);
-      allInputs[i].classList.toggle("missing", !e.complete && x.empty && anyFilled);
+      if (msg.textContent !== text) msg.textContent = text;
+      const invalid = x.message !== null && x.message !== "";
+      input.setAttribute("aria-invalid", String(invalid || (!e.complete && x.empty)));
+      input.classList.toggle("invalid", invalid);
+      input.classList.toggle("missing", !e.complete && x.empty && anyFilled);
     });
     showState("to", e.takeOff, e.complete);
     showState("ldg", e.landing, e.complete);
-    $("result").dataset.state = !e.complete ? "incomplete" : e.takeOff.within && e.landing.within ? "within" : "outside";
+    $("result").dataset["state"] = !e.complete ? "incomplete" : e.takeOff.within && e.landing.within ? "within" : "outside";
     $("figures").hidden = !e.complete;
     $("total").textContent = e.complete ? kg(e.takeOff.totalKg) : "";
     $("cg").textContent = e.complete ? m(e.takeOff.cgMm) : "";
     $("landing-figures").textContent = e.complete ? `Landing ${kg(e.landing.totalKg)} at ${m(e.landing.cgMm)}` : "";
-    const marks = e.entries.map((x, i) => (x.valid ? kg(Number(inputs[i].value.trim())) : null));
-    drawTopView($("topview") as unknown as SVGSVGElement, fleet.type, marks, e.fuel.valid ? `${Number(fuelInput.value.trim())} L` : null);
-    drawChart($("chart") as unknown as SVGSVGElement, fleet.type, e);
-    const body = $("table").querySelector("tbody")!;
+    const marks = e.entries.map((x, i) => (x.valid ? kg(Number(inputs[i]?.value.trim())) : null));
+    drawTopView(typed("topview", SVGSVGElement), fleet.type, marks, e.fuel.valid ? `${Number(fuelInput.value.trim())} L` : null);
+    drawChart(typed("chart", SVGSVGElement), fleet.type, e);
+    const body = child($("table"), "tbody", HTMLTableSectionElement);
     body.replaceChildren();
     if (e.complete) {
       const total = { name: "Total at take-off", litres: null, kg: e.takeOff.totalKg, armMm: e.takeOff.cgMm, momentTenths: e.takeOff.momentTenths };

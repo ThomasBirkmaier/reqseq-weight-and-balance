@@ -1,4 +1,5 @@
 // Loader of the WebAssembly calculation core and its JSON interface.
+import { arrayOf, checked, isBoolean, isNumber, isPair, isString, nullable, objectOf, oneOf, type Guard } from "./guard.js";
 
 export interface Station { key: string; name: string; armMm: number; maxKg: number }
 export interface AircraftType { key: string; name: string; mtomKg: number; stations: Station[]; envelope: [number, number][]; fuelArmMm: number; fuelCapacityL: number }
@@ -30,39 +31,103 @@ export interface Evaluation {
   landingFuel: Row;
 }
 
+const isStation: Guard<Station> = objectOf({ key: isString, name: isString, armMm: isNumber, maxKg: isNumber });
+const isAircraftType: Guard<AircraftType> = objectOf({
+  key: isString,
+  name: isString,
+  mtomKg: isNumber,
+  stations: arrayOf(isStation),
+  envelope: arrayOf(isPair),
+  fuelArmMm: isNumber,
+  fuelCapacityL: isNumber,
+});
+const isAircraft: Guard<Aircraft> = objectOf({
+  id: isString,
+  emptyKg: isNumber,
+  emptyArmMm: isNumber,
+  weighingDate: isString,
+  reportedFuelL: nullable(isNumber),
+  reportedAt: nullable(isString),
+});
+const isFleet: Guard<Fleet> = objectOf({ type: isAircraftType, aircraft: arrayOf(isAircraft), dataDate: isString });
+const isEntry: Guard<EntryResult> = objectOf({ valid: isBoolean, empty: isBoolean, message: nullable(isString) });
+const isRow: Guard<Row> = objectOf({ name: isString, litres: nullable(isNumber), kg: isNumber, armMm: isNumber, momentTenths: isNumber });
+const isState: Guard<State> = objectOf({
+  totalKg: isNumber,
+  momentTenths: isNumber,
+  cgMm: isNumber,
+  cgExactMm: isNumber,
+  massExceeded: isBoolean,
+  cgState: oneOf("within", "forward", "aft"),
+  fwdLimitMm: isNumber,
+  aftLimitMm: isNumber,
+  within: isBoolean,
+  indications: arrayOf(isString),
+});
+const isEvaluation: Guard<Evaluation> = objectOf({
+  complete: isBoolean,
+  entries: arrayOf(isEntry),
+  fuel: isEntry,
+  burn: isEntry,
+  takeOff: isState,
+  landing: isState,
+  rows: arrayOf(isRow),
+  landingFuel: isRow,
+});
+const isError: Guard<{ error: string }> = objectOf({ error: isString });
+
+type Call = (ptr: number, len: number) => bigint;
 interface Exports {
   memory: WebAssembly.Memory;
-  alloc(len: number): number;
-  fleet(ptr: number, len: number): bigint;
-  evaluate(ptr: number, len: number): bigint;
+  alloc: (len: number) => number;
+  fleet: Call;
+  evaluate: Call;
 }
 
-export class Core {
-  private constructor(private x: Exports) {}
+const isFunction = (v: unknown): v is (...args: never[]) => unknown => typeof v === "function";
+const isExports = (v: unknown): v is Exports =>
+  typeof v === "object" &&
+  v !== null &&
+  "memory" in v &&
+  v.memory instanceof WebAssembly.Memory &&
+  "alloc" in v &&
+  isFunction(v.alloc) &&
+  "fleet" in v &&
+  isFunction(v.fleet) &&
+  "evaluate" in v &&
+  isFunction(v.evaluate);
 
-  static async load(url: string): Promise<Core> {
-    const bytes = await (await fetch(url)).arrayBuffer();
-    const { instance } = await WebAssembly.instantiate(bytes, {});
-    return new Core(instance.exports as unknown as Exports);
+export class Core {
+  private readonly x: Exports;
+
+  private constructor(x: Exports) {
+    this.x = x;
   }
 
-  private call(fn: (p: number, l: number) => bigint, input: string): string {
+  static async load(url: string): Promise<Core> {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`calculation core: HTTP ${response.status}`);
+    const { instance } = await WebAssembly.instantiate(await response.arrayBuffer(), {});
+    return new Core(checked(instance.exports, isExports, "exports"));
+  }
+
+  private call(fn: Call, input: string): unknown {
     const data = new TextEncoder().encode(input);
     const ptr = this.x.alloc(data.length);
     new Uint8Array(this.x.memory.buffer, ptr, data.length).set(data);
     const r = fn(ptr, data.length);
     const outPtr = Number(r >> 32n);
     const outLen = Number(r & 0xffffffffn);
-    return new TextDecoder().decode(new Uint8Array(this.x.memory.buffer, outPtr, outLen));
+    const parsed: unknown = JSON.parse(new TextDecoder().decode(new Uint8Array(this.x.memory.buffer, outPtr, outLen)));
+    if (isError(parsed)) throw new Error(parsed.error);
+    return parsed;
   }
 
   fleet(typeKey: string): Fleet {
-    const f = JSON.parse(this.call(this.x.fleet, typeKey));
-    if (f.error) throw new Error(f.error);
-    return f;
+    return checked(this.call(this.x.fleet, typeKey), isFleet, "fleet data");
   }
 
-  evaluate(typeKey: string, aircraftId: string, entries: string[], fuel: string, burn: string): Evaluation {
-    return JSON.parse(this.call(this.x.evaluate, [typeKey, aircraftId, ...entries, fuel, burn].join("\n")));
+  evaluate(typeKey: string, aircraftId: string, entries: readonly string[], fuel: string, burn: string): Evaluation {
+    return checked(this.call(this.x.evaluate, [typeKey, aircraftId, ...entries, fuel, burn].join("\n")), isEvaluation, "evaluation");
   }
 }

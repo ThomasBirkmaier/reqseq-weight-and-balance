@@ -1,0 +1,10 @@
+{
+  "$comment": "Type check of the end-to-end tests and the Playwright configuration (no output).",
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": ["node"],
+    "noEmit": true
+  },
+  "include": ["e2e", "playwright.config.ts"]
+}

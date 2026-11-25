@@ -1,6 +1,6 @@
 // End-to-end verification of the platform requirements: phone screen, contrast, offline.
 import { expect, test } from "@playwright/test";
-import { contrast, load, open } from "../helpers";
+import { contrast, load, open, box } from "../helpers";
 
 const A = [160, 0, 20]; // with 0 L fuel and 0 L burn unless named
 const AFT = [70, 200, 50];
@@ -17,9 +17,9 @@ test.describe("phone", () => {
   test("[SR-54e043/AK-qdnj] total mass and both limit indications without horizontal scrolling", async ({ page }) => {
     await load(page, "HC4-01", [160, 0, 0], 100, 60);
     for (const id of ["#indication", "#landing-indication", "#total"]) {
-      const b = await page.locator(id).boundingBox();
-      expect(b!.x).toBeGreaterThanOrEqual(0);
-      expect(b!.x + b!.width).toBeLessThanOrEqual(360);
+      const b = await box(page.locator(id));
+      expect(b.x).toBeGreaterThanOrEqual(0);
+      expect(b.x + b.width).toBeLessThanOrEqual(360);
     }
   });
 
@@ -36,12 +36,14 @@ for (const scheme of ["light", "dark"] as const) {
   test.describe(`${scheme} mode`, () => {
     test.use({ colorScheme: scheme });
     const ak = scheme === "light" ? "AK-qcdw" : "AK-fcf4";
+
     test(`[SR-070ac3/${ak}] text contrast at least 4.5:1 in ${scheme} mode`, async ({ page }) => {
       for (const loading of [A, AFT, [160, 201, 0]]) {
         await load(page, "HC4-01", loading);
         for (const sel of ["#indication span", "#landing-indication span", "#landing-figures", "#fuel-report", "#total", "#aid", "#entries label", ".banner", "#table td", ".message"]) {
+          // eslint-disable-next-line playwright/no-conditional-in-test -- only the elements shown for this loading have a colour to measure
           if (!(await page.locator(sel).first().isVisible())) continue;
-          expect(await contrast(page, sel), `${sel} ${loading}`).toBeGreaterThanOrEqual(4.5);
+          expect(await contrast(page, sel), `${sel} ${loading.join(",")}`).toBeGreaterThanOrEqual(4.5);
         }
       }
       await page.screenshot({ path: test.info().outputPath(`${scheme}.png`) });
@@ -63,18 +65,18 @@ test("[SR-070ac3/AK-rrs5] graphics contrast at least 3:1 in light and dark mode"
 
 test("[SR-384eab/AK-g07h] opens and calculates without network after the first visit", async ({ page, context }) => {
   await open(page);
-  await page.evaluate(() => navigator.serviceWorker.ready);
+  await page.evaluate(async () => navigator.serviceWorker.ready);
   await page.reload();
   await expect(page.locator("body")).toHaveAttribute("data-ready", "true");
   await context.setOffline(true);
   await page.reload();
   await expect(page.locator("body")).toHaveAttribute("data-ready", "true");
-  await page.selectOption("#aircraft", "HC4-01");
-  await page.fill("#entry-front", "160");
-  await page.fill("#entry-rear", "0");
-  await page.fill("#entry-baggage", "0");
-  await page.fill("#entry-fuel", "0");
-  await page.fill("#entry-burn", "0");
+  await page.locator("#aircraft").selectOption("HC4-01");
+  await page.locator("#entry-front").fill("160");
+  await page.locator("#entry-rear").fill("0");
+  await page.locator("#entry-baggage").fill("0");
+  await page.locator("#entry-fuel").fill("0");
+  await page.locator("#entry-burn").fill("0");
   await expect(page.locator("#total")).toHaveText("925 kg");
   await context.setOffline(false);
 });
@@ -83,8 +85,8 @@ test("[SR-87691b/AK-dbn0] entering a loading sends no network request", async ({
   await open(page);
   const requests: string[] = [];
   page.on("request", (r) => requests.push(r.url()));
-  await page.selectOption("#aircraft", "HC4-01");
-  for (const [id, v] of [["#entry-fuel", "0"], ["#entry-burn", "0"], ["#entry-front", "160"], ["#entry-rear", "0"], ["#entry-baggage", "20"]]) await page.fill(id, v);
+  await page.locator("#aircraft").selectOption("HC4-01");
+  for (const [id, v] of [["#entry-fuel", "0"], ["#entry-burn", "0"], ["#entry-front", "160"], ["#entry-rear", "0"], ["#entry-baggage", "20"]] as const) await page.locator(id).fill(v);
   await expect(page.locator("#total")).toHaveText("945 kg");
   expect(requests).toEqual([]);
 });
@@ -93,7 +95,7 @@ test("[SR-87691b/AK-jdyw] changing the usable fuel sends no network request", as
   await load(page, "HC4-01", A);
   const requests: string[] = [];
   page.on("request", (r) => requests.push(r.url()));
-  await page.fill("#entry-fuel", "80");
+  await page.locator("#entry-fuel").fill("80");
   await expect(page.locator("#total")).toHaveText("1003 kg");
   expect(requests).toEqual([]);
 });

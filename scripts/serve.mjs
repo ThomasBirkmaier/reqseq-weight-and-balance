@@ -4,6 +4,7 @@ import { readFile, stat } from "node:fs/promises";
 import { extname, join, normalize } from "node:path";
 
 const [root = "dist", port = "4173"] = process.argv.slice(2);
+/** @type {Partial<Record<string, string>>} */
 const types = {
   ".html": "text/html; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
@@ -12,9 +13,21 @@ const types = {
   ".svg": "image/svg+xml",
   ".webmanifest": "application/manifest+json",
 };
-createServer(async (req, res) => {
+createServer((req, res) => {
+  void serve(req.url ?? "/", res);
+}).listen(Number(port), "127.0.0.1", () => {
+  console.log(`serving ${root} on http://127.0.0.1:${port}/`);
+});
+
+/**
+ * Answer one request with the file below the root, or 404.
+ * @param {string} url
+ * @param {import("node:http").ServerResponse} res
+ * @returns {Promise<void>}
+ */
+async function serve(url, res) {
   try {
-    let p = normalize(decodeURIComponent(new URL(req.url, "http://x").pathname)).replace(/^(\.\.[/\\])+/, "");
+    const p = normalize(decodeURIComponent(new URL(url, "http://x").pathname)).replace(/^(\.\.[/\\])+/u, "");
     let file = join(root, p);
     if ((await stat(file)).isDirectory()) file = join(file, "index.html");
     const body = await readFile(file);
@@ -24,4 +37,4 @@ createServer(async (req, res) => {
     res.writeHead(404);
     res.end("not found");
   }
-}).listen(Number(port), "127.0.0.1", () => console.log(`serving ${root} on http://127.0.0.1:${port}/`));
+}

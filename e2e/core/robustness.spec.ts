@@ -9,12 +9,12 @@ test("result card names the selected aircraft", async ({ page }) => {
   await load(page, "HC4-02", [160, 0, 20]);
   await expect(page.locator("#result-aircraft")).toHaveText("For HC4-02");
   await expect(indication(page)).toHaveText("Within limits");
-  await page.selectOption("#aircraft", "HC4-01");
+  await page.locator("#aircraft").selectOption("HC4-01");
   await expect(page.locator("#result-aircraft")).toHaveText("For HC4-01");
 });
 
 test("a load failure shows a message and no selection", async ({ page }) => {
-  await page.route("**/wb_core.wasm", (r) => r.fulfill({ status: 404, body: "" }));
+  await page.route("**/wb_core.wasm", async (r) => r.fulfill({ status: 404, body: "" }));
   await page.goto("/");
   await expect(page.locator("body")).toHaveAttribute("data-ready", "error");
   await expect(page.locator("#load-error")).toBeVisible();
@@ -32,6 +32,7 @@ test("entry messages are polite live regions, not alerts", async ({ page }) => {
 
 test.describe("phone screen", () => {
   test.use({ viewport: { width: 360, height: 740 }, isMobile: true, hasTouch: true });
+
   test("[SR-c1fe36/AK-kpp7] the result card never hides the entry being edited or its message", async ({ page }) => {
     await load(page, "HC4-01", [160, 75, 60], null, null);
     for (const sel of ["#entry-baggage", "#entry-baggage-msg"]) {
@@ -64,10 +65,11 @@ test("[SR-55a648/AK-xh16] the offline notice disappears when the network is back
 
 test.describe("poor reception", () => {
   test.use({ serviceWorkers: "allow" });
+
   test("opens from the cache within 5 s when the network hangs", async ({ page, context }) => {
     await page.goto("/");
     await expect(page.locator("body")).toHaveAttribute("data-ready", "true");
-    await page.evaluate(() => navigator.serviceWorker.ready);
+    await page.evaluate(async () => navigator.serviceWorker.ready);
     await page.reload();
     await expect(page.locator("body")).toHaveAttribute("data-ready", "true");
     // Every request now takes 10 s to answer.
@@ -79,7 +81,7 @@ test.describe("poor reception", () => {
     await page.reload({ waitUntil: "commit", timeout: 9_000 });
     await expect(page.locator("body")).toHaveAttribute("data-ready", "true", { timeout: 9_000 });
     expect(Date.now() - start).toBeLessThan(5_000);
-    await page.selectOption("#aircraft", "HC4-01");
+    await page.locator("#aircraft").selectOption("HC4-01");
     await expect(page.locator("#empty-data")).toContainText("Empty mass 765 kg");
     await context.unrouteAll({ behavior: "ignoreErrors" });
   });
