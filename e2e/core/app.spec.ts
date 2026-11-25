@@ -264,10 +264,11 @@ test("[SR-bdab78/AK-d3h0] HC4-02 empty: 778 kg at 2.236 m", async ({ page }) => 
   await expect(page.locator("#cg")).toHaveText("2.236 m");
 });
 
-test("[SR-bdab78/AK-nybx] maximum take-off mass 1150 kg", async ({ page }) => {
+test("[SR-6c5e0c/AK-kj10] maximum take-off mass 1150 kg next to the selected aircraft", async ({ page }) => {
   await open(page);
   await page.locator("#aircraft").selectOption("HC4-01");
   await expect(page.locator("#mtom")).toHaveText("Maximum take-off mass 1150 kg");
+  await expect(page.locator("#aircraft-info #mtom")).toBeVisible();
 });
 
 test("[SR-663a61/AK-q89m] empty mass, lever arm and weighing date from the fleet data file", async ({ page }) => {

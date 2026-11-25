@@ -195,10 +195,6 @@ fn sr_bdab78_ak_d3h0_hc4_02_empty() {
     let e = ev("HC4-02", &["0", "0", "0"]).take_off;
     assert_eq!((e.total_kg(), e.cg_mm_rounded()), (778, 2236));
 }
-#[test]
-fn sr_bdab78_ak_nybx_hc4_mtom_1150_kg() {
-    assert_eq!(TYPES[0].mtom_kg, 1150);
-}
 
 // SR-d0fb6e Data of the Halcyra HC-2
 #[test]

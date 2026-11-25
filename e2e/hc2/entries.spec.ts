@@ -26,6 +26,13 @@ test("[SR-b73090/AK-g5b4] the HC-2 build names the selected aircraft above the r
   await expect(page.locator("#selected")).toHaveText("HC2-01 · Halcyra HC-2");
 });
 
+test("[SR-b473b6/AK-jqz4] maximum take-off mass 880 kg next to the selected aircraft", async ({ page }) => {
+  await open(page, HC2);
+  await page.locator("#aircraft").selectOption("HC2-01");
+  await expect(page.locator("#mtom")).toHaveText("Maximum take-off mass 880 kg");
+  await expect(page.locator("#aircraft-info #mtom")).toBeVisible();
+});
+
 test("[SR-56d038/AK-xpmc] empty mass, lever arm and weighing date of HC2-01", async ({ page }) => {
   await open(page, HC2);
   await page.locator("#aircraft").selectOption("HC2-01");
