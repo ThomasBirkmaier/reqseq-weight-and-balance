@@ -1,5 +1,6 @@
 // Display formats (decision on units and rounding): values arrive already rounded as integers.
 
+/** Mass in kg (integer) with its unit. */
 export const kg = (v: number): string => `${v} kg`;
 
 /** Lever arm or centre of gravity in mm (integer) as metres with three decimals. */

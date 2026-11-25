@@ -39,9 +39,24 @@ pub const TYPES: &[AircraftType] = &[
         name: "Halcyra HC-4",
         mtom_kg: 1150,
         stations: &[
-            Station { key: "front", name: "Front seats", arm_mm: 2000, max_kg: 230 },
-            Station { key: "rear", name: "Rear seats", arm_mm: 3250, max_kg: 200 },
-            Station { key: "baggage", name: "Baggage compartment", arm_mm: 3950, max_kg: 50 },
+            Station {
+                key: "front",
+                name: "Front seats",
+                arm_mm: 2000,
+                max_kg: 230,
+            },
+            Station {
+                key: "rear",
+                name: "Rear seats",
+                arm_mm: 3250,
+                max_kg: 200,
+            },
+            Station {
+                key: "baggage",
+                name: "Baggage compartment",
+                arm_mm: 3950,
+                max_kg: 50,
+            },
         ],
         envelope: &[(650, 2100), (850, 2100), (1150, 2300), (1150, 2470), (650, 2470)],
     },
@@ -50,8 +65,18 @@ pub const TYPES: &[AircraftType] = &[
         name: "Halcyra HC-2",
         mtom_kg: 880,
         stations: &[
-            Station { key: "front", name: "Front seats", arm_mm: 2000, max_kg: 220 },
-            Station { key: "baggage", name: "Baggage compartment", arm_mm: 2900, max_kg: 40 },
+            Station {
+                key: "front",
+                name: "Front seats",
+                arm_mm: 2000,
+                max_kg: 220,
+            },
+            Station {
+                key: "baggage",
+                name: "Baggage compartment",
+                arm_mm: 2900,
+                max_kg: 40,
+            },
         ],
         envelope: &[(550, 2050), (750, 2050), (880, 2130), (880, 2170), (550, 2170)],
     },

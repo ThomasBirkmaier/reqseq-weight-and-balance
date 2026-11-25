@@ -1,19 +1,24 @@
 //! Acceptance tests of the calculation core. Test names follow `sr_<short id>_ak_<criterion key>_<what>`;
-//! CI enriches the JUnit report with `--name-pattern '{prefix}_{id}_ak_{ak}'` for the core and
-//! the HC-2 view, so every test names exactly one acceptance criterion.
+//! CI enriches the JUnit report with `--name-pattern '{prefix}_{id}_ak_{ak}'` for the core and the
+//! HC-2 view, so every test names exactly one acceptance criterion. More tests: `release3.rs`.
 #![expect(
     clippy::unwrap_used,
     clippy::indexing_slicing,
     reason = "test helpers fail the test loudly on broken data; the lints stay on for the core"
 )]
 
-use wb_core::calc::{evaluate, kg_rounded, moment_tenths, CgState, Evaluation, FUEL_ROW, INCOMPLETE, OUT_BELOW, OUT_CG, OUT_MASS, WITHIN};
-use wb_core::fleet::{parse_fleet, Aircraft, FLEET_CSV, TYPES};
-use wb_core::fuel::{fuel_data, parse_fuel, FuelData, FUEL_JSON};
-use wb_core::fleet_json_from;
+use wb_core::calc::{
+    CgState, Evaluation, FUEL_ROW, INCOMPLETE, OUT_CG, OUT_MASS, WITHIN, evaluate, kg_rounded, moment_tenths,
+};
+use wb_core::fleet::{Aircraft, FLEET_CSV, TYPES, parse_fleet};
+use wb_core::fuel::{FUEL_JSON, FuelData, fuel_data, parse_fuel};
 
 fn ac(id: &str) -> Aircraft {
-    parse_fleet(FLEET_CSV).unwrap().into_iter().find(|a| a.id == id).unwrap()
+    parse_fleet(FLEET_CSV)
+        .unwrap()
+        .into_iter()
+        .find(|a| a.id == id)
+        .unwrap()
 }
 fn fd() -> FuelData {
     fuel_data().unwrap()
@@ -35,7 +40,10 @@ fn ev(id: &str, t: &[&str]) -> Evaluation {
 // SR-348143 Total mass
 #[test]
 fn sr_348143_ak_jk10_total_mass_with_fuel_1017_kg() {
-    assert_eq!(evf("HC4-01", &["160", "0", "20"], "100", "60").take_off.total_kg(), 1017);
+    assert_eq!(
+        evf("HC4-01", &["160", "0", "20"], "100", "60").take_off.total_kg(),
+        1017
+    );
 }
 #[test]
 fn sr_348143_ak_yc6g_total_mass_empty_aircraft_765_kg() {
@@ -50,7 +58,10 @@ fn sr_348143_ak_vf0q_landing_mass_974_kg() {
 // SR-29562e Centre of gravity
 #[test]
 fn sr_29562e_ak_vbf5_cg_with_fuel_2_229_m() {
-    assert_eq!(evf("HC4-01", &["160", "0", "20"], "100", "60").take_off.cg_mm_rounded(), 2229);
+    assert_eq!(
+        evf("HC4-01", &["160", "0", "20"], "100", "60").take_off.cg_mm_rounded(),
+        2229
+    );
 }
 #[test]
 fn sr_29562e_ak_ts69_cg_2_475_m() {
@@ -59,7 +70,10 @@ fn sr_29562e_ak_ts69_cg_2_475_m() {
 
 #[test]
 fn sr_29562e_ak_ssg7_cg_at_landing_2_223_m() {
-    assert_eq!(evf("HC4-01", &["160", "0", "20"], "100", "60").landing.cg_mm_rounded(), 2223);
+    assert_eq!(
+        evf("HC4-01", &["160", "0", "20"], "100", "60").landing.cg_mm_rounded(),
+        2223
+    );
 }
 
 // SR-45198e Mass above the maximum take-off mass
@@ -109,7 +123,10 @@ fn sr_687e88_ak_gf0r_exactly_on_forward_limit_not_outside() {
 // SR-3a4905 Within limits
 #[test]
 fn sr_3a4905_ak_y54c_within_limits_with_fuel() {
-    assert_eq!(evf("HC4-01", &["160", "0", "20"], "100", "60").take_off.indications, vec![WITHIN]);
+    assert_eq!(
+        evf("HC4-01", &["160", "0", "20"], "100", "60").take_off.indications,
+        vec![WITHIN]
+    );
 }
 #[test]
 fn sr_3a4905_ak_gt5z_within_limits_exactly_mtom() {
@@ -127,15 +144,24 @@ fn sr_3a4905_ak_svpd_within_limits_exactly_on_aft_limit() {
 // SR-181ae8 Message for an invalid mass entry
 #[test]
 fn sr_181ae8_ak_j1jc_rear_seats_201_kg_message() {
-    assert_eq!(ev("HC4-01", &["0", "201", "0"]).entries[1].message.as_deref(), Some("Enter 0 to 200 kg"));
+    assert_eq!(
+        ev("HC4-01", &["0", "201", "0"]).entries[1].message.as_deref(),
+        Some("Enter 0 to 200 kg")
+    );
 }
 #[test]
 fn sr_181ae8_ak_bb4d_front_seats_negative_message() {
-    assert_eq!(ev("HC4-01", &["-5", "0", "0"]).entries[0].message.as_deref(), Some("Enter 0 to 230 kg"));
+    assert_eq!(
+        ev("HC4-01", &["-5", "0", "0"]).entries[0].message.as_deref(),
+        Some("Enter 0 to 230 kg")
+    );
 }
 #[test]
 fn sr_181ae8_ak_w4j4_baggage_decimal_message() {
-    assert_eq!(ev("HC4-01", &["0", "0", "7.5"]).entries[2].message.as_deref(), Some("Enter 0 to 50 kg"));
+    assert_eq!(
+        ev("HC4-01", &["0", "0", "7.5"]).entries[2].message.as_deref(),
+        Some("Enter 0 to 50 kg")
+    );
 }
 
 // SR-b59c9a Check not complete
@@ -181,23 +207,10 @@ fn sr_d0fb6e_ak_j03d_hc2_01_empty() {
     assert_eq!((e.total_kg(), e.cg_mm_rounded()), (640, 2150));
 }
 #[test]
-fn sr_d0fb6e_ak_jsz9_hc2_01_front_seats_220_kg() {
-    let e = ev("HC2-01", &["220", "0"]).take_off;
-    assert_eq!((e.total_kg(), e.cg_mm_rounded()), (860, 2112));
-}
-#[test]
-fn sr_d0fb6e_ak_d8yh_hc2_01_baggage_40_kg() {
-    let e = ev("HC2-01", &["0", "40"]).take_off;
-    assert_eq!((e.total_kg(), e.cg_mm_rounded()), (680, 2194));
-}
-
-// SR-5ca0ef Mass entry per loading station in the HC-2 build
-#[test]
 fn sr_5ca0ef_ak_y112_hc2_stations() {
     let names: Vec<_> = TYPES[1].stations.iter().map(|s| (s.name, s.max_kg)).collect();
     assert_eq!(names, vec![("Front seats", 220), ("Baggage compartment", 40)]);
 }
-// SR-a93b59 Centre of gravity outside the envelope in the HC-2 build
 #[test]
 fn sr_a93b59_ak_qq3j_hc2_aft_limit_exceeded() {
     let e = ev("HC2-01", &["60", "40"]).take_off;
@@ -209,20 +222,14 @@ fn sr_a93b59_ak_qq3j_hc2_aft_limit_exceeded() {
 #[test]
 fn sr_663a61_ak_cb0f_changed_fleet_file_changes_total_mass() {
     let csv = FLEET_CSV.replace("HC4-02,hc4,778,", "HC4-02,hc4,781,");
-    let a = parse_fleet(&csv).unwrap().into_iter().find(|a| a.id == "HC4-02").unwrap();
+    let a = parse_fleet(&csv)
+        .unwrap()
+        .into_iter()
+        .find(|a| a.id == "HC4-02")
+        .unwrap();
     let f = fd();
     let e = evaluate(&a, &f.types["hc4"], f.density_g_per_l, &["0", "0", "0"], "0", "0");
     assert_eq!(e.take_off.total_kg(), 781);
-}
-
-// SR-56d038 Aircraft data from the fleet data file in the HC-2 build
-#[test]
-fn sr_56d038_ak_qxhd_changed_fleet_file_changes_hc2_total_mass() {
-    let csv = FLEET_CSV.replace("HC2-01,hc2,640,", "HC2-01,hc2,645,");
-    let a = parse_fleet(&csv).unwrap().into_iter().find(|a| a.id == "HC2-01").unwrap();
-    let f = fd();
-    let e = evaluate(&a, &f.types["hc2"], f.density_g_per_l, &["0", "0"], "0", "0");
-    assert_eq!(e.take_off.total_kg(), 645);
 }
 
 // SR-0b76d9 Loading table with moments
@@ -230,13 +237,27 @@ fn sr_56d038_ak_qxhd_changed_fleet_file_changes_hc2_total_mass() {
 fn sr_0b76d9_ak_hnpk_landing_fuel_row() {
     let e = evf("HC4-01", &["160", "0", "20"], "100", "60");
     let r = &e.landing_fuel;
-    assert_eq!((r.litres, kg_rounded(r.g), r.arm_mm, moment_tenths(r.moment_gmm)), (Some(40), 29, 2350, 677));
-    assert_eq!((e.landing.total_kg(), e.landing.cg_mm_rounded(), moment_tenths(e.landing.moment_gmm)), (974, 2223, 21650));
+    assert_eq!(
+        (r.litres, kg_rounded(r.g), r.arm_mm, moment_tenths(r.moment_gmm)),
+        (Some(40), 29, 2350, 677)
+    );
+    assert_eq!(
+        (
+            e.landing.total_kg(),
+            e.landing.cg_mm_rounded(),
+            moment_tenths(e.landing.moment_gmm)
+        ),
+        (974, 2223, 21650)
+    );
 }
 #[test]
 fn sr_0b76d9_ak_yf9k_table_rows_with_fuel() {
     let e = evf("HC4-01", &["160", "0", "20"], "100", "60");
-    let rows: Vec<(String, i64, i64, i64)> = e.rows.iter().map(|r| (r.name.clone(), kg_rounded(r.g), r.arm_mm, moment_tenths(r.moment_gmm))).collect();
+    let rows: Vec<(String, i64, i64, i64)> = e
+        .rows
+        .iter()
+        .map(|r| (r.name.clone(), kg_rounded(r.g), r.arm_mm, moment_tenths(r.moment_gmm)))
+        .collect();
     assert_eq!(
         rows,
         vec![
@@ -249,22 +270,20 @@ fn sr_0b76d9_ak_yf9k_table_rows_with_fuel() {
     );
     assert_eq!(e.rows[4].litres, Some(100));
     let t = &e.take_off;
-    assert_eq!((t.total_kg(), t.cg_mm_rounded(), moment_tenths(t.moment_gmm)), (1017, 2229, 22665));
+    assert_eq!(
+        (t.total_kg(), t.cg_mm_rounded(), moment_tenths(t.moment_gmm)),
+        (1017, 2229, 22665)
+    );
 }
 
 // SR-79804b Fuel mass and lever arm from the fuel interface data file
 #[test]
 fn sr_79804b_ak_cy7n_hc4_100_l_fuel() {
-    let f = fd();
-    assert_eq!((f.density_g_per_l, f.types["hc4"].arm_mm, f.types["hc4"].capacity_l), (720, 2350, 170));
     let e = evf("HC4-01", &["0", "0", "0"], "100", "0").take_off;
     assert_eq!((e.total_kg(), e.cg_mm_rounded()), (837, 2231));
 }
-// SR-e47cbf Fuel mass and lever arm in the HC-2 build
 #[test]
 fn sr_e47cbf_ak_k2b3_hc2_50_l_fuel() {
-    let f = fd();
-    assert_eq!((f.density_g_per_l, f.types["hc2"].arm_mm, f.types["hc2"].capacity_l), (720, 2100, 104));
     let e = evf("HC2-01", &["0", "0"], "50", "0").take_off;
     assert_eq!((e.total_kg(), e.cg_mm_rounded()), (676, 2147));
 }
@@ -276,26 +295,27 @@ fn sr_79804b_ak_fpkj_changed_fuel_lever_arm_changes_cg() {
     assert_eq!(e.cg_mm_rounded(), 2235);
 }
 
-#[test]
-fn sr_e47cbf_ak_fy23_changed_hc2_fuel_lever_arm_changes_cg() {
-    let f = parse_fuel(&FUEL_JSON.replace("\"fuelLeverArmM\": 2.1,", "\"fuelLeverArmM\": 2.200,")).unwrap();
-    assert_eq!(f.types["hc2"].arm_mm, 2200);
-    let e = ev_with(&f, "HC2-01", &["0", "0"], "50", "0").take_off;
-    assert_eq!(e.cg_mm_rounded(), 2153);
-}
-
 // SR-5689df Message for an invalid fuel entry
 #[test]
 fn sr_5689df_ak_bd65_fuel_above_capacity_message() {
-    assert_eq!(evf("HC4-01", &["0", "0", "0"], "171", "0").fuel.message.as_deref(), Some("Enter 0 to 170 L"));
+    assert_eq!(
+        evf("HC4-01", &["0", "0", "0"], "171", "0").fuel.message.as_deref(),
+        Some("Enter 0 to 170 L")
+    );
 }
 #[test]
 fn sr_5689df_ak_z3vm_burn_above_fuel_message() {
-    assert_eq!(evf("HC4-01", &["0", "0", "0"], "100", "101").burn.message.as_deref(), Some("Enter 0 to 100 L"));
+    assert_eq!(
+        evf("HC4-01", &["0", "0", "0"], "100", "101").burn.message.as_deref(),
+        Some("Enter 0 to 100 L")
+    );
 }
 #[test]
 fn sr_5689df_ak_cm4v_fuel_fraction_message() {
-    assert_eq!(evf("HC4-01", &["0", "0", "0"], "12.5", "0").fuel.message.as_deref(), Some("Enter 0 to 170 L"));
+    assert_eq!(
+        evf("HC4-01", &["0", "0", "0"], "12.5", "0").fuel.message.as_deref(),
+        Some("Enter 0 to 170 L")
+    );
 }
 
 // SR-90608c Limit indication at landing
@@ -318,127 +338,4 @@ fn sr_bd8e44_ak_dnhh_hc2_landing_aft_of_aft_limit() {
     let e = evf("HC2-01", &["60", "35"], "52", "10");
     assert_eq!(e.take_off.indications, vec![WITHIN]);
     assert_eq!(e.landing.indications, vec![OUT_CG]);
-}
-
-// SR-45198e: both indications when mass and centre of gravity are exceeded, the mass first
-// (limit check rule), also for an aircraft whose empty mass alone is far aft.
-#[test]
-fn sr_45198e_ak_yk0x_synthetic_aircraft_mass_first() {
-    // Synthetic aircraft with a far aft empty mass: no real loading of the fleet exceeds both so.
-    let a = Aircraft { id: "T".into(), type_index: 0, empty_kg: 1100, empty_arm_mm: 2600, weighing_date: "-".into() };
-    let f = fd();
-    let e = evaluate(&a, &f.types["hc4"], f.density_g_per_l, &["100", "0", "0"], "0", "0");
-    assert_eq!(e.take_off.indications, vec![OUT_MASS, OUT_CG]);
-}
-
-/// The fleet JSON of the core, or its error, for the given data files.
-fn fleet(csv: &str, fuel: &str, key: &str) -> String {
-    fleet_json_from(csv, fuel, key)
-}
-fn refused(j: &str) -> bool {
-    j.starts_with("{\"error\":") && !j.contains("\"aircraft\"")
-}
-
-// SR-b53822 Unsupported fuel interface version
-#[test]
-fn sr_b53822_ak_dzj0_major_version_2_is_refused() {
-    let j = fleet(FLEET_CSV, &FUEL_JSON.replace("\"1.0.1\"", "\"2.0.0\""), "hc4");
-    assert!(refused(&j), "{j}");
-    assert!(j.contains("unsupported interface version 2.0.0"), "{j}");
-}
-#[test]
-fn sr_b53822_ak_fd7z_malformed_version_1_0_is_refused() {
-    for v in ["1.0", "1.0.1.2", "1..1", "1.a.0", "01.0.1"] {
-        let j = fleet(FLEET_CSV, &FUEL_JSON.replace("\"1.0.1\"", &format!("\"{v}\"")), "hc2");
-        assert!(refused(&j), "{v}: {j}");
-    }
-}
-#[test]
-fn sr_b53822_ak_bcrp_minor_version_1_1_0_is_read() {
-    let j = fleet(FLEET_CSV, &FUEL_JSON.replace("\"1.0.1\"", "\"1.1.0\""), "hc4");
-    assert!(j.contains("\"id\":\"HC4-01\"") && j.contains("\"id\":\"HC4-02\""), "{j}");
-}
-
-// SR-ecf597 Data file not readable in its documented form
-#[test]
-fn sr_ecf597_ak_stzd_fuel_file_with_duplicate_member_is_refused() {
-    let dup = FUEL_JSON.replace("\"HC4-02\": {", "\"HC4-01\": {");
-    assert!(refused(&fleet(FLEET_CSV, &dup, "hc4")));
-    let dup_type = FUEL_JSON.replace("\"HC-2\": { \"fuelLeverArmM\"", "\"hc4\": { \"fuelLeverArmM\"");
-    assert!(refused(&fleet(FLEET_CSV, &dup_type, "hc4")));
-}
-#[test]
-fn sr_ecf597_ak_stzd_fuel_file_with_number_out_of_range_is_refused() {
-    let big = FUEL_JSON.replace("\"fuelLeverArmM\": 2.35", "\"fuelLeverArmM\": 99999999999999999");
-    assert!(refused(&fleet(FLEET_CSV, &big, "hc4")));
-    assert!(refused(&fleet(FLEET_CSV, "{}", "hc4")));
-    assert!(refused(&fleet(FLEET_CSV, &FUEL_JSON.replace("\"usableFuelL\": 142", "\"usableFuelL\": \"142\""), "hc4")));
-}
-#[test]
-fn sr_ecf597_ak_t42r_fleet_file_with_missing_field_is_refused() {
-    let short = FLEET_CSV.replace("HC4-01,hc4,765,2220,2026-03-02", "HC4-01,hc4,765");
-    assert!(refused(&fleet(&short, FUEL_JSON, "hc4")));
-    assert!(parse_fleet("HC4-01,hc4,765").is_err());
-}
-#[test]
-fn sr_ecf597_ak_t42r_fleet_file_with_unknown_type_is_refused() {
-    let unknown = FLEET_CSV.replace("HC4-01,hc4,", "HC4-01,hc9,");
-    assert!(refused(&fleet(&unknown, FUEL_JSON, "hc4")));
-    assert!(parse_fleet("HC4-01,hc9,765,2220,2026-01-01").is_err());
-}
-
-// SR-9d15c9 Aircraft without a fuel report
-#[test]
-fn sr_9d15c9_ak_w7qh_aircraft_without_report_has_no_fuel_figure() {
-    let without = FUEL_JSON.replace(
-        "    \"HC4-02\": { \"type\": \"HC-4\", \"usableFuelL\": 96, \"fuelMassKg\": 69.1, \"reportedAtUtc\": \"2026-11-02T05:15:00Z\" },\n",
-        "",
-    );
-    assert_ne!(without, FUEL_JSON);
-    let j = fleet(FLEET_CSV, &without, "hc4");
-    assert!(j.contains("\"id\":\"HC4-02\",\"emptyKg\":778,\"emptyArmMm\":2236,\"weighingDate\":\"2026-09-14\",\"reportedFuelL\":null,\"reportedAt\":null"), "{j}");
-    assert!(j.contains("\"reportedFuelL\":142"), "{j}");
-}
-
-// SR-e6d15f Aircraft selection of the HC-2 build: the HC-2 fleet only
-#[test]
-fn sr_e6d15f_ak_q7ty_hc2_build_offers_hc2_01_only() {
-    let f = wb_core::fleet_json("hc2");
-    assert!(f.contains("HC2-01") && !f.contains("HC4-01") && !f.contains("HC4-02"));
-    assert!(f.contains("\"reportedFuelL\":78") && f.contains("\"fuelCapacityL\":104"));
-    assert!(wb_core::evaluate_json("hc2\nHC4-01\n0\n0\n0\n0").contains("unknown aircraft"));
-}
-
-// SR-348143 through the JSON interface of the core
-#[test]
-fn sr_348143_ak_jk10_total_mass_through_the_json_interface() {
-    let j = wb_core::evaluate_json("hc4\nHC4-01\n160\n0\n20\n100\n60");
-    assert!(j.contains("\"totalKg\":1017"), "{j}");
-    assert!(j.contains("\"cgMm\":2229"));
-    assert!(j.contains("\"totalKg\":974"));
-    assert!(j.contains("\"Within limits\""));
-}
-
-
-// SR-bb9061 Total mass below the lowest mass of the envelope (both aircraft types)
-/// A synthetic aircraft of the type with index `ti`, with the given empty mass and lever arm.
-fn synthetic(ti: usize, kg: i64, arm_mm: i64) -> Aircraft {
-    Aircraft { id: "T".into(), type_index: ti, empty_kg: kg, empty_arm_mm: arm_mm, weighing_date: "-".into() }
-}
-#[test]
-fn sr_bb9061_ak_b8d6_total_mass_below_the_envelope_is_outside() {
-    let f = fd();
-    for (ti, key, lowest, arm, empty) in [(0, "hc4", 650, 2200, ["0", "0", "0"].as_slice()), (1, "hc2", 550, 2100, ["0", "0"].as_slice())] {
-        let e = evaluate(&synthetic(ti, lowest - 10, arm), &f.types[key], f.density_g_per_l, empty, "0", "0").take_off;
-        assert_eq!(e.indications, vec![OUT_BELOW], "{key}");
-        assert!(!e.indications.contains(&WITHIN));
-    }
-}
-#[test]
-fn sr_bb9061_ak_cn28_total_mass_at_the_lowest_mass_is_within() {
-    let f = fd();
-    for (ti, key, lowest, arm, empty) in [(0, "hc4", 650, 2200, ["0", "0", "0"].as_slice()), (1, "hc2", 550, 2100, ["0", "0"].as_slice())] {
-        let e = evaluate(&synthetic(ti, lowest, arm), &f.types[key], f.density_g_per_l, empty, "0", "0").take_off;
-        assert_eq!(e.indications, vec![WITHIN], "{key}");
-    }
 }

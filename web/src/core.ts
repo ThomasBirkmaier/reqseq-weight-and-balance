@@ -1,12 +1,90 @@
 // Loader of the WebAssembly calculation core and its JSON interface.
-import { arrayOf, checked, isBoolean, isNumber, isPair, isString, nullable, objectOf, oneOf, type Guard } from "./guard.js";
+import {
+  arrayOf,
+  checked,
+  isBoolean,
+  isNumber,
+  isPair,
+  isString,
+  nullable,
+  objectOf,
+  oneOf,
+  type Guard,
+} from "./guard.js";
 
-export interface Station { key: string; name: string; armMm: number; maxKg: number }
-export interface AircraftType { key: string; name: string; mtomKg: number; stations: Station[]; envelope: [number, number][]; fuelArmMm: number; fuelCapacityL: number }
-export interface Aircraft { id: string; emptyKg: number; emptyArmMm: number; weighingDate: string; reportedFuelL: number | null; reportedAt: string | null }
-export interface Fleet { type: AircraftType; aircraft: Aircraft[] }
-export interface EntryResult { valid: boolean; empty: boolean; message: string | null }
-export interface Row { name: string; litres: number | null; kg: number; armMm: number; momentTenths: number }
+/** A loading station of the aircraft type. */
+export interface Station {
+  /** Key of the station, used in the entry ids (`entry-<key>`). */
+  key: string;
+  /** Name shown to the pilot. */
+  name: string;
+  /** Lever arm in mm aft of the datum. */
+  armMm: number;
+  /** Maximum mass of the station in kg. */
+  maxKg: number;
+}
+/** The type data of the build's aircraft type. */
+export interface AircraftType {
+  /** Type key of the build (hc4, hc2). */
+  key: string;
+  /** Type name shown to the pilot. */
+  name: string;
+  /** Maximum take-off mass in kg. */
+  mtomKg: number;
+  /** The loading stations, in the order of the entries. */
+  stations: Station[];
+  /** Envelope corners as [total mass kg, centre of gravity mm], in order. */
+  envelope: [number, number][];
+  /** Fuel lever arm in mm aft of the datum (from the fuel interface data file). */
+  fuelArmMm: number;
+  /** Usable fuel capacity in whole litres. */
+  fuelCapacityL: number;
+}
+/** One aircraft of the build's fleet. */
+export interface Aircraft {
+  /** Invented identifier (not a registration). */
+  id: string;
+  /** Empty mass in kg. */
+  emptyKg: number;
+  /** Lever arm of the empty mass in mm. */
+  emptyArmMm: number;
+  /** Date of the last weighing (YYYY-MM-DD). */
+  weighingDate: string;
+  /** Usable fuel last reported by the fuel system module in litres, or null without a report. */
+  reportedFuelL: number | null;
+  /** Report time in UTC (ISO 8601), or null without a report. */
+  reportedAt: string | null;
+}
+/** The fleet of the build with its aircraft type. */
+export interface Fleet {
+  /** The aircraft type of the build. */
+  type: AircraftType;
+  /** The aircraft of that type. */
+  aircraft: Aircraft[];
+  /** Date of the aircraft data: the newest date of the fleet and fuel data files. */
+}
+/** The check of one entry. */
+export interface EntryResult {
+  /** True when the entry holds a permitted value. */
+  valid: boolean;
+  /** True when the entry is empty. */
+  empty: boolean;
+  /** Message next to an invalid entry, or null. */
+  message: string | null;
+}
+/** One row of the calculation table (values already rounded by the core). */
+export interface Row {
+  /** Name of the row. */
+  name: string;
+  /** Litres for a fuel row, null for the others. */
+  litres: number | null;
+  /** Mass in kg. */
+  kg: number;
+  /** Lever arm in mm. */
+  armMm: number;
+  /** Moment in tenths of kg·m. */
+  momentTenths: number;
+}
 /** Result of the limit check rule for one state of the flight. */
 export interface State {
   totalKg: number;
@@ -21,6 +99,7 @@ export interface State {
   within: boolean;
   indications: string[];
 }
+/** The evaluation of one loading at take-off and at landing. */
 export interface Evaluation {
   complete: boolean;
   entries: EntryResult[];
@@ -52,7 +131,13 @@ const isAircraft: Guard<Aircraft> = objectOf({
 });
 const isFleet: Guard<Fleet> = objectOf({ type: isAircraftType, aircraft: arrayOf(isAircraft) });
 const isEntry: Guard<EntryResult> = objectOf({ valid: isBoolean, empty: isBoolean, message: nullable(isString) });
-const isRow: Guard<Row> = objectOf({ name: isString, litres: nullable(isNumber), kg: isNumber, armMm: isNumber, momentTenths: isNumber });
+const isRow: Guard<Row> = objectOf({
+  name: isString,
+  litres: nullable(isNumber),
+  kg: isNumber,
+  armMm: isNumber,
+  momentTenths: isNumber,
+});
 const isState: Guard<State> = objectOf({
   totalKg: isNumber,
   momentTenths: isNumber,
@@ -99,6 +184,7 @@ const isExports = (v: unknown): v is Exports =>
   "evaluate" in v &&
   isFunction(v.evaluate);
 
+/** The WebAssembly calculation core and its JSON interface. */
 export class Core {
   private readonly x: Exports;
 
@@ -106,6 +192,7 @@ export class Core {
     this.x = x;
   }
 
+  /** Loads and instantiates the core from `url`. */
   static async load(url: string): Promise<Core> {
     const response = await fetch(url);
     if (!response.ok) throw new Error(`calculation core: HTTP ${response.status}`);
@@ -113,6 +200,7 @@ export class Core {
     return new Core(checked(instance.exports, isExports, "exports"));
   }
 
+  /** Calls an export with `input` as UTF-8 and returns the parsed JSON result (an error result throws). */
   private call(fn: Call, input: string): unknown {
     const data = new TextEncoder().encode(input);
     const ptr = this.x.alloc(data.length);
@@ -125,11 +213,17 @@ export class Core {
     return parsed;
   }
 
+  /** The fleet of the build for the type key. */
   fleet(typeKey: string): Fleet {
     return checked(this.call(this.x.fleet, typeKey), isFleet, "fleet data");
   }
 
+  /** Evaluates one loading of the aircraft: one text per station, the usable fuel and the planned burn. */
   evaluate(typeKey: string, aircraftId: string, entries: readonly string[], fuel: string, burn: string): Evaluation {
-    return checked(this.call(this.x.evaluate, [typeKey, aircraftId, ...entries, fuel, burn].join("\n")), isEvaluation, "evaluation");
+    return checked(
+      this.call(this.x.evaluate, [typeKey, aircraftId, ...entries, fuel, burn].join("\n")),
+      isEvaluation,
+      "evaluation",
+    );
   }
 }

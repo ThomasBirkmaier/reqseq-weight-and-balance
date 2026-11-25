@@ -40,13 +40,22 @@
     color-scheme: dark;
   }
 }
-* { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
+* {
+  box-sizing: border-box;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+}
 body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font:
+    16px/1.45 system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
 }
 .banner {
   margin: 0;
@@ -56,13 +65,37 @@ body {
   font-weight: 600;
   text-align: center;
 }
-main { max-width: 720px; margin: 0 auto; padding: 8px 16px 24px; }
-h1 { font-size: 1.5rem; margin: 12px 0 4px; }
-h2 { font-size: 1.1rem; margin: 0 0 8px; }
-.aid { margin: 0 0 12px; color: var(--muted); }
-.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin: 12px 0; }
-label { display: block; font-weight: 600; margin-bottom: 4px; }
-select, input {
+main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 8px 16px 24px;
+}
+h1 {
+  font-size: 1.5rem;
+  margin: 12px 0 4px;
+}
+h2 {
+  font-size: 1.1rem;
+  margin: 0 0 8px;
+}
+.aid {
+  margin: 0 0 12px;
+  color: var(--muted);
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin: 12px 0;
+}
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+select,
+input {
   font: inherit;
   color: var(--text);
   background: var(--surface);
@@ -71,17 +104,50 @@ select, input {
   padding: 8px 10px;
   min-height: 44px;
 }
-select { width: 100%; }
-.hint { color: var(--muted); margin: 6px 0 0; font-size: 0.95rem; }
-.selected { font-size: 1.15rem; font-weight: 700; margin: 10px 0 2px; }
-.data { margin: 0; color: var(--muted); }
-.entry { margin: 10px 0; }
-.field { display: flex; align-items: center; gap: 8px; }
-.field input { width: 8rem; }
-.unit { color: var(--muted); }
-input.invalid, input.missing { border: 2px solid var(--bad); }
-.message { color: var(--bad); margin: 4px 0 0; min-height: 0; font-weight: 600; }
-.message:empty { display: none; }
+select {
+  width: 100%;
+}
+.hint {
+  color: var(--muted);
+  margin: 6px 0 0;
+  font-size: 0.95rem;
+}
+.selected {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 10px 0 2px;
+}
+.data {
+  margin: 0;
+  color: var(--muted);
+}
+.entry {
+  margin: 10px 0;
+}
+.field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.field input {
+  width: 8rem;
+}
+.unit {
+  color: var(--muted);
+}
+input.invalid,
+input.missing {
+  border: 2px solid var(--bad);
+}
+.message {
+  color: var(--bad);
+  margin: 4px 0 0;
+  min-height: 0;
+  font-weight: 600;
+}
+.message:empty {
+  display: none;
+}
 .result {
   position: sticky;
   bottom: 0;
@@ -93,58 +159,235 @@ input.invalid, input.missing { border: 2px solid var(--bad); }
   margin: 12px 0;
   box-shadow: 0 -2px 10px rgb(0 0 0 / 12%);
 }
-.result[data-state="within"] { border-color: var(--ok); background: var(--ok-bg); }
-.result[data-state="outside"] { border-color: var(--bad); background: var(--bad-bg); }
-.result[data-state="incomplete"] { border-color: var(--warn); background: var(--warn-bg); }
-.result-aircraft { margin: 0 0 0.25rem; font-weight: 600; }
-.load-error { margin: 0; font-weight: 700; color: var(--bad); }
-.indication { margin: 0; font-weight: 700; font-size: 1.1rem; }
-.indication span { display: block; }
-.result { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; }
-.result-aircraft { grid-column: 1 / -1; }
-.state-name { margin: 0; font-size: 0.85rem; font-weight: 600; color: var(--text); text-transform: uppercase; letter-spacing: 0.04em; }
-.state[data-state="within"] .indication { color: var(--ok); }
-.state[data-state="outside"] .indication { color: var(--bad); }
-.state[data-state="incomplete"] .indication { color: var(--warn); }
-.state .indication { font-size: 1rem; }
-.state .data { margin: 6px 0 0; font-weight: 700; color: var(--text); }
-.sub { font-size: 1rem; margin: 1rem 0 0.25rem; }
-.note { margin: 4px 0 0; font-weight: 600; color: var(--warn); }
-.figures { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 6px 0 0; }
-.figures div { display: flex; flex-direction: column; }
-.figures dt { color: var(--text); font-size: 0.85rem; }
-.figures dd { margin: 0; font-weight: 700; font-size: 1.15rem; }
-svg { width: 100%; height: auto; display: block; }
-#topview { max-height: 420px; }
-.airframe { fill: var(--airframe); stroke: var(--line); stroke-width: 1.5; }
-.mark { fill: var(--mark); stroke: var(--text); stroke-width: 1.5; }
-.mark.loaded { fill: var(--mark-loaded); }
-.mark-label, .axis, .point-label { fill: var(--text); font-size: 13px; }
-.axis { font-size: 11px; fill: var(--muted); }
-.axis-line { stroke: var(--muted); stroke-width: 1; }
-.envelope { fill: var(--ok-bg); stroke: var(--ok); stroke-width: 2; }
-.point { fill: var(--accent); stroke: var(--text); stroke-width: 1.5; }
-.point.outside { fill: none; stroke: var(--bad); stroke-width: 3.5; }
-.point-label { font-weight: 700; fill: var(--bad); }
-.table-wrap { overflow-x: auto; }
-table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
-th, td { text-align: right; padding: 6px 6px; border-bottom: 1px solid var(--line); white-space: nowrap; }
-th:first-child, td:first-child { text-align: left; white-space: normal; }
-thead th { color: var(--muted); font-weight: 600; font-size: 0.9rem; }
-tr.total th, tr.total td { font-weight: 700; border-top: 2px solid var(--text); }
-[hidden] { display: none !important; }
-.mark-value { font-weight: 700; }
+.result[data-state="within"] {
+  border-color: var(--ok);
+  background: var(--ok-bg);
+}
+.result[data-state="outside"] {
+  border-color: var(--bad);
+  background: var(--bad-bg);
+}
+.result[data-state="incomplete"] {
+  border-color: var(--warn);
+  background: var(--warn-bg);
+}
+.result-aircraft {
+  margin: 0 0 0.25rem;
+  font-weight: 600;
+}
+.load-error {
+  margin: 0;
+  font-weight: 700;
+  color: var(--bad);
+}
+.indication {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+.indication span {
+  display: block;
+}
+.result {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 12px;
+}
+.result-aircraft {
+  grid-column: 1 / -1;
+}
+.state-name {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.state[data-state="within"] .indication {
+  color: var(--ok);
+}
+.state[data-state="outside"] .indication {
+  color: var(--bad);
+}
+.state[data-state="incomplete"] .indication {
+  color: var(--warn);
+}
+.state .indication {
+  font-size: 1rem;
+}
+.state .data {
+  margin: 6px 0 0;
+  font-weight: 700;
+  color: var(--text);
+}
+.sub {
+  font-size: 1rem;
+  margin: 1rem 0 0.25rem;
+}
+.note {
+  margin: 4px 0 0;
+  font-weight: 600;
+  color: var(--warn);
+}
+.figures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 6px 0 0;
+}
+.figures div {
+  display: flex;
+  flex-direction: column;
+}
+.figures dt {
+  color: var(--text);
+  font-size: 0.85rem;
+}
+.figures dd {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+#topview {
+  max-height: 420px;
+}
+.airframe {
+  fill: var(--airframe);
+  stroke: var(--line);
+  stroke-width: 1.5;
+}
+.mark {
+  fill: var(--mark);
+  stroke: var(--text);
+  stroke-width: 1.5;
+}
+.mark.loaded {
+  fill: var(--mark-loaded);
+}
+.mark-label,
+.axis,
+.point-label {
+  fill: var(--text);
+  font-size: 13px;
+}
+.axis {
+  font-size: 11px;
+  fill: var(--muted);
+}
+.axis-line {
+  stroke: var(--muted);
+  stroke-width: 1;
+}
+.envelope {
+  fill: var(--ok-bg);
+  stroke: var(--ok);
+  stroke-width: 2;
+}
+.point {
+  fill: var(--accent);
+  stroke: var(--text);
+  stroke-width: 1.5;
+}
+.point.outside {
+  fill: none;
+  stroke: var(--bad);
+  stroke-width: 3.5;
+}
+.point-label {
+  font-weight: 700;
+  fill: var(--bad);
+}
+.table-wrap {
+  overflow-x: auto;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-variant-numeric: tabular-nums;
+}
+th,
+td {
+  text-align: right;
+  padding: 6px 6px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+th:first-child,
+td:first-child {
+  text-align: left;
+  white-space: normal;
+}
+thead th {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+tr.total th,
+tr.total td {
+  font-weight: 700;
+  border-top: 2px solid var(--text);
+}
+[hidden] {
+  display: none !important;
+}
+.mark-value {
+  font-weight: 700;
+}
 @media (max-width: 420px) {
-  th, td { padding: 6px 2px; font-size: 0.8rem; }
-  thead th { font-size: 0.75rem; }
+  th,
+  td {
+    padding: 6px 2px;
+    font-size: 0.8rem;
+  }
+  thead th {
+    font-size: 0.75rem;
+  }
 }
 
 /* The sticky result card must never hide the entry being edited or marked. */
-#entries input, #fuel-entries input { scroll-margin-bottom: 14rem; scroll-margin-top: 1rem; }
-.offline { margin: 0.5rem 0 0; font-weight: 600; color: var(--warn); }
-.corners { width: 100%; border-collapse: collapse; margin-top: 0.5rem; font-size: 0.9rem; }
-.corners caption { text-align: left; font-weight: 600; padding-bottom: 0.25rem; }
-.corners th, .corners td { text-align: right; padding: 0.15rem 0.4rem; border-bottom: 1px solid var(--line, #ccc); }
-.corners th:first-child { text-align: left; }
-.point.landing { fill: var(--surface); stroke: var(--accent); stroke-width: 2.5; }
-.burn-line { stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 4 3; }
+#entries input,
+#fuel-entries input {
+  scroll-margin-bottom: 14rem;
+  scroll-margin-top: 1rem;
+}
+.offline {
+  margin: 0.5rem 0 0;
+  font-weight: 600;
+  color: var(--warn);
+}
+.corners {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+.corners caption {
+  text-align: left;
+  font-weight: 600;
+  padding-bottom: 0.25rem;
+}
+.corners th,
+.corners td {
+  text-align: right;
+  padding: 0.15rem 0.4rem;
+  border-bottom: 1px solid var(--line, #ccc);
+}
+.corners th:first-child {
+  text-align: left;
+}
+.point.landing {
+  fill: var(--surface);
+  stroke: var(--accent);
+  stroke-width: 2.5;
+}
+.burn-line {
+  stroke: var(--muted);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+}

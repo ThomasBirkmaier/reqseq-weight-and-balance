@@ -4,8 +4,11 @@
 /** A check that narrows an unknown value to T. */
 export type Guard<T> = (v: unknown) => v is T;
 
+/** A string. */
 export const isString: Guard<string> = (v): v is string => typeof v === "string";
+/** A finite number. */
 export const isNumber: Guard<number> = (v): v is number => typeof v === "number" && Number.isFinite(v);
+/** true or false. */
 export const isBoolean: Guard<boolean> = (v): v is boolean => typeof v === "boolean";
 
 /** null or a value of the guarded type. */
@@ -21,7 +24,8 @@ export const arrayOf =
     Array.isArray(v) && v.every((x) => g(x));
 
 /** A pair of numbers. */
-export const isPair: Guard<[number, number]> = (v): v is [number, number] => Array.isArray(v) && v.length === 2 && v.every((x) => isNumber(x));
+export const isPair: Guard<[number, number]> = (v): v is [number, number] =>
+  Array.isArray(v) && v.length === 2 && v.every((x) => isNumber(x));
 
 /** One of the given strings. */
 export const oneOf =
