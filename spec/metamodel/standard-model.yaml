@@ -1,8 +1,13 @@
-# Standard model (D-037, extended by D-059 and D-060), shipped with ReqSeq and written by workspace.init (SR-014).
-# Keys never change (D-043); names are English (D-019). Every built-in meaning has a key (SR-014 AK3):
-# each type and property meaning exactly one, derivation two relation kinds
-# (open question #150).
-# Marked "assumption": not yet covered by a decision.
+# Standard model, shipped with ReqSeq and written by `reqseq workspace init`.
+# Keys never change. Each type and property meaning has exactly one key, except `identifier`,
+# `synonyms` and `translation`, which a workspace gives to properties of its own;
+# derivation has two relation kinds (Refines, Derives from).
+#
+# Project changes to the file of ReqSeq 0.14.0 (D-1af77a): criticality and safety-related on the
+# system requirement (pilot brief section 5); stricter `required` lists on need, system
+# requirement and decision; at most 3 acceptance criteria per requirement; the definitions of
+# priority and validation-criteria live in pilot-model.yaml (choices must/should/could, both count
+# to the version), so the two definitions of this file are left out.
 reqseq-metamodel: 1
 
 types:
@@ -11,13 +16,26 @@ types:
     description: "What a stakeholder needs, in their own words. System requirements derive from needs."
     prefix: N
     meaning: need
-    properties: [title, rationale, priority, validation-criteria, topic, source, source-identifier, import-date, delivery, import-version]
-    required: [title]
+    properties:
+      [
+        title,
+        priority,
+        validation-criteria,
+        rationale,
+        packages,
+        topic,
+        source,
+        source-identifier,
+        import-date,
+        delivery,
+        import-version,
+      ]
+    required: [title, priority, validation-criteria]
   - key: use-case
     name: Use Case
     description: "A goal a user reaches with the system, step by step. Requirements can refine it."
     prefix: UC
-    properties: [title, rationale, source, source-identifier, import-date, delivery, import-version]
+    properties: [title, rationale, packages, source, source-identifier, import-date, delivery, import-version]
     required: [title]
   - key: system-requirement
     name: System Requirement
@@ -44,26 +62,26 @@ types:
         import-version,
         topic,
       ]
-    required: [title, requirement-type, acceptance-criteria]
+    required: [title, requirement-type, acceptance-criteria, rationale, verification-method, criticality, safety-related]
   - key: decision
     name: Decision
     description: "A decision with its rationale; requirements are based on it."
     prefix: D
-    properties: [title, rationale, source, source-identifier, import-date, delivery, import-version]
-    required: [title]
+    properties: [title, rationale, packages, source, source-identifier, import-date, delivery, import-version]
+    required: [title, rationale]
   - key: variant
     name: Variant
-    description: "A variant of the product. Its requirements replace requirements of the core only through Replaces; Excludes names the core requirements that do not apply in it."
+    description: "A variant of a system, built on the common core. Its requirements replace requirements of the core only through Replaces; Excludes names the core requirements that do not apply in it."
     prefix: VAR
     meaning: variant
-    properties: [title, source, source-identifier, import-date, delivery, import-version]
+    properties: [title, packages, source, source-identifier, import-date, delivery, import-version]
     required: [title]
   - key: package
     name: Package
-    description: "A group of elements. System requirements name it in their property Package."
+    description: "A set of elements declared to belong together for any reason, such as all requirements of a use case. An element can belong to several packages and names them in its property Package."
     prefix: PKG
     meaning: package
-    properties: [title, source, source-identifier, import-date, delivery, import-version]
+    properties: [title, packages, source, source-identifier, import-date, delivery, import-version]
     required: [title]
 
 properties:
@@ -92,13 +110,14 @@ properties:
     name: Acceptance Criteria
     description: "The conditions under which the requirement is met, one per entry."
     kind: text
+    meaning: acceptance-criteria
+    max-items: 3
     many: true
     content: true
     markdown: true
-    meaning: acceptance-criteria
   - key: validity
     name: Validity
-    description: "The variants the requirement applies to; without validity it belongs to the core and applies to every variant."
+    description: "The variants the requirement applies in; without validity it belongs to the core and applies in every variant."
     kind: relation
     many: true
     target-types: [variant]
@@ -113,7 +132,7 @@ properties:
     meaning: packages
   - key: emergent
     name: Emergent
-    description: "Whether the requirement has emergent behaviour: behaviour that does not follow from its children alone. Such a requirement needs evidence of its own."
+    description: "Whether the requirement has emergent behaviour: behaviour that does not follow from its children alone. Such a requirement needs a verification of its own."
     kind: choice
     meaning: emergent
     choices:
@@ -134,7 +153,7 @@ properties:
       name: Statement,
       kind: text,
       meaning: statement,
-      description: "The statement of the requirement.",
+      description: "The supplier's statement on an imported requirement, exported to the source with `reqif export --statements`. It does not count to the version; the requirement itself is the element text.",
     }
   - {
       key: source,
@@ -164,9 +183,9 @@ properties:
       meaning: delivery,
       description: "The name of the delivery the element was imported from.",
     }
-  # D-059: Import Version has the meaning import-version (Importfassung), written only by the
-  # import and never counted to the version. Every type carries the origin, so that a ReqIF
-  # export of any selection can be imported again (assumption, #511).
+  # Import Version has the meaning import-version, written only by the import and never counted
+  # to the version. Every type carries the origin, so that a ReqIF export of any selection can be
+  # imported again.
   - {
       key: import-version,
       name: Import Version,
@@ -174,9 +193,8 @@ properties:
       meaning: import-version,
       description: "The import version: the version of what the import wrote, right after the last import.",
     }
-  # D-060 names only the property. Marked "assumption": kind text (the topics belong to the
-  # project, D-019), on need and system-requirement as this spec uses "thema", not content
-  # (like rationale and packages, D-057), not required.
+  # Topic is free text (the topics belong to the project), on need and system requirement, does
+  # not count to the version (like rationale and packages), and is not required.
   - {
       key: topic,
       name: Topic,
@@ -202,7 +220,7 @@ relations:
     description: "The source is based on a decision."
     inverse-name: Basis for
     target-types: [decision]
-  - key: supersedes # a successor supersedes the target, D-045 / SR-072
+  - key: supersedes # a successor supersedes the target
     name: Supersedes
     description: "The source says that it supersedes the target. Superseding an element (element.supersede) also sets the target to an invalid status; the relation alone does not."
     inverse-name: Superseded by
@@ -214,7 +232,7 @@ relations:
     source-types: [system-requirement]
     target-types: [system-requirement]
     meaning: replacement
-  - key: excludes # D-059, SR-042
+  - key: excludes
     name: Excludes
     description: "A variant excludes a system requirement of the core: it does not apply in that variant."
     inverse-name: Excluded by

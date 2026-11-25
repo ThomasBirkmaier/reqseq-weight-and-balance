@@ -23,7 +23,7 @@ types:
 
 properties:
   # Every property that carries meaning counts to the version (content: true).
-  # Added to standard types in standard-model.yaml: priority and validation-criteria on need,
+  # Used by standard types in standard-model.yaml: priority and validation-criteria on need,
   # criticality and safety-related on system-requirement.
   - key: priority
     name: Priority
