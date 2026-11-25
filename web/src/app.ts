@@ -77,9 +77,11 @@ export function startApp(core: Core, typeKey: string): void {
     }
     corners.append(tr);
   });
-  $("offline").textContent = `Offline: aircraft data as of ${fleet.dataDate}. Check the weighing date against the aircraft documents.`;
+  // Offline notice: the date of the aircraft data is the weighing date of the selected aircraft.
   const offline = (): void => {
-    $("offline").hidden = navigator.onLine;
+    const a = fleet.aircraft.find((x) => x.id === select.value);
+    $("offline").textContent = a === undefined ? "" : `Offline: aircraft data as of ${a.weighingDate}. Check the weighing date against the aircraft documents.`;
+    $("offline").hidden = navigator.onLine || a === undefined;
   };
   addEventListener("online", offline);
   addEventListener("offline", offline);
@@ -97,6 +99,7 @@ export function startApp(core: Core, typeKey: string): void {
     $("select-hint").hidden = a !== undefined;
     $("aircraft-info").hidden = a === undefined;
     $("work").hidden = a === undefined;
+    offline();
     if (a === undefined) return;
     $("selected").textContent = `${a.id} · ${fleet.type.name}`;
     $("empty-data").textContent = `Empty mass ${kg(a.emptyKg)} at ${m(a.emptyArmMm)}, weighed ${a.weighingDate}`;
@@ -140,6 +143,7 @@ export function startApp(core: Core, typeKey: string): void {
     $("total").textContent = e.complete ? kg(e.takeOff.totalKg) : "";
     $("cg").textContent = e.complete ? m(e.takeOff.cgMm) : "";
     $("landing-figures").textContent = e.complete ? `Landing ${kg(e.landing.totalKg)} at ${m(e.landing.cgMm)}` : "";
+    $("landing-burn").textContent = e.complete ? `after ${String(Number(burnInput.value.trim()))} L planned fuel burn` : "";
     const marks = e.entries.map((x, i) => (x.valid ? kg(Number(inputs[i]?.value.trim())) : null));
     drawTopView(typed("topview", SVGSVGElement), fleet.type, marks, e.fuel.valid ? `${Number(fuelInput.value.trim())} L` : null);
     drawChart(typed("chart", SVGSVGElement), fleet.type, e);

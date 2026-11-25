@@ -84,7 +84,7 @@ export function drawChart(svg: SVGSVGElement, t: AircraftType, e: Evaluation | n
   const to = point(e.takeOff, "point", "Take-off");
   svg.append(el("line", { x1: to.px, y1: to.py, x2: ldg.px, y2: ldg.py, class: "burn-line" }));
   const st = e.takeOff;
-  const label = st.cgState === "aft" ? "Aft limit exceeded" : st.cgState === "forward" ? "Forward limit exceeded" : st.massExceeded ? "Mass limit exceeded" : "";
+  const label = st.cgState === "aft" ? "Aft limit exceeded" : st.cgState === "forward" ? "Forward limit exceeded" : st.massExceeded || st.massBelow ? "Mass limit exceeded" : "";
   if (label !== "") {
     const anchor = to.px > W / 2 ? "end" : "start";
     svg.append(el("text", { x: to.px + (anchor === "end" ? -10 : 10), y: to.py + 24, "text-anchor": anchor, class: "point-label", id: "point-label" }, label));

@@ -4,7 +4,7 @@ import { arrayOf, checked, isBoolean, isNumber, isPair, isString, nullable, obje
 export interface Station { key: string; name: string; armMm: number; maxKg: number }
 export interface AircraftType { key: string; name: string; mtomKg: number; stations: Station[]; envelope: [number, number][]; fuelArmMm: number; fuelCapacityL: number }
 export interface Aircraft { id: string; emptyKg: number; emptyArmMm: number; weighingDate: string; reportedFuelL: number | null; reportedAt: string | null }
-export interface Fleet { type: AircraftType; aircraft: Aircraft[]; dataDate: string }
+export interface Fleet { type: AircraftType; aircraft: Aircraft[] }
 export interface EntryResult { valid: boolean; empty: boolean; message: string | null }
 export interface Row { name: string; litres: number | null; kg: number; armMm: number; momentTenths: number }
 /** Result of the limit check rule for one state of the flight. */
@@ -14,6 +14,7 @@ export interface State {
   cgMm: number;
   cgExactMm: number;
   massExceeded: boolean;
+  massBelow: boolean;
   cgState: "within" | "forward" | "aft";
   fwdLimitMm: number;
   aftLimitMm: number;
@@ -49,7 +50,7 @@ const isAircraft: Guard<Aircraft> = objectOf({
   reportedFuelL: nullable(isNumber),
   reportedAt: nullable(isString),
 });
-const isFleet: Guard<Fleet> = objectOf({ type: isAircraftType, aircraft: arrayOf(isAircraft), dataDate: isString });
+const isFleet: Guard<Fleet> = objectOf({ type: isAircraftType, aircraft: arrayOf(isAircraft) });
 const isEntry: Guard<EntryResult> = objectOf({ valid: isBoolean, empty: isBoolean, message: nullable(isString) });
 const isRow: Guard<Row> = objectOf({ name: isString, litres: nullable(isNumber), kg: isNumber, armMm: isNumber, momentTenths: isNumber });
 const isState: Guard<State> = objectOf({
@@ -58,6 +59,7 @@ const isState: Guard<State> = objectOf({
   cgMm: isNumber,
   cgExactMm: isNumber,
   massExceeded: isBoolean,
+  massBelow: isBoolean,
   cgState: oneOf("within", "forward", "aft"),
   fwdLimitMm: isNumber,
   aftLimitMm: isNumber,

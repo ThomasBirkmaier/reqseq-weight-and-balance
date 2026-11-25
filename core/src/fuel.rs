@@ -277,15 +277,23 @@ fn text(o: &Json, k: &str) -> Result<String, String> {
     if let Json::Str(s) = get(o, k)? { Ok(s.clone()) } else { Err(format!("{k} is not a string")) }
 }
 
+/// Whether `v` is an interface version this build reads: `1.minor.patch` with whole numbers.
+#[must_use]
+pub fn is_supported_version(v: &str) -> bool {
+    let mut parts = v.split('.');
+    let whole = |p: Option<&str>| p.is_some_and(|t| !t.is_empty() && t.bytes().all(|b| b.is_ascii_digit()));
+    parts.next() == Some("1") && whole(parts.next()) && whole(parts.next()) && parts.next().is_none()
+}
+
 /// Parse the fuel interface data file.
 ///
 /// # Errors
-/// When the file is not JSON, has an unsupported interface version (major other than 1), or a
+/// When the file is not JSON, has an unsupported interface version (not `1.minor.patch`), or a
 /// field is missing or not of its documented form.
 pub fn parse_fuel(json: &str) -> Result<FuelData, String> {
     let root = parse_json(json)?;
     let interface_version = text(&root, "interfaceVersion")?;
-    if !interface_version.starts_with("1.") {
+    if !is_supported_version(&interface_version) {
         return Err(format!("unsupported interface version {interface_version}"));
     }
     let density_g_per_l = decimal_scaled(&num(&root, "fuelDensityKgPerL")?, 3)?;
